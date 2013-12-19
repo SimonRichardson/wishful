@@ -42,12 +42,12 @@ func (o None) getOrElse(x Value) Value {
 }
 
 // Derived
-func (o Some) ap (x Option) Option {
+func (o Some) ap(x Option) Option {
     return o.chain(func(f Value) Option {
         return x.fmap(f.(func(f Value) Value))
     })
 }
-func (o None) ap (x Option) Option {
+func (o None) ap(x Option) Option {
     return o
 }
 func (o Some) fmap(f func(x Value) Value) Option {

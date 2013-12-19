@@ -132,3 +132,41 @@ func TestApWithOptionSome(t *testing.T) {
         t.Error(err)
     }
 }
+
+func TestApWithOptionNoneForApMethod(t *testing.T) {
+    f := func(v int) Option {
+        return None{}
+    }
+    g := func(v int) Option {
+        return Some{func(x Value) Value {
+            return x
+        }}.ap(None{})
+    }
+    if err := quick.CheckEqual(f, g, nil); err != nil {
+        t.Error(err)
+    }
+}
+
+func TestApWithOptionNoneForApConstructor(t *testing.T) {
+    f := func(v int) Option {
+        return None{}
+    }
+    g := func(v int) Option {
+        return None{}.ap(None{})
+    }
+    if err := quick.CheckEqual(f, g, nil); err != nil {
+        t.Error(err)
+    }
+}
+
+func TestApWithOptionNoneForApConstructorWithSome(t *testing.T) {
+    f := func(v int) Option {
+        return None{}
+    }
+    g := func(v int) Option {
+        return None{}.ap(Some{v})
+    }
+    if err := quick.CheckEqual(f, g, nil); err != nil {
+        t.Error(err)
+    }
+}
