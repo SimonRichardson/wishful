@@ -118,3 +118,17 @@ func TestOrElseWithOptionNone(t *testing.T) {
         t.Error(err)
     }
 }
+
+func TestApWithOptionSome(t *testing.T) {
+    f := func(v int) Option {
+        return Some{v}
+    }
+    g := func(v int) Option {
+        return Some{func(x Value) Value {
+            return x
+        }}.ap(Some{v})
+    }
+    if err := quick.CheckEqual(f, g, nil); err != nil {
+        t.Error(err)
+    }
+}

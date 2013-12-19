@@ -9,6 +9,7 @@ type Option interface {
     orElse(x Option) Option
 
     // Derived
+    ap(x Option) Option
     fmap(func(v Value) Value) Option
 }
 
@@ -41,6 +42,14 @@ func (o None) getOrElse(x Value) Value {
 }
 
 // Derived
+func (o Some) ap (x Option) Option {
+    return o.chain(func(f Value) Option {
+        return x.fmap(f.(func(f Value) Value))
+    })
+}
+func (o None) ap (x Option) Option {
+    return o
+}
 func (o Some) fmap(f func(x Value) Value) Option {
     return o.chain(func(x Value) Option {
         return Some{f(x)}
