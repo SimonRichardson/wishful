@@ -20,7 +20,7 @@ func TestChainWithOptionSome(t *testing.T) {
         return Some{v * 2}
     }
     g := func(v int) Option {
-        return Some{v}.Chain(func (x Value) Option {
+        return Some{v}.chain(func (x Value) Option {
             return Some{x.(int) * 2}
         })
     }
@@ -34,7 +34,7 @@ func TestChainWithOptionNone(t *testing.T) {
         return None{}
     }
     g := func(v int) Option {
-        return None{}.Chain(func (x Value) Option {
+        return None{}.chain(func (x Value) Option {
             return Some{x.(int) * 2}
         })
     }
@@ -48,7 +48,7 @@ func TestMapWithOptionSome(t *testing.T) {
         return Some{v + 1}
     }
     g := func(v int) Option {
-        return Some{v}.Map(func (x Value) Value {
+        return Some{v}.fmap(func (x Value) Value {
             return x.(int) + 1
         })
     }
@@ -62,7 +62,7 @@ func TestMapWithOptionNone(t *testing.T) {
         return None{}
     }
     g := func(v int) Option {
-        return None{}.Map(func (x Value) Value {
+        return None{}.fmap(func (x Value) Value {
             return x.(int) + 1
         })
     }
@@ -76,7 +76,7 @@ func TestGetOrElseWithOptionSome(t *testing.T) {
         return v
     }
     g := func(v int) int {
-        return Some{v}.GetOrElse(v + 1).(int)
+        return Some{v}.getOrElse(v + 1).(int)
     }
     if err := quick.CheckEqual(f, g, nil); err != nil {
         t.Error(err)
@@ -88,7 +88,7 @@ func TestGetOrElseWithOptionNone(t *testing.T) {
         return v
     }
     g := func(v int) int {
-        return None{}.GetOrElse(v).(int)
+        return None{}.getOrElse(v).(int)
     }
     if err := quick.CheckEqual(f, g, nil); err != nil {
         t.Error(err)
@@ -100,7 +100,7 @@ func TestOrElseWithOptionSome(t *testing.T) {
         return Some{v}
     }
     g := func(v int) Option {
-        return Some{v}.OrElse(Some{v + 1})
+        return Some{v}.orElse(Some{v + 1})
     }
     if err := quick.CheckEqual(f, g, nil); err != nil {
         t.Error(err)
@@ -112,7 +112,7 @@ func TestOrElseWithOptionNone(t *testing.T) {
         return Some{v}
     }
     g := func(v int) Option {
-        return None{}.OrElse(Some{v})
+        return None{}.orElse(Some{v})
     }
     if err := quick.CheckEqual(f, g, nil); err != nil {
         t.Error(err)

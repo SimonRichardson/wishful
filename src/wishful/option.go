@@ -4,12 +4,12 @@ type Value interface {}
 
 type Option interface {
     // Methods
-    Chain(func(v Value) Option) Option
-    GetOrElse(x Value) Value
-    OrElse(x Option) Option
+    chain(func(v Value) Option) Option
+    getOrElse(x Value) Value
+    orElse(x Option) Option
 
     // Derived
-    Map(func(v Value) Value) Option
+    fmap(func(v Value) Value) Option
 }
 
 type Some struct {
@@ -19,33 +19,33 @@ type Some struct {
 type None struct {}
 
 // Methods
-func (o Some) Chain(f func(x Value) Option) Option {
+func (o Some) chain(f func(x Value) Option) Option {
     return f(o.x)
 }
-func (o None) Chain(f func(x Value) Option) Option {
+func (o None) chain(f func(x Value) Option) Option {
     return o
 }
 
-func (o Some) OrElse(x Option) Option {
+func (o Some) orElse(x Option) Option {
     return o
 }
-func (o None) OrElse(x Option) Option {
+func (o None) orElse(x Option) Option {
     return x
 }
 
-func (o Some) GetOrElse(x Value) Value {
+func (o Some) getOrElse(x Value) Value {
     return o.x
 }
-func (o None) GetOrElse(x Value) Value {
+func (o None) getOrElse(x Value) Value {
     return x
 }
 
 // Derived
-func (o Some) Map(f func(x Value) Value) Option {
-    return o.Chain(func(x Value) Option {
+func (o Some) fmap(f func(x Value) Value) Option {
+    return o.chain(func(x Value) Option {
         return Some{f(x)}
     })
 }
-func (o None) Map(f func(x Value) Value) Option {
+func (o None) fmap(f func(x Value) Value) Option {
     return o
 }
