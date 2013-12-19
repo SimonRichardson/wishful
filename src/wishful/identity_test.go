@@ -7,10 +7,10 @@ import (
 
 func TestIdentityOf(t *testing.T) {
     f := func(v int) Identity {
-        return Id{v}
+        return Identity{v}
     }
     g := func(v int) Identity {
-        return Id{1}.of(v)
+        return Identity{}.of(v)
     }
     if err := quick.CheckEqual(f, g, nil); err != nil {
         t.Error(err)
@@ -20,11 +20,11 @@ func TestIdentityOf(t *testing.T) {
 // chain
 func TestChainWithIdentity(t *testing.T) {
     f := func(v int) Identity {
-        return Id{v * 2}
+        return Identity{v * 2}
     }
     g := func(v int) Identity {
-        return Id{v}.chain(func (x AnyVal) Identity {
-            return Id{x.(int) * 2}
+        return Identity{v}.chain(func (x AnyVal) Identity {
+            return Identity{x.(int) * 2}
         })
     }
     if err := quick.CheckEqual(f, g, nil); err != nil {
@@ -35,10 +35,10 @@ func TestChainWithIdentity(t *testing.T) {
 // ap
 func TestApWithIdentity(t *testing.T) {
     f := func(v int) Identity {
-        return Id{v}
+        return Identity{v}
     }
     g := func(v int) Identity {
-        return Id{identity}.ap(Id{v})
+        return Identity{identity}.ap(Identity{v})
     }
     if err := quick.CheckEqual(f, g, nil); err != nil {
         t.Error(err)
@@ -48,10 +48,10 @@ func TestApWithIdentity(t *testing.T) {
 // fmap
 func TestFmapWithIdentity(t *testing.T) {
     f := func(v int) Identity {
-        return Id{v + 1}
+        return Identity{v + 1}
     }
     g := func(v int) Identity {
-        return Id{v}.fmap(func (x AnyVal) AnyVal {
+        return Identity{v}.fmap(func (x AnyVal) AnyVal {
             return x.(int) + 1
         })
     }
