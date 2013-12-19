@@ -70,3 +70,51 @@ func TestMapWithOptionNone(t *testing.T) {
         t.Error(err)
     }
 }
+
+func TestGetOrElseWithOptionSome(t *testing.T) {
+    f := func(v int) int {
+        return v
+    }
+    g := func(v int) int {
+        return Some{v}.GetOrElse(v + 1).(int)
+    }
+    if err := quick.CheckEqual(f, g, nil); err != nil {
+        t.Error(err)
+    }
+}
+
+func TestGetOrElseWithOptionNone(t *testing.T) {
+    f := func(v int) int {
+        return v
+    }
+    g := func(v int) int {
+        return None{}.GetOrElse(v).(int)
+    }
+    if err := quick.CheckEqual(f, g, nil); err != nil {
+        t.Error(err)
+    }
+}
+
+func TestOrElseWithOptionSome(t *testing.T) {
+    f := func(v int) Option {
+        return Some{v}
+    }
+    g := func(v int) Option {
+        return Some{v}.OrElse(Some{v + 1})
+    }
+    if err := quick.CheckEqual(f, g, nil); err != nil {
+        t.Error(err)
+    }
+}
+
+func TestOrElseWithOptionNone(t *testing.T) {
+    f := func(v int) Option {
+        return Some{v}
+    }
+    g := func(v int) Option {
+        return None{}.OrElse(Some{v})
+    }
+    if err := quick.CheckEqual(f, g, nil); err != nil {
+        t.Error(err)
+    }
+}
