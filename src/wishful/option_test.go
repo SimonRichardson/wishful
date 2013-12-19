@@ -3,16 +3,15 @@ package wishful
 import (
     "testing"
     "testing/quick"
-    "math/rand"
-    "reflect"
 )
 
-func (o Some) Generate(rand *rand.Rand, size int) reflect.Value {
-    return reflect.ValueOf(Some{rand.Intn(size) - size / 2})
+// Create a semi-group for testing with
+type IntSemigroup struct {
+    x Value
 }
-
-func (o None) Generate(rand *rand.Rand, size int) reflect.Value {
-    return reflect.ValueOf(None{})
+func (o IntSemigroup) concat(x Semigroup) Semigroup {
+    a := x.(IntSemigroup)
+    return IntSemigroup{o.x.(int) + a.x.(int)}
 }
 
 func TestOf(t *testing.T) {
@@ -38,6 +37,7 @@ func TestEmpty(t *testing.T) {
     }
 }
 
+// chain
 func TestChainWithOptionSome(t *testing.T) {
     f := func(v int) Option {
         return Some{v * 2}
@@ -51,7 +51,6 @@ func TestChainWithOptionSome(t *testing.T) {
         t.Error(err)
     }
 }
-
 func TestChainWithOptionNone(t *testing.T) {
     f := func(v int) Option {
         return None{}
@@ -66,34 +65,53 @@ func TestChainWithOptionNone(t *testing.T) {
     }
 }
 
-func TestMapWithOptionSome(t *testing.T) {
+// concat
+func TestConcatWithOptionSomeAndSome(t *testing.T) {
     f := func(v int) Option {
-        return Some{v + 1}
+        return Some{IntSemigroup{v + v}}
     }
     g := func(v int) Option {
-        return Some{v}.fmap(func (x Value) Value {
-            return x.(int) + 1
-        })
+        return Some{IntSemigroup{v}}.concat(Some{IntSemigroup{v}})
     }
     if err := quick.CheckEqual(f, g, nil); err != nil {
         t.Error(err)
     }
 }
-
-func TestMapWithOptionNone(t *testing.T) {
+func TestConcatWithOptionSomeAndNone(t *testing.T) {
     f := func(v int) Option {
         return None{}
     }
     g := func(v int) Option {
-        return None{}.fmap(func (x Value) Value {
-            return x.(int) + 1
-        })
+        return Some{IntSemigroup{v}}.concat(None{})
+    }
+    if err := quick.CheckEqual(f, g, nil); err != nil {
+        t.Error(err)
+    }
+}
+func TestConcatWithOptionNoneAndSome(t *testing.T) {
+    f := func(v int) Option {
+        return None{}
+    }
+    g := func(v int) Option {
+        return None{}.concat(Some{IntSemigroup{v}})
+    }
+    if err := quick.CheckEqual(f, g, nil); err != nil {
+        t.Error(err)
+    }
+}
+func TestConcatWithOptionNoneAndNone(t *testing.T) {
+    f := func(v int) Option {
+        return None{}
+    }
+    g := func(v int) Option {
+        return None{}.concat(None{})
     }
     if err := quick.CheckEqual(f, g, nil); err != nil {
         t.Error(err)
     }
 }
 
+// getOrElse
 func TestGetOrElseWithOptionSome(t *testing.T) {
     f := func(v int) int {
         return v
@@ -105,7 +123,6 @@ func TestGetOrElseWithOptionSome(t *testing.T) {
         t.Error(err)
     }
 }
-
 func TestGetOrElseWithOptionNone(t *testing.T) {
     f := func(v int) int {
         return v
@@ -118,6 +135,7 @@ func TestGetOrElseWithOptionNone(t *testing.T) {
     }
 }
 
+// orElse
 func TestOrElseWithOptionSome(t *testing.T) {
     f := func(v int) Option {
         return Some{v}
@@ -129,7 +147,6 @@ func TestOrElseWithOptionSome(t *testing.T) {
         t.Error(err)
     }
 }
-
 func TestOrElseWithOptionNone(t *testing.T) {
     f := func(v int) Option {
         return Some{v}
@@ -142,6 +159,7 @@ func TestOrElseWithOptionNone(t *testing.T) {
     }
 }
 
+// ap
 func TestApWithOptionSome(t *testing.T) {
     f := func(v int) Option {
         return Some{v}
@@ -155,7 +173,6 @@ func TestApWithOptionSome(t *testing.T) {
         t.Error(err)
     }
 }
-
 func TestApWithOptionNoneForApMethod(t *testing.T) {
     f := func(v int) Option {
         return None{}
@@ -169,7 +186,6 @@ func TestApWithOptionNoneForApMethod(t *testing.T) {
         t.Error(err)
     }
 }
-
 func TestApWithOptionNoneForApConstructor(t *testing.T) {
     f := func(v int) Option {
         return None{}
@@ -181,13 +197,40 @@ func TestApWithOptionNoneForApConstructor(t *testing.T) {
         t.Error(err)
     }
 }
-
 func TestApWithOptionNoneForApConstructorWithSome(t *testing.T) {
     f := func(v int) Option {
         return None{}
     }
     g := func(v int) Option {
         return None{}.ap(Some{v})
+    }
+    if err := quick.CheckEqual(f, g, nil); err != nil {
+        t.Error(err)
+    }
+}
+
+// fmap
+func TestFmapWithOptionSome(t *testing.T) {
+    f := func(v int) Option {
+        return Some{v + 1}
+    }
+    g := func(v int) Option {
+        return Some{v}.fmap(func (x Value) Value {
+            return x.(int) + 1
+        })
+    }
+    if err := quick.CheckEqual(f, g, nil); err != nil {
+        t.Error(err)
+    }
+}
+func TestFmapWithOptionNone(t *testing.T) {
+    f := func(v int) Option {
+        return None{}
+    }
+    g := func(v int) Option {
+        return None{}.fmap(func (x Value) Value {
+            return x.(int) + 1
+        })
     }
     if err := quick.CheckEqual(f, g, nil); err != nil {
         t.Error(err)

@@ -2,9 +2,14 @@ package wishful
 
 type Value interface {}
 
+type Semigroup interface {
+    concat(x Semigroup) Semigroup
+}
+
 type Option interface {
     // Methods
     chain(func(v Value) Option) Option
+    concat(x Option) Option
     getOrElse(x Value) Value
     orElse(x Option) Option
 
@@ -31,6 +36,19 @@ func (o Some) chain(f func(x Value) Option) Option {
     return f(o.x)
 }
 func (o None) chain(f func(x Value) Option) Option {
+    return o
+}
+
+func (o Some) concat(x Option) Option {
+    return o.chain(func(a Value) Option {
+        return x.fmap(func(b Value) Value {
+            s0 := a.(Semigroup)
+            s1 := b.(Semigroup)
+            return s0.concat(s1)
+        })
+    })
+}
+func (o None) concat(x Option) Option {
     return o
 }
 
