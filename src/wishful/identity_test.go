@@ -38,9 +38,7 @@ func TestApWithIdentity(t *testing.T) {
         return Id{v}
     }
     g := func(v int) Identity {
-        return Id{func(x AnyVal) AnyVal {
-            return x
-        }}.ap(Id{v})
+        return Id{identity}.ap(Id{v})
     }
     if err := quick.CheckEqual(f, g, nil); err != nil {
         t.Error(err)

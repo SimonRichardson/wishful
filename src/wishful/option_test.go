@@ -165,9 +165,7 @@ func TestApWithOptionSome(t *testing.T) {
         return Some{v}
     }
     g := func(v int) Option {
-        return Some{func(x AnyVal) AnyVal {
-            return x
-        }}.ap(Some{v})
+        return Some{identity}.ap(Some{v})
     }
     if err := quick.CheckEqual(f, g, nil); err != nil {
         t.Error(err)
@@ -178,9 +176,7 @@ func TestApWithOptionNoneForApMethod(t *testing.T) {
         return None{}
     }
     g := func(v int) Option {
-        return Some{func(x AnyVal) AnyVal {
-            return x
-        }}.ap(None{})
+        return Some{identity}.ap(None{})
     }
     if err := quick.CheckEqual(f, g, nil); err != nil {
         t.Error(err)
