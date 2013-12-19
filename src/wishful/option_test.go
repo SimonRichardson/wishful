@@ -7,7 +7,7 @@ import (
 
 // Create a semi-group for testing with
 type IntSemigroup struct {
-    x Value
+    x AnyVal
 }
 func (o IntSemigroup) concat(x Semigroup) Semigroup {
     a := x.(IntSemigroup)
@@ -43,7 +43,7 @@ func TestChainWithOptionSome(t *testing.T) {
         return Some{v * 2}
     }
     g := func(v int) Option {
-        return Some{v}.chain(func (x Value) Option {
+        return Some{v}.chain(func (x AnyVal) Option {
             return Some{x.(int) * 2}
         })
     }
@@ -56,7 +56,7 @@ func TestChainWithOptionNone(t *testing.T) {
         return None{}
     }
     g := func(v int) Option {
-        return None{}.chain(func (x Value) Option {
+        return None{}.chain(func (x AnyVal) Option {
             return Some{x.(int) * 2}
         })
     }
@@ -165,7 +165,7 @@ func TestApWithOptionSome(t *testing.T) {
         return Some{v}
     }
     g := func(v int) Option {
-        return Some{func(x Value) Value {
+        return Some{func(x AnyVal) AnyVal {
             return x
         }}.ap(Some{v})
     }
@@ -178,7 +178,7 @@ func TestApWithOptionNoneForApMethod(t *testing.T) {
         return None{}
     }
     g := func(v int) Option {
-        return Some{func(x Value) Value {
+        return Some{func(x AnyVal) AnyVal {
             return x
         }}.ap(None{})
     }
@@ -215,7 +215,7 @@ func TestFmapWithOptionSome(t *testing.T) {
         return Some{v + 1}
     }
     g := func(v int) Option {
-        return Some{v}.fmap(func (x Value) Value {
+        return Some{v}.fmap(func (x AnyVal) AnyVal {
             return x.(int) + 1
         })
     }
@@ -228,7 +228,7 @@ func TestFmapWithOptionNone(t *testing.T) {
         return None{}
     }
     g := func(v int) Option {
-        return None{}.fmap(func (x Value) Value {
+        return None{}.fmap(func (x AnyVal) AnyVal {
             return x.(int) + 1
         })
     }

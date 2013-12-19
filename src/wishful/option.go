@@ -1,30 +1,24 @@
 package wishful
 
-type Value interface {}
-
-type Semigroup interface {
-    concat(x Semigroup) Semigroup
-}
-
 type Option interface {
     // Methods
-    chain(func(v Value) Option) Option
+    chain(func(v AnyVal) Option) Option
     concat(x Option) Option
-    getOrElse(x Value) Value
+    getOrElse(x AnyVal) AnyVal
     orElse(x Option) Option
 
     // Derived
     ap(x Option) Option
-    fmap(func(v Value) Value) Option
+    fmap(func(v AnyVal) AnyVal) Option
 }
 
 type Some struct {
-    x Value
+    x AnyVal
 }
 
 type None struct {}
 
-func of(x Value) Option {
+func of(x AnyVal) Option {
     return Some{x}
 }
 func empty() Option {
@@ -32,16 +26,16 @@ func empty() Option {
 }
 
 // Methods
-func (o Some) chain(f func(x Value) Option) Option {
+func (o Some) chain(f func(x AnyVal) Option) Option {
     return f(o.x)
 }
-func (o None) chain(f func(x Value) Option) Option {
+func (o None) chain(f func(x AnyVal) Option) Option {
     return o
 }
 
 func (o Some) concat(x Option) Option {
-    return o.chain(func(a Value) Option {
-        return x.fmap(func(b Value) Value {
+    return o.chain(func(a AnyVal) Option {
+        return x.fmap(func(b AnyVal) AnyVal {
             s0 := a.(Semigroup)
             s1 := b.(Semigroup)
             return s0.concat(s1)
@@ -59,27 +53,27 @@ func (o None) orElse(x Option) Option {
     return x
 }
 
-func (o Some) getOrElse(x Value) Value {
+func (o Some) getOrElse(x AnyVal) AnyVal {
     return o.x
 }
-func (o None) getOrElse(x Value) Value {
+func (o None) getOrElse(x AnyVal) AnyVal {
     return x
 }
 
 // Derived
 func (o Some) ap(x Option) Option {
-    return o.chain(func(f Value) Option {
-        return x.fmap(f.(func(f Value) Value))
+    return o.chain(func(f AnyVal) Option {
+        return x.fmap(f.(func(f AnyVal) AnyVal))
     })
 }
 func (o None) ap(x Option) Option {
     return o
 }
-func (o Some) fmap(f func(x Value) Value) Option {
-    return o.chain(func(x Value) Option {
+func (o Some) fmap(f func(x AnyVal) AnyVal) Option {
+    return o.chain(func(x AnyVal) Option {
         return Some{f(x)}
     })
 }
-func (o None) fmap(f func(x Value) Value) Option {
+func (o None) fmap(f func(x AnyVal) AnyVal) Option {
     return o
 }
