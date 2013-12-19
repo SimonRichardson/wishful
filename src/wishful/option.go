@@ -19,6 +19,13 @@ type Some struct {
 
 type None struct {}
 
+func of(x Value) Option {
+    return Some{x}
+}
+func empty() Option {
+    return None{}
+}
+
 // Methods
 func (o Some) chain(f func(x Value) Option) Option {
     return f(o.x)

@@ -15,6 +15,29 @@ func (o None) Generate(rand *rand.Rand, size int) reflect.Value {
     return reflect.ValueOf(None{})
 }
 
+func TestOf(t *testing.T) {
+    f := func(v int) Option {
+        return Some{1}
+    }
+    g := func(v int) Option {
+        return of(1)
+    }
+    if err := quick.CheckEqual(f, g, nil); err != nil {
+        t.Error(err)
+    }
+}
+func TestEmpty(t *testing.T) {
+    f := func(v int) Option {
+        return None{}
+    }
+    g := func(v int) Option {
+        return empty()
+    }
+    if err := quick.CheckEqual(f, g, nil); err != nil {
+        t.Error(err)
+    }
+}
+
 func TestChainWithOptionSome(t *testing.T) {
     f := func(v int) Option {
         return Some{v * 2}
