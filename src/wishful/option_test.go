@@ -14,23 +14,23 @@ func (o IntSemigroup) concat(x Semigroup) Semigroup {
     return IntSemigroup{o.x.(int) + a.x.(int)}
 }
 
-func TestOf(t *testing.T) {
+func TestOptionOf(t *testing.T) {
     f := func(v int) Option {
-        return Some{1}
+        return Some{v}
     }
     g := func(v int) Option {
-        return of(1)
+        return Some{1}.of(v)
     }
     if err := quick.CheckEqual(f, g, nil); err != nil {
         t.Error(err)
     }
 }
-func TestEmpty(t *testing.T) {
+func TestOptionEmpty(t *testing.T) {
     f := func(v int) Option {
         return None{}
     }
     g := func(v int) Option {
-        return empty()
+        return None{}.empty()
     }
     if err := quick.CheckEqual(f, g, nil); err != nil {
         t.Error(err)

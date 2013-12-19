@@ -18,10 +18,10 @@ type Some struct {
 
 type None struct {}
 
-func of(x AnyVal) Option {
+func (o Some) of(x AnyVal) Option {
     return Some{x}
 }
-func empty() Option {
+func (o None) empty() Option {
     return None{}
 }
 
