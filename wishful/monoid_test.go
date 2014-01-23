@@ -5,23 +5,26 @@ import (
 	"testing/quick"
 )
 
-func TestOptionOf(t *testing.T) {
+// Option
+
+func Test_EmptyWithOptionSome(t *testing.T) {
 	f := func(v int) Option {
-		return Some{v}
+		return None{}
 	}
 	g := func(v int) Option {
-		return Some{}.Of(v).(Option)
+		return Some{v}.Empty()
 	}
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
-func TestOptionEmpty(t *testing.T) {
+
+func Test_EmptyWithOptionNone(t *testing.T) {
 	f := func(v int) Option {
 		return None{}
 	}
 	g := func(v int) Option {
-		return None{}.Empty().(Option)
+		return None{}.Empty()
 	}
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)

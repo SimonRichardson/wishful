@@ -20,3 +20,6 @@ _cgo_export.*
 _testmain.go
 
 *.exe
+
+# Stupid FUCKING MAC OS X SHITE
+*.DS_Store
