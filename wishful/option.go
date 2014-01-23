@@ -1,6 +1,7 @@
 package wishful
 
 type Option interface {
+	Fold(f func(y AnyVal) AnyVal, g func() AnyVal) AnyVal
 	GetOrElse(x AnyVal) AnyVal
 	OrElse(x Option) Option
 }
@@ -82,6 +83,13 @@ func (x None) Map(f func(y AnyVal) AnyVal) Functor {
 }
 
 // Derived
+func (x Some) Fold(f func(y AnyVal) AnyVal, g func() AnyVal) AnyVal {
+	return f(x)
+}
+func (x None) Fold(f func(y AnyVal) AnyVal, g func() AnyVal) AnyVal {
+	return g()
+}
+
 func (x Some) OrElse(y Option) Option {
 	return x
 }
