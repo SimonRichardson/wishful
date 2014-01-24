@@ -33,6 +33,24 @@ func (x None) Ap(v Applicative) Applicative {
 	return x
 }
 
+// Promise
+
+func (x Promise) Of(v AnyVal) Applicative {
+	return Promise{func(resolve func(x AnyVal) AnyVal) AnyVal {
+		return resolve(v)
+	}}
+}
+
+func (x Promise) Ap(v Applicative) Applicative {
+	return Promise{func(resolve func(x AnyVal) AnyVal) AnyVal {
+		return x.Fork(func(f AnyVal) AnyVal {
+			fun := v.(Functor)
+			pro := fun.Map(f.(func(x AnyVal) AnyVal)).(Promise)
+			return pro.Fork(resolve)
+		})
+	}}
+}
+
 // Common
 
 func fromMonadToApplicativeAp(x Monad, y Applicative) Applicative {

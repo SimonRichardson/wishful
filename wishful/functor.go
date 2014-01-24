@@ -22,3 +22,13 @@ func (x Some) Map(f func(v AnyVal) AnyVal) Functor {
 func (x None) Map(f func(v AnyVal) AnyVal) Functor {
 	return x
 }
+
+// Promise
+
+func (x Promise) Map(f func(v AnyVal) AnyVal) Functor {
+	return Promise{func(resolve func(v AnyVal) AnyVal) AnyVal {
+		return x.Fork(func(a AnyVal) AnyVal {
+			return resolve(f(a))
+		})
+	}}
+}

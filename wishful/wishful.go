@@ -15,3 +15,13 @@ type Some struct {
 }
 type None struct {
 }
+
+// Promise
+
+type Promise struct {
+	fork func(resolve func(x AnyVal) AnyVal) AnyVal
+}
+
+func (x Promise) Fork(f func(x AnyVal) AnyVal) AnyVal {
+	return x.fork(f)
+}

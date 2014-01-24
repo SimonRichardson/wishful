@@ -13,7 +13,7 @@ func Test_ChainWithIdentity(t *testing.T) {
 	}
 	g := func(v int) Id {
 		a := Id{v}.Chain(func(x AnyVal) Monad {
-			return Id{x.(int) + 1}
+			return Id{Inc(x)}
 		})
 		return a.(Id)
 	}
@@ -30,7 +30,7 @@ func Test_ChainWithOptionSome(t *testing.T) {
 	}
 	g := func(v int) Option {
 		return Some{v}.Chain(func(x AnyVal) Monad {
-			return Some{x.(int) + 1}
+			return Some{Inc(x)}
 		})
 	}
 	if err := quick.CheckEqual(f, g, nil); err != nil {
@@ -44,8 +44,29 @@ func Test_ChainWithOptionNone(t *testing.T) {
 	}
 	g := func(v int) Option {
 		return None{}.Chain(func(x AnyVal) Monad {
-			return Some{x.(int) + 1}
+			return Some{Inc(x)}
 		})
+	}
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
+
+// Promise
+
+func Test_ChainWithPromise(t *testing.T) {
+	f := func(v int) int {
+		return v + 1
+	}
+	g := func(v int) int {
+		pro := Promise{}.Of(v).(Promise)
+		fun := pro.Chain(func(x AnyVal) Monad {
+			return Promise{}.Of(Inc(x)).(Monad)
+		})
+		p := fun.(Promise)
+		return p.Fork(func(x AnyVal) AnyVal {
+			return x
+		}).(int)
 	}
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)

@@ -21,5 +21,7 @@ _testmain.go
 
 *.exe
 
+*.out
+
 # Stupid FUCKING MAC OS X SHITE
 *.DS_Store

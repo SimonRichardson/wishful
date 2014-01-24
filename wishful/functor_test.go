@@ -12,9 +12,7 @@ func Test_MapWithIdentity(t *testing.T) {
 		return Id{v + 1}
 	}
 	g := func(v int) Id {
-		res := Id{v}.Map(func(x AnyVal) AnyVal {
-			return x.(int) + 1
-		})
+		res := Id{v}.Map(Inc)
 		return res.(Id)
 	}
 	if err := quick.CheckEqual(f, g, nil); err != nil {
@@ -29,9 +27,7 @@ func Test_MapWithOptionSome(t *testing.T) {
 		return Some{v + 1}
 	}
 	g := func(v int) Option {
-		res := Some{v}.Map(func(x AnyVal) AnyVal {
-			return x.(int) + 1
-		})
+		res := Some{v}.Map(Inc)
 		return res.(Option)
 	}
 	if err := quick.CheckEqual(f, g, nil); err != nil {
@@ -44,10 +40,27 @@ func Test_MapWithOptionNone(t *testing.T) {
 		return None{}
 	}
 	g := func(v int) Option {
-		res := None{}.Map(func(x AnyVal) AnyVal {
-			return x.(int) + 1
-		})
+		res := None{}.Map(Inc)
 		return res.(Option)
+	}
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
+
+// Promise
+
+func Test_MapWithPromise(t *testing.T) {
+	f := func(v int) int {
+		return v + 1
+	}
+	g := func(v int) int {
+		pro := Promise{}.Of(v).(Promise)
+		fun := pro.Map(Inc)
+		p := fun.(Promise)
+		return p.Fork(func(x AnyVal) AnyVal {
+			return x
+		}).(int)
 	}
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)

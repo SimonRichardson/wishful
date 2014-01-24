@@ -104,3 +104,39 @@ func Test_ApWithOptionNoneForApConstructorWithSome(t *testing.T) {
 		t.Error(err)
 	}
 }
+
+// Promise
+
+func Test_PromiseOf(t *testing.T) {
+	f := func(v int) int {
+		return Promise{func(resolve func(x AnyVal) AnyVal) AnyVal {
+			return resolve(v)
+		}}.Fork(func(x AnyVal) AnyVal {
+			return x
+		}).(int)
+	}
+	g := func(v int) int {
+		return Promise{}.Of(v).(Promise).Fork(func(x AnyVal) AnyVal {
+			return x
+		}).(int)
+	}
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
+
+func Test_PromiseAp(t *testing.T) {
+	f := func(v int) int {
+		return IncInt(v)
+	}
+	g := func(v int) int {
+		app := Promise{}.Of(Inc).Ap(Promise{}.Of(v))
+		pro := app.(Promise)
+		return pro.Fork(func(x AnyVal) AnyVal {
+			return x
+		}).(int)
+	}
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
