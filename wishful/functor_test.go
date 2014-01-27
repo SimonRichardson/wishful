@@ -20,6 +20,23 @@ func Test_MapWithIdentity(t *testing.T) {
 	}
 }
 
+// IdentityT
+
+func Test_MapWithIdentityT(t *testing.T) {
+	f := func(v int) Id {
+		return NewId(v + 1)
+	}
+	g := func(v int) Id {
+		M := NewIdT(Id{})
+		app := M.Of(v)
+		res := app.(Functor).Map(Inc)
+		return res.(IdT).Run.(Id)
+	}
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
+
 // IO
 
 func Test_MapWithIO(t *testing.T) {

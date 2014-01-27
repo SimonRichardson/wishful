@@ -17,7 +17,8 @@ func (x IdT) Chain(f func(v AnyVal) Monad) Monad {
 	tra := IdT{
 		m: x.m,
 		Run: mon.Chain(func(y AnyVal) Monad {
-			return f(y).(Monad)
+			idt := f(y).(IdT)
+			return idt.Run.(Monad)
 		}),
 	}
 	return tra

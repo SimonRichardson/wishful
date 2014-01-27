@@ -33,7 +33,7 @@ func Test_ChainWithIdentityT(t *testing.T) {
 
 		program := M.Of(v)
 		mon := program.(Monad).Chain(func(x AnyVal) Monad {
-			app := Id{}.Of(Inc(x))
+			app := M.Of(Inc(x))
 			return app.(Monad)
 		})
 		return mon.(IdT).Run.(Id)

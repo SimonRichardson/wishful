@@ -46,7 +46,6 @@ func Test_IdentityTOf(t *testing.T) {
 	}
 }
 
-/*
 func Test_IdentityTAp(t *testing.T) {
 	f := func(v int) Id {
 		return NewId(v)
@@ -56,14 +55,12 @@ func Test_IdentityTAp(t *testing.T) {
 		app0 := M.Of(Identity)
 		app1 := M.Of(v)
 		program := app0.Ap(app1)
-		fmt.Println(program)
 		return program.(IdT).Run.(Id)
 	}
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
-*/
 
 // IO
 

@@ -14,10 +14,8 @@ func (x Id) Map(f func(v AnyVal) AnyVal) Functor {
 
 func (x IdT) Map(f func(v AnyVal) AnyVal) Functor {
 	mon := x.Chain(func(y AnyVal) Monad {
-		return IdT{
-			m:   x.m,
-			Run: x.m.Of(f(y)),
-		}
+		app := NewIdT(x.m).Of(f(y))
+		return app.(Monad)
 	})
 	return mon.(Functor)
 }
