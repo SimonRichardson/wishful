@@ -7,7 +7,7 @@ type Functor interface {
 // Identity
 
 func (x Id) Map(f func(v AnyVal) AnyVal) Functor {
-	return NewId(f(x.x))
+	return NewId(f(x.X))
 }
 
 // IdentityT

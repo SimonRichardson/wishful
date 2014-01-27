@@ -3,12 +3,12 @@ package wishful
 // Identity
 
 type Id struct {
-	x AnyVal
+	X AnyVal
 }
 
 func NewId(x AnyVal) Id {
 	return Id{
-		x: x,
+		X: x,
 	}
 }
 
@@ -43,14 +43,14 @@ func NewIO(unsafe func() AnyVal) IO {
 type Option interface {
 }
 type Some struct {
-	x AnyVal
+	X AnyVal
 }
 type None struct {
 }
 
 func NewSome(x AnyVal) Some {
 	return Some{
-		x: x,
+		X: x,
 	}
 }
 func NewNone() None {
@@ -60,9 +60,5 @@ func NewNone() None {
 // Promise
 
 type Promise struct {
-	fork func(resolve func(x AnyVal) AnyVal) AnyVal
-}
-
-func (x Promise) Fork(f func(x AnyVal) AnyVal) AnyVal {
-	return x.fork(f)
+	Fork func(resolve func(x AnyVal) AnyVal) AnyVal
 }
