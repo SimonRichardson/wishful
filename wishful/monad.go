@@ -10,6 +10,19 @@ func (x Id) Chain(f func(v AnyVal) Monad) Monad {
 	return f(x.x)
 }
 
+// IdentityT
+
+func (x IdT) Chain(f func(v AnyVal) Monad) Monad {
+	mon := x.Run.(Monad)
+	tra := IdT{
+		m: x.m,
+		Run: mon.Chain(func(y AnyVal) Monad {
+			return f(y).(Monad)
+		}),
+	}
+	return tra
+}
+
 // IO
 
 func (x IO) Chain(f func(x AnyVal) Monad) Monad {

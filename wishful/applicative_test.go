@@ -8,11 +8,11 @@ import (
 // Identity
 
 func Test_IdentityOf(t *testing.T) {
-	f := func(v int) Option {
+	f := func(v int) Id {
 		return NewId(v)
 	}
-	g := func(v int) Option {
-		return Id{}.Of(v)
+	g := func(v int) Id {
+		return Id{}.Of(v).(Id)
 	}
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
@@ -20,16 +20,50 @@ func Test_IdentityOf(t *testing.T) {
 }
 
 func Test_ApWithIdentity(t *testing.T) {
-	f := func(v int) Option {
+	f := func(v int) Id {
 		return NewId(v)
 	}
-	g := func(v int) Option {
-		return NewId(Identity).Ap(NewId(v))
+	g := func(v int) Id {
+		return NewId(Identity).Ap(NewId(v)).(Id)
 	}
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
+
+// IdentityT
+
+func Test_IdentityTOf(t *testing.T) {
+	f := func(v int) Id {
+		return NewId(v)
+	}
+	g := func(v int) Id {
+		app := NewIdT(Id{}).Of(v)
+		return app.(IdT).Run.(Id)
+	}
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
+
+/*
+func Test_IdentityTAp(t *testing.T) {
+	f := func(v int) Id {
+		return NewId(v)
+	}
+	g := func(v int) Id {
+		M := NewIdT(Id{})
+		app0 := M.Of(Identity)
+		app1 := M.Of(v)
+		program := app0.Ap(app1)
+		fmt.Println(program)
+		return program.(IdT).Run.(Id)
+	}
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
+*/
 
 // IO
 

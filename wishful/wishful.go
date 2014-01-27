@@ -12,6 +12,20 @@ func NewId(x AnyVal) Id {
 	}
 }
 
+// IdentityT
+
+type IdT struct {
+	m   Applicative
+	Run AnyVal
+}
+
+func NewIdT(m Applicative) IdT {
+	return IdT{
+		m:   m,
+		Run: Empty{},
+	}
+}
+
 // IO
 
 type IO struct {
