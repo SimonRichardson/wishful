@@ -19,10 +19,10 @@ func (o IntSemigroup) Concat(x Semigroup) Semigroup {
 
 func Test_ConcatWithId(t *testing.T) {
 	f := func(v int) Option {
-		return Id{IntSemigroup{v + v}}
+		return NewId(IntSemigroup{v + v})
 	}
 	g := func(v int) Option {
-		return Id{IntSemigroup{v}}.Concat(Id{IntSemigroup{v}})
+		return NewId(IntSemigroup{v}).Concat(NewId(IntSemigroup{v}))
 	}
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
@@ -33,10 +33,10 @@ func Test_ConcatWithId(t *testing.T) {
 
 func Test_ConcatWithOptionSomeAndSome(t *testing.T) {
 	f := func(v int) Option {
-		return Some{IntSemigroup{v + v}}
+		return NewSome(IntSemigroup{v + v})
 	}
 	g := func(v int) Option {
-		return Some{IntSemigroup{v}}.Concat(Some{IntSemigroup{v}})
+		return NewSome(IntSemigroup{v}).Concat(NewSome(IntSemigroup{v}))
 	}
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
@@ -48,7 +48,7 @@ func Test_ConcatWithOptionSomeAndNone(t *testing.T) {
 		return None{}
 	}
 	g := func(v int) Option {
-		return Some{IntSemigroup{v}}.Concat(None{})
+		return NewSome(IntSemigroup{v}).Concat(None{})
 	}
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
@@ -60,7 +60,7 @@ func Test_ConcatWithOptionNoneAndSome(t *testing.T) {
 		return None{}
 	}
 	g := func(v int) Option {
-		return None{}.Concat(Some{IntSemigroup{v}})
+		return None{}.Concat(NewSome(IntSemigroup{v}))
 	}
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)

@@ -9,10 +9,10 @@ import (
 
 func Test_MapWithIdentity(t *testing.T) {
 	f := func(v int) Id {
-		return Id{v + 1}
+		return NewId(v + 1)
 	}
 	g := func(v int) Id {
-		res := Id{v}.Map(Inc)
+		res := NewId(v).Map(Inc)
 		return res.(Id)
 	}
 	if err := quick.CheckEqual(f, g, nil); err != nil {
@@ -24,10 +24,10 @@ func Test_MapWithIdentity(t *testing.T) {
 
 func Test_MapWithOptionSome(t *testing.T) {
 	f := func(v int) Option {
-		return Some{v + 1}
+		return NewSome(v + 1)
 	}
 	g := func(v int) Option {
-		res := Some{v}.Map(Inc)
+		res := NewSome(v).Map(Inc)
 		return res.(Option)
 	}
 	if err := quick.CheckEqual(f, g, nil); err != nil {

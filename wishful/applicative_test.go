@@ -9,7 +9,7 @@ import (
 
 func Test_IdentityOf(t *testing.T) {
 	f := func(v int) Option {
-		return Id{v}
+		return NewId(v)
 	}
 	g := func(v int) Option {
 		return Id{}.Of(v)
@@ -21,10 +21,10 @@ func Test_IdentityOf(t *testing.T) {
 
 func Test_ApWithIdentity(t *testing.T) {
 	f := func(v int) Option {
-		return Id{v}
+		return NewId(v)
 	}
 	g := func(v int) Option {
-		return Id{Identity}.Ap(Id{v})
+		return NewId(Identity).Ap(NewId(v))
 	}
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
@@ -35,7 +35,7 @@ func Test_ApWithIdentity(t *testing.T) {
 
 func Test_OptionSomeOf(t *testing.T) {
 	f := func(v int) Option {
-		return Some{v}
+		return NewSome(v)
 	}
 	g := func(v int) Option {
 		return Some{}.Of(v)
@@ -47,7 +47,7 @@ func Test_OptionSomeOf(t *testing.T) {
 
 func Test_OptionNoneOf(t *testing.T) {
 	f := func(v int) Option {
-		return Some{v}
+		return NewSome(v)
 	}
 	g := func(v int) Option {
 		return None{}.Of(v)
@@ -59,10 +59,10 @@ func Test_OptionNoneOf(t *testing.T) {
 
 func Test_ApWithOptionSome(t *testing.T) {
 	f := func(v int) Option {
-		return Some{v}
+		return NewSome(v)
 	}
 	g := func(v int) Option {
-		return Some{Identity}.Ap(Some{v})
+		return NewSome(Identity).Ap(NewSome(v))
 	}
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
@@ -74,7 +74,7 @@ func Test_ApWithOptionNoneForApMethod(t *testing.T) {
 		return None{}
 	}
 	g := func(v int) Option {
-		return Some{Identity}.Ap(None{})
+		return NewSome(Identity).Ap(None{})
 	}
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
@@ -98,7 +98,7 @@ func Test_ApWithOptionNoneForApConstructorWithSome(t *testing.T) {
 		return None{}
 	}
 	g := func(v int) Option {
-		return None{}.Ap(Some{v})
+		return None{}.Ap(NewSome(v))
 	}
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)

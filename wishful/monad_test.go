@@ -9,11 +9,11 @@ import (
 
 func Test_ChainWithIdentity(t *testing.T) {
 	f := func(v int) Id {
-		return Id{v + 1}
+		return NewId(v + 1)
 	}
 	g := func(v int) Id {
-		a := Id{v}.Chain(func(x AnyVal) Monad {
-			return Id{Inc(x)}
+		a := NewId(v).Chain(func(x AnyVal) Monad {
+			return NewId(Inc(x))
 		})
 		return a.(Id)
 	}
@@ -26,11 +26,11 @@ func Test_ChainWithIdentity(t *testing.T) {
 
 func Test_ChainWithOptionSome(t *testing.T) {
 	f := func(v int) Option {
-		return Some{v + 1}
+		return NewSome(v + 1)
 	}
 	g := func(v int) Option {
-		return Some{v}.Chain(func(x AnyVal) Monad {
-			return Some{Inc(x)}
+		return NewSome(v).Chain(func(x AnyVal) Monad {
+			return NewSome(Inc(x))
 		})
 	}
 	if err := quick.CheckEqual(f, g, nil); err != nil {
@@ -44,7 +44,7 @@ func Test_ChainWithOptionNone(t *testing.T) {
 	}
 	g := func(v int) Option {
 		return None{}.Chain(func(x AnyVal) Monad {
-			return Some{Inc(x)}
+			return NewSome(Inc(x))
 		})
 	}
 	if err := quick.CheckEqual(f, g, nil); err != nil {

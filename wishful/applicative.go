@@ -8,7 +8,7 @@ type Applicative interface {
 // Identity
 
 func (x Id) Of(v AnyVal) Applicative {
-	return Id{v}
+	return NewId(v)
 }
 
 func (x Id) Ap(v Applicative) Applicative {
@@ -18,11 +18,11 @@ func (x Id) Ap(v Applicative) Applicative {
 // Option
 
 func (x Some) Of(v AnyVal) Applicative {
-	return Some{v}
+	return NewSome(v)
 }
 
 func (x None) Of(v AnyVal) Applicative {
-	return Some{v}
+	return NewSome(v)
 }
 
 func (x Some) Ap(v Applicative) Applicative {

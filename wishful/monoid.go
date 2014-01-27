@@ -7,9 +7,9 @@ type Monoid interface {
 // Option
 
 func (x Some) Empty() Monoid {
-	return None{}
+	return NewNone()
 }
 
 func (x None) Empty() Monoid {
-	return None{}
+	return NewNone()
 }

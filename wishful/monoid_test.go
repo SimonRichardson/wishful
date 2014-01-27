@@ -12,7 +12,7 @@ func Test_EmptyWithOptionSome(t *testing.T) {
 		return None{}
 	}
 	g := func(v int) Option {
-		return Some{v}.Empty()
+		return NewSome(v).Empty()
 	}
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)

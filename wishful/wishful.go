@@ -6,6 +6,12 @@ type Id struct {
 	x AnyVal
 }
 
+func NewId(x AnyVal) Id {
+	return Id{
+		x: x,
+	}
+}
+
 // Option
 
 type Option interface {
@@ -14,6 +20,15 @@ type Some struct {
 	x AnyVal
 }
 type None struct {
+}
+
+func NewSome(x AnyVal) Some {
+	return Some{
+		x: x,
+	}
+}
+func NewNone() None {
+	return None{}
 }
 
 // Promise
