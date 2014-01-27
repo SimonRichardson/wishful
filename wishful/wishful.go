@@ -12,6 +12,18 @@ func NewId(x AnyVal) Id {
 	}
 }
 
+// IO
+
+type IO struct {
+	UnsafePerform func() AnyVal
+}
+
+func NewIO(unsafe func() AnyVal) IO {
+	return IO{
+		UnsafePerform: unsafe,
+	}
+}
+
 // Option
 
 type Option interface {

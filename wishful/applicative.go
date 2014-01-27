@@ -15,6 +15,23 @@ func (x Id) Ap(v Applicative) Applicative {
 	return fromMonadToApplicativeAp(x, v)
 }
 
+// IO
+
+func (x IO) Of(v AnyVal) Applicative {
+	return NewIO(func() AnyVal {
+		return v
+	})
+}
+
+func (x IO) Ap(v Applicative) Applicative {
+	res := x.Chain(func(f AnyVal) Monad {
+		fun := v.(Functor)
+		res := fun.Map(f.(func(f AnyVal) AnyVal))
+		return res.(Monad)
+	})
+	return res.(Applicative)
+}
+
 // Option
 
 func (x Some) Of(v AnyVal) Applicative {

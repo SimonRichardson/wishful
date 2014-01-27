@@ -22,6 +22,25 @@ func Test_ChainWithIdentity(t *testing.T) {
 	}
 }
 
+// IO
+
+func Test_ChainWithIO(t *testing.T) {
+	f := func(v int) int {
+		return v + 1
+	}
+	g := func(v int) int {
+		app := IO{}.Of(v)
+		mon := app.(Monad).Chain(func(x AnyVal) Monad {
+			return IO{}.Of(Inc(x)).(Monad)
+		})
+		io := mon.(IO)
+		return io.UnsafePerform().(int)
+	}
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
+
 // Option
 
 func Test_ChainWithOptionSome(t *testing.T) {

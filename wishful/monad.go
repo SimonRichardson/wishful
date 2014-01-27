@@ -10,6 +10,15 @@ func (x Id) Chain(f func(v AnyVal) Monad) Monad {
 	return f(x.x)
 }
 
+// IO
+
+func (x IO) Chain(f func(x AnyVal) Monad) Monad {
+	return NewIO(func() AnyVal {
+		io := f(x.UnsafePerform()).(IO)
+		return io.UnsafePerform()
+	})
+}
+
 // Option
 
 func (x Some) Chain(f func(v AnyVal) Monad) Monad {

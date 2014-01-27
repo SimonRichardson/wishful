@@ -10,6 +10,17 @@ func (x Id) Map(f func(v AnyVal) AnyVal) Functor {
 	return NewId(f(x.x))
 }
 
+// IO
+
+func (x IO) Map(f func(x AnyVal) AnyVal) Functor {
+	res := x.Chain(func(x AnyVal) Monad {
+		return IO{func() AnyVal {
+			return f(x)
+		}}
+	})
+	return res.(Functor)
+}
+
 // Option
 
 func (x Some) Map(f func(v AnyVal) AnyVal) Functor {

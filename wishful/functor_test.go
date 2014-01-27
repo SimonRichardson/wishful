@@ -20,6 +20,23 @@ func Test_MapWithIdentity(t *testing.T) {
 	}
 }
 
+// IO
+
+func Test_MapWithIO(t *testing.T) {
+	f := func(v int) int {
+		return v + 1
+	}
+	g := func(v int) int {
+		fun := IO{}.Of(v).(Functor)
+		return fun.Map(func(x AnyVal) AnyVal {
+			return x.(int) + 1
+		}).(IO).UnsafePerform().(int)
+	}
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
+
 // Option
 
 func Test_MapWithOptionSome(t *testing.T) {

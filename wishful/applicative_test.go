@@ -31,6 +31,22 @@ func Test_ApWithIdentity(t *testing.T) {
 	}
 }
 
+// IO
+
+func Test_ApWithIO(t *testing.T) {
+	f := func(v int) int {
+		return v
+	}
+	g := func(v int) int {
+		app := IO{}.Of(Identity).Ap(IO{}.Of(v))
+		io := app.(IO)
+		return io.UnsafePerform().(int)
+	}
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
+
 // Option
 
 func Test_OptionSomeOf(t *testing.T) {
