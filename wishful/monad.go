@@ -7,7 +7,7 @@ type Monad interface {
 // Identity
 
 func (x Id) Chain(f func(v AnyVal) Monad) Monad {
-	return f(x.X)
+	return f(x.x)
 }
 
 // IdentityT
@@ -36,7 +36,7 @@ func (x IO) Chain(f func(x AnyVal) Monad) Monad {
 // Option
 
 func (x Some) Chain(f func(v AnyVal) Monad) Monad {
-	return f(x.X)
+	return f(x.x)
 }
 
 func (x None) Chain(f func(v AnyVal) Monad) Monad {

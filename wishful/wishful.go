@@ -3,13 +3,17 @@ package wishful
 // Identity
 
 type Id struct {
-	X AnyVal
+	x AnyVal
 }
 
 func NewId(x AnyVal) Id {
 	return Id{
-		X: x,
+		x: x,
 	}
+}
+
+func (x Id) Fold(f func(x AnyVal) AnyVal) AnyVal {
+	return f(x.x)
 }
 
 // IdentityT
@@ -24,6 +28,10 @@ func NewIdT(m Applicative) IdT {
 		m:   m,
 		Run: Empty{},
 	}
+}
+
+func (x IdT) Lift(m Applicative) IdT {
+	return NewIdT(m)
 }
 
 // IO
@@ -42,19 +50,30 @@ func NewIO(unsafe func() AnyVal) IO {
 
 type Option interface {
 }
+
 type Some struct {
-	X AnyVal
+	x AnyVal
 }
+
 type None struct {
 }
 
 func NewSome(x AnyVal) Some {
 	return Some{
-		X: x,
+		x: x,
 	}
 }
+
 func NewNone() None {
 	return None{}
+}
+
+func (x Some) Fold(f func(x AnyVal) AnyVal, g func() AnyVal) AnyVal {
+	return f(x.x)
+}
+
+func (x None) Fold(f func(x AnyVal) AnyVal, g func() AnyVal) AnyVal {
+	return g()
 }
 
 // Promise
