@@ -1,48 +1,70 @@
 package wishful
 
 type Applicative interface {
-	Of(v AnyVal) Applicative
 	Ap(v Applicative) Applicative
 }
 
-type Applicative struct{}
+type ApplicativeLaws struct {
+	x Point
+}
 
-func (o Applicative) Identity() {
-	f := func(v AnyVal) AnyVal {
-		return o.Of(Identity).Ap(o.Of(v))
+func NewApplicativeLaws(point Point) ApplicativeLaws {
+	return ApplicativeLaws{
+		x: point,
 	}
-	g := func(v AnyVal) AnyVal {
-		return o.Of(v)
+}
+
+func (o ApplicativeLaws) Identity(run func(v AnyVal) AnyVal) (func(v int) AnyVal, func(v int) AnyVal) {
+	f := func(v int) AnyVal {
+		a := o.x.Of(Identity).(Applicative)
+		b := o.x.Of(v).(Applicative)
+		return run(a.Ap(b))
+	}
+	g := func(v int) AnyVal {
+		return run(o.x.Of(v))
 	}
 	return f, g
 }
 
-func (o Applicative) Composition() {
-	f := func(v AnyVal) AnyVal {
-		return o.Of(Compose).Ap(o.Of(Identity)).Ap(o.Of(Identity)).Ap(o.Of(v))
+func (o ApplicativeLaws) Composition(run func(v AnyVal) AnyVal) (func(v int) AnyVal, func(v int) AnyVal) {
+	f := func(v int) AnyVal {
+		a := o.x.Of(Compose).(Applicative)
+		b := o.x.Of(Identity).(Applicative)
+		c := o.x.Of(Identity).(Applicative)
+		d := o.x.Of(v).(Applicative)
+		return run(a.Ap(b).Ap(c).Ap(d))
 	}
-	g := func(v AnyVal) AnyVal {
-		return o.Of(Identity).Ap(o.Of(Identity).Ap(o.Of(v)))
-	}
-	return f, g
-}
-
-func (o Applicative) Homomorphism() {
-	f := func(v AnyVal) AnyVal {
-		return o.Of(Identity).Ap(o.Of(v))
-	}
-	g := func(v AnyVal) AnyVal {
-		return o.Of(Identity(v))
+	g := func(v int) AnyVal {
+		a := o.x.Of(Identity).(Applicative)
+		b := o.x.Of(Identity).(Applicative)
+		c := o.x.Of(v).(Applicative)
+		return run(a.Ap(b.Ap(c)))
 	}
 	return f, g
 }
 
-func (o Applicative) Interchange() {
-	f := func(v AnyVal) AnyVal {
-		return o.Of(Identity).Ap(o.Of(v))
+func (o ApplicativeLaws) Homomorphism(run func(v AnyVal) AnyVal) (func(v int) AnyVal, func(v int) AnyVal) {
+	f := func(v int) AnyVal {
+		a := o.x.Of(Identity).(Applicative)
+		b := o.x.Of(v).(Applicative)
+		return run(a.Ap(b).(Applicative))
 	}
-	g := func(v AnyVal) AnyVal {
-		return o.Of(Thrush(v)).Ap(o.Of(Identity))
+	g := func(v int) AnyVal {
+		return run(o.x.Of(Identity(v)))
+	}
+	return f, g
+}
+
+func (o ApplicativeLaws) Interchange(run func(v AnyVal) AnyVal) (func(v int) AnyVal, func(v int) AnyVal) {
+	f := func(v int) AnyVal {
+		a := o.x.Of(Identity).(Applicative)
+		b := o.x.Of(v).(Applicative)
+		return run(a.Ap(b).(Applicative))
+	}
+	g := func(v int) AnyVal {
+		a := o.x.Of(Thrush(v)).(Applicative)
+		b := o.x.Of(Identity).(Applicative)
+		return run(a.Ap(b))
 	}
 	return f, g
 }

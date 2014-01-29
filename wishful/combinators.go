@@ -27,3 +27,10 @@ func Constant(a AnyVal) func(x AnyVal) AnyVal {
 func Identity(x AnyVal) AnyVal {
 	return x
 }
+
+// T combinator
+func Thrush(x AnyVal) func(f func(v AnyVal) AnyVal) AnyVal {
+	return func(f func(v AnyVal) AnyVal) AnyVal {
+		return f(x)
+	}
+}

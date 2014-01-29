@@ -56,3 +56,16 @@ func TestIdentity(t *testing.T) {
 		t.Error(err)
 	}
 }
+
+// T combinator
+func TestThrush(t *testing.T) {
+	f := func(v int) int {
+		return v
+	}
+	g := func(v int) int {
+		return Thrush(v)(Identity).(int)
+	}
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}

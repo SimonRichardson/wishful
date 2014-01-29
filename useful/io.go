@@ -1,7 +1,7 @@
 package useful
 
 import (
-	. "github.com/SimonRichardson/wishful"
+	. "github.com/SimonRichardson/wishful/wishful"
 )
 
 type IO struct {
@@ -14,7 +14,7 @@ func NewIO(unsafe func() AnyVal) IO {
 	}
 }
 
-func (x IO) Of(v AnyVal) Applicative {
+func (x IO) Of(v AnyVal) Point {
 	return NewIO(func() AnyVal {
 		return v
 	})
@@ -23,7 +23,11 @@ func (x IO) Of(v AnyVal) Applicative {
 func (x IO) Ap(v Applicative) Applicative {
 	res := x.Chain(func(f AnyVal) Monad {
 		fun := v.(Functor)
-		res := fun.Map(f.(func(f AnyVal) AnyVal))
+		res := fun.Map(func(x AnyVal) AnyVal {
+			fun := NewFunction(f)
+			res, _ := fun.Call(x)
+			return res
+		})
 		return res.(Monad)
 	})
 	return res.(Applicative)

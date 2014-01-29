@@ -1,7 +1,7 @@
 package useful
 
 import (
-	. "github.com/SimonRichardson/wishful"
+	. "github.com/SimonRichardson/wishful/wishful"
 )
 
 type Option interface {
@@ -24,11 +24,11 @@ func NewNone() None {
 	return None{}
 }
 
-func (x Some) Of(v AnyVal) Applicative {
+func (x Some) Of(v AnyVal) Point {
 	return NewSome(v)
 }
 
-func (x None) Of(v AnyVal) Applicative {
+func (x None) Of(v AnyVal) Point {
 	return NewSome(v)
 }
 

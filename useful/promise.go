@@ -1,10 +1,14 @@
 package useful
 
+import (
+	. "github.com/SimonRichardson/wishful/wishful"
+)
+
 type Promise struct {
 	Fork func(resolve func(x AnyVal) AnyVal) AnyVal
 }
 
-func (x Promise) Of(v AnyVal) Applicative {
+func (x Promise) Of(v AnyVal) Point {
 	return Promise{func(resolve func(x AnyVal) AnyVal) AnyVal {
 		return resolve(v)
 	}}
@@ -14,8 +18,12 @@ func (x Promise) Ap(v Applicative) Applicative {
 	return Promise{func(resolve func(x AnyVal) AnyVal) AnyVal {
 		return x.Fork(func(f AnyVal) AnyVal {
 			fun := v.(Functor)
-			pro := fun.Map(f.(func(x AnyVal) AnyVal)).(Promise)
-			return pro.Fork(resolve)
+			pro := fun.Map(func(x AnyVal) AnyVal {
+				fun := NewFunction(f)
+				res, _ := fun.Call(x)
+				return res
+			})
+			return pro.(Promise).Fork(resolve)
 		})
 	}}
 }

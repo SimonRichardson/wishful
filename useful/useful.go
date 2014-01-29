@@ -1,15 +1,16 @@
 package useful
 
 import (
-	. "github.com/SimonRichardson/wishful"
+	. "github.com/SimonRichardson/wishful/wishful"
 )
 
 func fromMonadToApplicativeAp(x Monad, y Applicative) Applicative {
 	res := x.Chain(func(f AnyVal) Monad {
 		fun := y.(Functor)
 		res := fun.Map(func(g AnyVal) AnyVal {
-			app := f.(func(AnyVal) AnyVal)
-			return app(g)
+			fun := NewFunction(f)
+			res, _ := fun.Call(g)
+			return res
 		})
 		return res.(Monad)
 	})

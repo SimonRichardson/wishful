@@ -1,7 +1,7 @@
 package useful
 
 import (
-	. "github.com/SimonRichardson/wishful"
+	. "github.com/SimonRichardson/wishful/wishful"
 )
 
 type Id struct {
@@ -14,7 +14,7 @@ func NewId(x AnyVal) Id {
 	}
 }
 
-func (x Id) Of(v AnyVal) Applicative {
+func (x Id) Of(v AnyVal) Point {
 	return NewId(v)
 }
 
