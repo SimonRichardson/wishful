@@ -67,3 +67,37 @@ func Test_Option_None_ApplicativeLaws_Interchange(t *testing.T) {
 		t.Error(err)
 	}
 }
+
+// Functor Laws
+
+// Some
+
+func Test_Option_Some_FunctorLaws_Identity(t *testing.T) {
+	f, g := NewFunctorLaws(Some{}).Identity(Identity)
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
+
+func Test_Option_Some_FunctorLaws_Composition(t *testing.T) {
+	f, g := NewFunctorLaws(Some{}).Composition(Identity)
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
+
+// None
+
+func Test_Option_None_FunctorLaws_Identity(t *testing.T) {
+	f, g := NewFunctorLaws(None{}).Identity(Identity)
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
+
+func Test_Option_None_FunctorLaws_Composition(t *testing.T) {
+	f, g := NewFunctorLaws(None{}).Composition(Identity)
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}

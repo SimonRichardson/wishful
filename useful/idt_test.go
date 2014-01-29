@@ -40,3 +40,19 @@ func Test_IdT_ApplicativeLaws_Interchange(t *testing.T) {
 		t.Error(err)
 	}
 }
+
+// Functor Laws
+
+func Test_IdT_FunctorLaws_Identity(t *testing.T) {
+	f, g := NewFunctorLaws(NewIdT(Id{})).Identity(extractIdT)
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
+
+func Test_IdT_FunctorLaws_Composition(t *testing.T) {
+	f, g := NewFunctorLaws(NewIdT(Id{})).Composition(extractIdT)
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
