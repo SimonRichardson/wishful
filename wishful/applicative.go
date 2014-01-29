@@ -5,7 +5,9 @@ type Applicative interface {
 	Ap(v Applicative) Applicative
 }
 
-func (o Laws) Identity() {
+type Applicative struct{}
+
+func (o Applicative) Identity() {
 	f := func(v AnyVal) AnyVal {
 		return o.Of(Identity).Ap(o.Of(v))
 	}
@@ -15,7 +17,7 @@ func (o Laws) Identity() {
 	return f, g
 }
 
-func (o Laws) Composition() {
+func (o Applicative) Composition() {
 	f := func(v AnyVal) AnyVal {
 		return o.Of(Compose).Ap(o.Of(Identity)).Ap(o.Of(Identity)).Ap(o.Of(v))
 	}
@@ -25,7 +27,7 @@ func (o Laws) Composition() {
 	return f, g
 }
 
-func (o Laws) Homomorphism() {
+func (o Applicative) Homomorphism() {
 	f := func(v AnyVal) AnyVal {
 		return o.Of(Identity).Ap(o.Of(v))
 	}
@@ -35,7 +37,7 @@ func (o Laws) Homomorphism() {
 	return f, g
 }
 
-func (o Laws) Interchange() {
+func (o Applicative) Interchange() {
 	f := func(v AnyVal) AnyVal {
 		return o.Of(Identity).Ap(o.Of(v))
 	}
