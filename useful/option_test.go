@@ -101,3 +101,51 @@ func Test_Option_None_FunctorLaws_Composition(t *testing.T) {
 		t.Error(err)
 	}
 }
+
+// Monad Laws
+
+// Some
+
+func Test_Option_Some_MonadLaws_LeftIdentity(t *testing.T) {
+	f, g := NewMonadLaws(Some{}).LeftIdentity(Identity)
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
+
+func Test_Option_Some_MonadLaws_RightIdentity(t *testing.T) {
+	f, g := NewMonadLaws(Some{}).RightIdentity(Identity)
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
+
+func Test_Option_Some_MonadLaws_Associativity(t *testing.T) {
+	f, g := NewMonadLaws(Some{}).Associativity(Identity)
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
+
+// None
+
+func Test_Option_None_MonadLaws_LeftIdentity(t *testing.T) {
+	f, g := NewMonadLaws(None{}).LeftIdentity(Identity)
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
+
+func Test_Option_None_MonadLaws_RightIdentity(t *testing.T) {
+	f, g := NewMonadLaws(None{}).RightIdentity(Identity)
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
+
+func Test_Option_None_MonadLaws_Associativity(t *testing.T) {
+	f, g := NewMonadLaws(None{}).Associativity(Identity)
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}

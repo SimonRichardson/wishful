@@ -56,3 +56,26 @@ func Test_IO_FunctorLaws_Composition(t *testing.T) {
 		t.Error(err)
 	}
 }
+
+// Monad Laws
+
+func Test_IO_MonadLaws_LeftIdentity(t *testing.T) {
+	f, g := NewMonadLaws(IO{}).LeftIdentity(extractIO)
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
+
+func Test_IO_MonadLaws_RightIdentity(t *testing.T) {
+	f, g := NewMonadLaws(IO{}).RightIdentity(extractIO)
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
+
+func Test_IO_MonadLaws_Associativity(t *testing.T) {
+	f, g := NewMonadLaws(IO{}).Associativity(extractIO)
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
