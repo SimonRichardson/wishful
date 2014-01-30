@@ -27,7 +27,7 @@ func (x Id) Chain(f func(v AnyVal) Monad) Monad {
 }
 
 func (x Id) Concat(y Semigroup) Semigroup {
-	return fromMonadToSemigroupConcat(x, y)
+	return concat(x, y)
 }
 
 func (x Id) Map(f func(v AnyVal) AnyVal) Functor {

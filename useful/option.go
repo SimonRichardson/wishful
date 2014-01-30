@@ -68,7 +68,7 @@ func (x None) Map(f func(v AnyVal) AnyVal) Functor {
 }
 
 func (x Some) Concat(y Semigroup) Semigroup {
-	return fromMonadToSemigroupConcat(x, y)
+	return concat(x, y)
 }
 
 func (x None) Concat(y Semigroup) Semigroup {

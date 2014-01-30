@@ -6,6 +6,82 @@ import (
 	"testing/quick"
 )
 
+// Manual tests
+
+func Test_Option_None_Empty(t *testing.T) {
+	f := func(x int) Option {
+		return None{}.Empty()
+	}
+	g := func(x int) Option {
+		return Some{}.Empty()
+	}
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
+
+func Test_Option_None_Of(t *testing.T) {
+	f := func(x int) Option {
+		return None{}.Of(x)
+	}
+	g := func(x int) Option {
+		return Some{}.Of(x)
+	}
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
+
+func Test_Option_None_Ap(t *testing.T) {
+	f := func(x int) Option {
+		return None{}.Ap(None{})
+	}
+	g := func(x int) Option {
+		return None{}
+	}
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
+
+func Test_Option_None_Chain(t *testing.T) {
+	f := func(x int) Option {
+		return None{}.Chain(func(v AnyVal) Monad {
+			return None{}
+		})
+	}
+	g := func(x int) Option {
+		return None{}
+	}
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
+
+func Test_Option_None_Map(t *testing.T) {
+	f := func(x int) Option {
+		return None{}.Map(Identity)
+	}
+	g := func(x int) Option {
+		return None{}
+	}
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
+
+func Test_Option_None_Concat(t *testing.T) {
+	f := func(x int) Option {
+		return None{}.Concat(None{})
+	}
+	g := func(x int) Option {
+		return None{}
+	}
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
+
 // Applicative Laws
 
 // Some

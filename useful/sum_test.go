@@ -45,6 +45,29 @@ func Test_Sum_MonadLaws_Associativity(t *testing.T) {
 	}
 }
 
+// Monoid Laws
+
+func Test_Sum_MonoidLaws_LeftIdentity(t *testing.T) {
+	f, g := NewMonoidLaws(Sum{}).LeftIdentity(Identity)
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
+
+func Test_Sum_MonoidLaws_RightIdentity(t *testing.T) {
+	f, g := NewMonoidLaws(Sum{}).RightIdentity(Identity)
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
+
+func Test_Sum_MonoidLaws_Associativity(t *testing.T) {
+	f, g := NewMonoidLaws(Sum{}).Associativity(Identity)
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
+
 // Semigroup Laws
 
 func Test_Sum_SemigroupLaws_Associativity(t *testing.T) {
