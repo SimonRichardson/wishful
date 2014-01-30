@@ -31,5 +31,7 @@ func (x Id) Concat(y Semigroup) Semigroup {
 }
 
 func (x Id) Map(f func(v AnyVal) AnyVal) Functor {
-	return NewId(f(x.x))
+	return x.Chain(func(x AnyVal) Monad {
+		return NewId(f(x))
+	}).(Functor)
 }

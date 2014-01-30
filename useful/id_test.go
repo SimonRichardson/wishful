@@ -74,3 +74,12 @@ func Test_Id_MonadLaws_Associativity(t *testing.T) {
 		t.Error(err)
 	}
 }
+
+// Semigroup Laws
+
+func Test_Id_SemigroupLaws_Associativity(t *testing.T) {
+	f, g := NewSemigroupLaws(Id{}).Associativity(Identity)
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}

@@ -149,3 +149,23 @@ func Test_Option_None_MonadLaws_Associativity(t *testing.T) {
 		t.Error(err)
 	}
 }
+
+// Semigroup Laws
+
+// Some
+
+func Test_Option_Some_SemigroupLaws_Associativity(t *testing.T) {
+	f, g := NewSemigroupLaws(Some{}).Associativity(Identity)
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
+
+// None
+
+func Test_Option_None_SemigroupLaws_Associativity(t *testing.T) {
+	f, g := NewSemigroupLaws(None{}).Associativity(Identity)
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
