@@ -25,6 +25,22 @@ func Test_Endo_NewEndo(t *testing.T) {
 	}
 }
 
+// Functor Laws
+
+func Test_Endo_FunctorLaws_Identity(t *testing.T) {
+	f, g := NewFunctorLaws(Endo{}).Identity(extractEndo)
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
+
+func Test_Endo_FunctorLaws_Composition(t *testing.T) {
+	f, g := NewFunctorLaws(Endo{}).Composition(extractEndo)
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
+
 // Monoid Laws
 
 func Test_Endo_MonoidLaws_LeftIdentity(t *testing.T) {

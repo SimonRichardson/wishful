@@ -32,3 +32,9 @@ func (x Endo) Concat(y Semigroup) Semigroup {
 		return x.Fork(a.Fork(v))
 	})
 }
+
+func (x Endo) Map(f func(v AnyVal) AnyVal) Functor {
+	return NewEndo(func(v AnyVal) AnyVal {
+		return f(x.Fork(v))
+	})
+}
