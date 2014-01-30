@@ -58,25 +58,24 @@ func Test_IdT_FunctorLaws_Composition(t *testing.T) {
 }
 
 // Monad Laws
-/*
+
 func Test_IdT_MonadLaws_LeftIdentity(t *testing.T) {
-	f, g := NewMonadLaws(IdT{}).LeftIdentity(extractIdT)
+	f, g := NewMonadLaws(NewIdT(Id{})).LeftIdentity(extractIdT)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_IdT_MonadLaws_RightIdentity(t *testing.T) {
-	f, g := NewMonadLaws(IdT{}).RightIdentity(extractIdT)
+	f, g := NewMonadLaws(NewIdT(Id{})).RightIdentity(extractIdT)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_IdT_MonadLaws_Associativity(t *testing.T) {
-	f, g := NewMonadLaws(IdT{}).Associativity(extractIdT)
+	f, g := NewMonadLaws(NewIdT(Id{})).Associativity(extractIdT)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
-*/
