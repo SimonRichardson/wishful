@@ -1,0 +1,58 @@
+package useful
+
+import (
+	. "github.com/SimonRichardson/wishful/wishful"
+	"testing"
+	"testing/quick"
+)
+
+func extractEndo(x AnyVal) AnyVal {
+	endo := x.(Endo)
+	return endo.Fork(Identity)
+}
+
+// Manual
+
+func Test_Endo_NewEndo(t *testing.T) {
+	f := func(x int) Option {
+		return extractEndo(NewEndo(Constant(x)))
+	}
+	g := func(x int) Option {
+		return extractEndo(Endo{}.Of(x))
+	}
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
+
+// Monoid Laws
+
+func Test_Endo_MonoidLaws_LeftIdentity(t *testing.T) {
+	f, g := NewMonoidLaws(Endo{}).LeftIdentity(extractEndo)
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
+
+func Test_Endo_MonoidLaws_RightIdentity(t *testing.T) {
+	f, g := NewMonoidLaws(Endo{}).RightIdentity(extractEndo)
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
+
+func Test_Endo_MonoidLaws_Associativity(t *testing.T) {
+	f, g := NewMonoidLaws(Endo{}).Associativity(extractEndo)
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
+
+// Semigroup Laws
+
+func Test_Endo_SemigroupLaws_Associativity(t *testing.T) {
+	f, g := NewSemigroupLaws(Endo{}).Associativity(extractEndo)
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
