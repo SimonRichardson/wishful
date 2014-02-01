@@ -10,10 +10,10 @@ import (
 
 func Test_Option_None_Empty(t *testing.T) {
 	f := func(x int) Option {
-		return None{}.Empty()
+		return None{}.Empty().(Option)
 	}
 	g := func(x int) Option {
-		return Some{}.Empty()
+		return Some{}.Empty().(Option)
 	}
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
@@ -22,10 +22,10 @@ func Test_Option_None_Empty(t *testing.T) {
 
 func Test_Option_None_Of(t *testing.T) {
 	f := func(x int) Option {
-		return None{}.Of(x)
+		return None{}.Of(x).(Option)
 	}
 	g := func(x int) Option {
-		return Some{}.Of(x)
+		return Some{}.Of(x).(Option)
 	}
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
@@ -34,7 +34,7 @@ func Test_Option_None_Of(t *testing.T) {
 
 func Test_Option_None_Ap(t *testing.T) {
 	f := func(x int) Option {
-		return None{}.Ap(None{})
+		return None{}.Ap(None{}).(Option)
 	}
 	g := func(x int) Option {
 		return None{}
@@ -48,7 +48,7 @@ func Test_Option_None_Chain(t *testing.T) {
 	f := func(x int) Option {
 		return None{}.Chain(func(v AnyVal) Monad {
 			return None{}
-		})
+		}).(Option)
 	}
 	g := func(x int) Option {
 		return None{}
@@ -60,7 +60,7 @@ func Test_Option_None_Chain(t *testing.T) {
 
 func Test_Option_None_Map(t *testing.T) {
 	f := func(x int) Option {
-		return None{}.Map(Identity)
+		return None{}.Map(Identity).(Option)
 	}
 	g := func(x int) Option {
 		return None{}
@@ -72,10 +72,58 @@ func Test_Option_None_Map(t *testing.T) {
 
 func Test_Option_None_Concat(t *testing.T) {
 	f := func(x int) Option {
-		return None{}.Concat(None{})
+		return None{}.Concat(None{}).(Option)
 	}
 	g := func(x int) Option {
 		return None{}
+	}
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
+
+func Test_Option_Some_GetOrElse(t *testing.T) {
+	f := func(x int, y int) int {
+		return x
+	}
+	g := func(x int, y int) int {
+		return Some{}.Of(x).(Option).GetOrElse(y).(int)
+	}
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
+
+func Test_Option_None_GetOrElse(t *testing.T) {
+	f := func(x int, y int) int {
+		return y
+	}
+	g := func(x int, y int) int {
+		return None{}.GetOrElse(y).(int)
+	}
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
+
+func Test_Option_Some_OrElse(t *testing.T) {
+	f := func(x int, y int) Option {
+		return Some{x}
+	}
+	g := func(x int, y int) Option {
+		return Some{x}.OrElse(Some{y})
+	}
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
+
+func Test_Option_None_OrElse(t *testing.T) {
+	f := func(x int, y int) Option {
+		return Some{y}
+	}
+	g := func(x int, y int) Option {
+		return None{}.OrElse(Some{y})
 	}
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)

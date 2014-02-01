@@ -27,28 +27,50 @@ func (x State) Ap(v Applicative) Applicative {
 	return app.(Applicative)
 }
 
-func (o State) Chain(f func(x AnyVal) Monad) Monad {
+func (x State) Chain(f func(x AnyVal) Monad) Monad {
 	return State{func(s AnyVal) (AnyVal, AnyVal) {
-		a, b := o.Run(s)
+		a, b := x.Run(s)
 		fun := NewFunction(f)
 		res, _ := fun.Call(a)
 		return res.(State).Run(b)
 	}}
 }
 
-func (o State) Map(f func(x AnyVal) AnyVal) Functor {
-	fun := o.Chain(func(x AnyVal) Monad {
-		return State{}.Of(f(x)).(Monad)
+func (x State) Map(f func(x AnyVal) AnyVal) Functor {
+	fun := x.Chain(func(y AnyVal) Monad {
+		return x.Of(f(y)).(Monad)
 	})
 	return fun.(Functor)
 }
 
-func (o State) EvalState(x AnyVal) AnyVal {
-	a, _ := o.Run(x)
+// Derived
+
+func (x State) EvalState(y AnyVal) AnyVal {
+	a, _ := x.Run(y)
 	return a
 }
 
-func (o State) ExecState(x AnyVal) AnyVal {
-	_, b := o.Run(x)
+func (x State) ExecState(y AnyVal) AnyVal {
+	_, b := x.Run(y)
 	return b
+}
+
+func (x State) Get() State {
+	return State{func(z AnyVal) (AnyVal, AnyVal) {
+		return z, z
+	}}
+}
+
+func (x State) Modify(f func(x AnyVal) AnyVal) State {
+	return State{func(z AnyVal) (AnyVal, AnyVal) {
+		fun := NewFunction(f)
+		res, _ := fun.Call(z)
+		return nil, res
+	}}
+}
+
+func (x State) Put(a AnyVal, b AnyVal) State {
+	return State{func(z AnyVal) (AnyVal, AnyVal) {
+		return a, b
+	}}
 }

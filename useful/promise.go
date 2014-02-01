@@ -44,3 +44,17 @@ func (x Promise) Map(f func(v AnyVal) AnyVal) Functor {
 		})
 	}}
 }
+
+// Derived
+
+func (x Promise) Extract() AnyVal {
+	return x.Fork(Identity)
+}
+
+func (x Promise) Extend(f func(p Promise) AnyVal) Promise {
+	return x.Map(func(y AnyVal) AnyVal {
+		fun := NewFunction(f)
+		res, _ := fun.Call(x.Of(y))
+		return res
+	}).(Promise)
+}

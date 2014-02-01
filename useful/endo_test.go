@@ -14,10 +14,10 @@ func extractEndo(x AnyVal) AnyVal {
 // Manual
 
 func Test_Endo_NewEndo(t *testing.T) {
-	f := func(x int) Option {
+	f := func(x int) AnyVal {
 		return extractEndo(NewEndo(Constant(x)))
 	}
-	g := func(x int) Option {
+	g := func(x int) AnyVal {
 		return extractEndo(Endo{}.Of(x))
 	}
 	if err := quick.CheckEqual(f, g, nil); err != nil {

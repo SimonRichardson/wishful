@@ -5,6 +5,8 @@ import (
 )
 
 type Option interface {
+	GetOrElse(y AnyVal) AnyVal
+	OrElse(y Option) Option
 }
 
 type Some struct {
@@ -73,4 +75,22 @@ func (x Some) Concat(y Semigroup) Semigroup {
 
 func (x None) Concat(y Semigroup) Semigroup {
 	return x
+}
+
+// Derived
+
+func (x Some) GetOrElse(y AnyVal) AnyVal {
+	return x.x
+}
+
+func (x None) GetOrElse(y AnyVal) AnyVal {
+	return y
+}
+
+func (x Some) OrElse(y Option) Option {
+	return Some{}.Of(x.x).(Option)
+}
+
+func (x None) OrElse(y Option) Option {
+	return y
 }

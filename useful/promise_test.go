@@ -8,7 +8,25 @@ import (
 
 func extractPromise(x AnyVal) AnyVal {
 	promise := x.(Promise)
-	return promise.Fork(Identity)
+	return promise.Extract()
+}
+
+// Manual tests
+
+func Test_Promise_Extend(t *testing.T) {
+	f := func(x int) int {
+		return x
+	}
+	g := func(x int) int {
+		a := Promise{}.Of(x)
+		b := a.(Promise).Extend(func(p Promise) AnyVal {
+			return p.Extract()
+		})
+		return b.Extract().(int)
+	}
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
 }
 
 // Applicative Laws

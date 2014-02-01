@@ -11,6 +11,60 @@ func extractState(x AnyVal) AnyVal {
 	return state.EvalState(1)
 }
 
+// Manual tests
+
+func Test_State_ExecState(t *testing.T) {
+	f := func(x int, y int) int {
+		return y
+	}
+	g := func(x int, y int) int {
+		a := State{}.Of(x).(State)
+		return a.ExecState(y).(int)
+	}
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
+
+func Test_State_Get(t *testing.T) {
+	f := func(x int) (AnyVal, AnyVal) {
+		return x, x
+	}
+	g := func(x int) (AnyVal, AnyVal) {
+		a := State{}.Get()
+		return a.Run(x)
+	}
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
+
+func Test_State_Modify(t *testing.T) {
+	f := func(x int) (AnyVal, AnyVal) {
+		return nil, x
+	}
+	g := func(x int) (AnyVal, AnyVal) {
+		a := State{}.Modify(Identity)
+		return a.Run(x)
+	}
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
+
+func Test_State_Put(t *testing.T) {
+	f := func(x int, y int) (AnyVal, AnyVal) {
+		return x, y
+	}
+	g := func(x int, y int) (AnyVal, AnyVal) {
+		a := State{}.Put(x, y)
+		return a.Run(x)
+	}
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
+
 // Applicative Laws
 
 func Test_State_ApplicativeLaws_Identity(t *testing.T) {
