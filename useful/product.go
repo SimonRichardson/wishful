@@ -7,8 +7,8 @@ import (
 var (
 	productConcat = fromMonadToSemigroupConcat(func(a Semigroup, b Semigroup) AnyVal {
 		// This is a bit horrid
-		x, _ := fromAnyValToInt(a)
-		y, _ := fromAnyValToInt(b)
+		x, _ := FromAnyValToInt(a)
+		y, _ := FromAnyValToInt(b)
 		return int(x) * int(y)
 	})
 )
@@ -24,7 +24,7 @@ func NewProduct(x Int) Product {
 }
 
 func (x Product) Of(v AnyVal) Point {
-	p, _ := fromAnyValToInt(v)
+	p, _ := FromAnyValToInt(v)
 	return NewProduct(p)
 }
 
@@ -42,7 +42,7 @@ func (x Product) Concat(y Semigroup) Semigroup {
 
 func (x Product) Map(f func(v AnyVal) AnyVal) Functor {
 	return x.Chain(func(x AnyVal) Monad {
-		p, _ := fromAnyValToInt(f(x))
+		p, _ := FromAnyValToInt(f(x))
 		return NewProduct(p)
 	}).(Functor)
 }

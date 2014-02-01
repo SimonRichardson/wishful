@@ -1,9 +1,7 @@
 package useful
 
 import (
-	"errors"
 	. "github.com/SimonRichardson/wishful/wishful"
-	"math"
 )
 
 var (
@@ -37,15 +35,5 @@ func fromMonadToSemigroupConcat(f func(a Semigroup, b Semigroup) AnyVal) func(x 
 			return res.(Monad)
 		})
 		return res.(Semigroup)
-	}
-}
-
-func fromAnyValToInt(v AnyVal) (Int, error) {
-	if obj, ok := v.(int); ok {
-		return Int(obj), nil
-	} else if obj, ok := v.(Int); ok {
-		return obj, nil
-	} else {
-		return Int(int(math.NaN())), errors.New("Type error, invalid Int")
 	}
 }

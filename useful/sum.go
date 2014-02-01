@@ -15,7 +15,7 @@ func NewSum(x Int) Sum {
 }
 
 func (x Sum) Of(v AnyVal) Point {
-	p, _ := fromAnyValToInt(v)
+	p, _ := FromAnyValToInt(v)
 	return NewSum(p)
 }
 
@@ -33,7 +33,7 @@ func (x Sum) Concat(y Semigroup) Semigroup {
 
 func (x Sum) Map(f func(v AnyVal) AnyVal) Functor {
 	return x.Chain(func(x AnyVal) Monad {
-		p, _ := fromAnyValToInt(f(x))
+		p, _ := FromAnyValToInt(f(x))
 		return NewSum(p)
 	}).(Functor)
 }
