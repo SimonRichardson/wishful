@@ -43,6 +43,17 @@ func TestConstant(t *testing.T) {
 		t.Error(err)
 	}
 }
+func TestConstantNoArg(t *testing.T) {
+	f := func(v int) int {
+		return v
+	}
+	g := func(v int) int {
+		return ConstantNoArgs(v)().(int)
+	}
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
 
 // I combinator
 func TestIdentity(t *testing.T) {

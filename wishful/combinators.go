@@ -22,6 +22,11 @@ func Constant(a AnyVal) func(x AnyVal) AnyVal {
 		return a
 	}
 }
+func ConstantNoArgs(a AnyVal) func() AnyVal {
+	return func() AnyVal {
+		return a
+	}
+}
 
 // I combinator
 func Identity(x AnyVal) AnyVal {
