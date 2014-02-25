@@ -25,15 +25,22 @@ func (x Lens) Id() Lens {
 }
 func (x Lens) SliceLens(index int) Lens {
 	return NewLens(func(a AnyVal) Store {
-		val := reflect.ValueOf(a)
+		// Is there away to clone the array, without cloning
+		// the whole thing?
+		src := reflect.ValueOf(a)
+		dst := reflect.New(src.Type()).Elem()
+		for i := 0; i < src.Len(); i++ {
+			dst = reflect.Append(dst, src.Index(i))
+		}
+		val := dst.Index(index)
 
 		return NewStore(
 			func(b AnyVal) AnyVal {
 				val.Set(reflect.ValueOf(b))
-				return val.Interface()
+				return dst.Interface()
 			},
 			func() AnyVal {
-				return val.Index(index).Interface()
+				return val.Interface()
 			},
 		)
 	})

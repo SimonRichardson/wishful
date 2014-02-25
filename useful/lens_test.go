@@ -5,7 +5,7 @@ import (
 	"testing/quick"
 )
 
-func guard(a func(x []int) int) func(x []int) int {
+func getGuard(a func(x []int) int) func(x []int) int {
 	return func(x []int) int {
 		if len(x) < 1 {
 			return 0
@@ -14,13 +14,38 @@ func guard(a func(x []int) int) func(x []int) int {
 	}
 }
 
+func setGuard(a func(x []int, y int) []int) func(x []int, y int) []int {
+	return func(x []int, y int) []int {
+		if len(x) < 2 {
+			return x
+		}
+		return a(x, y)
+	}
+}
+
 // Manual tests
-func Test_Lens(t *testing.T) {
-	f := guard(func(x []int) int {
+func Test_Lens_SliceLensGet_ReturnsCorrectValue(t *testing.T) {
+	f := getGuard(func(x []int) int {
 		return x[0]
 	})
-	g := guard(func(x []int) int {
+	g := getGuard(func(x []int) int {
 		return Lens{}.SliceLens(0).Run(x).Get().(int)
+	})
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
+
+func Test_Lens_SliceLensSet_ReturnsCorrectValue(t *testing.T) {
+	f := setGuard(func(x []int, y int) []int {
+		num := len(x)
+		val := make([]int, num, num)
+		copy(val, x)
+		val[1] = y
+		return val
+	})
+	g := setGuard(func(x []int, y int) []int {
+		return Lens{}.SliceLens(1).Run(x).Set(y).([]int)
 	})
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
