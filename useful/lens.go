@@ -56,7 +56,7 @@ func (x Lens) Id() Lens {
 	})
 }
 
-func (x Lens) SliceLens(accessor Accessor) Lens {
+func (x Lens) Slice(accessor Accessor) Lens {
 	return NewLens(func(a AnyVal) Store {
 		return NewStore(
 			func(b AnyVal) AnyVal {
