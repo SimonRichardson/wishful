@@ -1,4 +1,5 @@
-# Fantasy Land Specification
+# Wishful Specification
+## Taken hand and fist from [Fantasy Land Specification](https://github.com/fantasyland/fantasy-land)
 
 (aka "Algebraic GO Specification")
 
@@ -17,7 +18,7 @@ structures:
 An algebra is a set of values, a set of operators that it is closed
 under and some laws it must obey.
 
-Each Fantasy Land algebra is a separate specification. An algebra may
+Each Wishful algebra is a separate specification. An algebra may
 have dependencies on other algebras which must be implemented. An
 algebra may also state other algebra methods which do not need to be
 implemented and how they can be derived from new methods.
