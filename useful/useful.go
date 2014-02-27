@@ -37,3 +37,11 @@ func fromMonadToSemigroupConcat(f func(a Semigroup, b Semigroup) AnyVal) func(x 
 		return res.(Semigroup)
 	}
 }
+
+func concatAnyvals(x AnyVal) func(y AnyVal) AnyVal {
+	return func(y AnyVal) AnyVal {
+		a := x.(Semigroup)
+		b := y.(Semigroup)
+		return a.Concat(b)
+	}
+}

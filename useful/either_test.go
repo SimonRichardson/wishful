@@ -110,7 +110,7 @@ func Test_Either_Left_Bimap(t *testing.T) {
 	f := func(x int) Either {
 		return Left{x}.Bimap(func(v AnyVal) AnyVal {
 			return v.(int) + 1
-		}).(Either)
+		}, Identity).(Either)
 	}
 	g := func(x int) Either {
 		return Left{x + 1}
@@ -122,7 +122,7 @@ func Test_Either_Left_Bimap(t *testing.T) {
 
 func Test_Either_Right_Bimap(t *testing.T) {
 	f := func(x int) Either {
-		return Right{x}.Bimap(func(v AnyVal) AnyVal {
+		return Right{x}.Bimap(Identity, func(v AnyVal) AnyVal {
 			return v.(int) + 1
 		}).(Either)
 	}

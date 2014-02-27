@@ -6,7 +6,7 @@ import (
 
 type Either interface {
 	Swap() Monad
-	Bimap(f func(v AnyVal) AnyVal) Monad
+	Bimap(f func(v AnyVal) AnyVal, g func(v AnyVal) AnyVal) Monad
 }
 
 type Left struct {
@@ -81,10 +81,10 @@ func (x Right) Swap() Monad {
 	return NewLeft(x.x)
 }
 
-func (x Left) Bimap(f func(v AnyVal) AnyVal) Monad {
+func (x Left) Bimap(f func(v AnyVal) AnyVal, g func(v AnyVal) AnyVal) Monad {
 	return NewLeft(f(x.x))
 }
 
-func (x Right) Bimap(f func(v AnyVal) AnyVal) Monad {
-	return NewRight(f(x.x))
+func (x Right) Bimap(f func(v AnyVal) AnyVal, g func(v AnyVal) AnyVal) Monad {
+	return NewRight(g(x.x))
 }
