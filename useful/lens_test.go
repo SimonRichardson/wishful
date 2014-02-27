@@ -24,12 +24,14 @@ func setGuard(a func(x []int, y int) []int) func(x []int, y int) []int {
 }
 
 // Manual tests
+
 func Test_Lens_SliceLensGet_ReturnsCorrectValue(t *testing.T) {
 	f := getGuard(func(x []int) int {
 		return x[0]
 	})
 	g := getGuard(func(x []int) int {
-		return Lens{}.SliceLens(0).Run(x).Get().(int)
+		a := SliceIndex{0}
+		return Lens{}.SliceLens(a).Run(x).Get().(int)
 	})
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
@@ -45,7 +47,8 @@ func Test_Lens_SliceLensSet_ReturnsCorrectValue(t *testing.T) {
 		return val
 	})
 	g := setGuard(func(x []int, y int) []int {
-		return Lens{}.SliceLens(1).Run(x).Set(y).([]int)
+		a := SliceIndex{1}
+		return Lens{}.SliceLens(a).Run(x).Set(y).([]int)
 	})
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)

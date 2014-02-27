@@ -5,6 +5,38 @@ import (
 	"reflect"
 )
 
+type Accessor interface {
+	Get(x AnyVal) AnyVal
+	Set(x AnyVal, y AnyVal) AnyVal
+}
+
+type SliceIndex struct {
+	Index int
+}
+
+func (s SliceIndex) extract(val AnyVal) (reflect.Value, reflect.Value) {
+	src := reflect.ValueOf(val)
+	num := src.Len()
+
+	dst := reflect.MakeSlice(src.Type(), num, num)
+	for i := 0; i < num; i++ {
+		dst.Index(i).Set(src.Index(i))
+	}
+
+	return dst, dst.Index(s.Index)
+}
+
+func (s SliceIndex) Get(x AnyVal) AnyVal {
+	_, b := s.extract(x)
+	return b.Interface()
+}
+
+func (s SliceIndex) Set(x AnyVal, y AnyVal) AnyVal {
+	a, b := s.extract(x)
+	b.Set(reflect.ValueOf(y))
+	return a.Interface()
+}
+
 type Lens struct {
 	Run func(a AnyVal) Store
 }
@@ -23,24 +55,15 @@ func (x Lens) Id() Lens {
 		)
 	})
 }
-func (x Lens) SliceLens(index int) Lens {
-	return NewLens(func(a AnyVal) Store {
-		// Is there away to clone the array, without cloning
-		// the whole thing?
-		src := reflect.ValueOf(a)
-		dst := reflect.New(src.Type()).Elem()
-		for i := 0; i < src.Len(); i++ {
-			dst = reflect.Append(dst, src.Index(i))
-		}
-		val := dst.Index(index)
 
+func (x Lens) SliceLens(accessor Accessor) Lens {
+	return NewLens(func(a AnyVal) Store {
 		return NewStore(
 			func(b AnyVal) AnyVal {
-				val.Set(reflect.ValueOf(b))
-				return dst.Interface()
+				return accessor.Set(a, b)
 			},
 			func() AnyVal {
-				return val.Interface()
+				return accessor.Get(a)
 			},
 		)
 	})
@@ -56,6 +79,7 @@ func (x Lens) Compose(y Lens) Lens {
 		)
 	})
 }
+
 func (x Lens) AndThen(y Lens) Lens {
 	return y.Compose(x)
 }
