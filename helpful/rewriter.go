@@ -3,6 +3,7 @@ package helpful
 import (
 	"fmt"
 	"go/ast"
+	"strings"
 )
 
 const (
@@ -21,8 +22,8 @@ func (v Rewriter) Visit(node ast.Node) ast.Visitor {
 			if d, ok := m.(*ast.GenDecl); ok {
 				for _, k := range d.Specs {
 					if t, ok := k.(*ast.TypeSpec); ok {
-						prev := fmt.Sprintf("%s", t.Name.Name)
-						next := fmt.Sprintf("%s_%s", prev, v.TypeName)
+						prev := t.Name.Name
+						next := rename(prev, v.TypeName)
 
 						t.Name.Name = next
 						v.Names[prev] = next
@@ -41,4 +42,17 @@ func (v Rewriter) Visit(node ast.Node) ast.Visitor {
 		}
 	}
 	return v
+}
+
+func rename(n string, t string) string {
+	return fmt.Sprintf("%s%s", n, clean(strings.Title(t)))
+}
+
+func clean(n string) string {
+	// remove pointers
+	p := strings.Replace(n, "*", "Ptr", -1)
+	// remove slices
+	s := strings.Replace(p, "[]", "Slice", -1)
+
+	return s
 }
