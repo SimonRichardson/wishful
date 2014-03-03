@@ -35,3 +35,15 @@ func (x Id) Map(f func(v AnyVal) AnyVal) Functor {
 		return NewId(f(x))
 	}).(Functor)
 }
+
+func (x Id) Extract() AnyVal {
+	return x.x
+}
+
+func (x Id) Extend(f func(p Comonad) AnyVal) Comonad {
+	return x.Map(func(y AnyVal) AnyVal {
+		fun := NewFunction(f)
+		res, _ := fun.Call(x.Of(y))
+		return res
+	}).(Comonad)
+}

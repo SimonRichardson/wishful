@@ -83,3 +83,26 @@ func Test_Id_SemigroupLaws_Associativity(t *testing.T) {
 		t.Error(err)
 	}
 }
+
+// Comonad Laws
+
+func Test_Id_ComonadLaws_Identity(t *testing.T) {
+	f, g := NewComonadLaws(Id{}).Identity(Identity)
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
+
+func Test_Id_ComonadLaws_Composition(t *testing.T) {
+	f, g := NewComonadLaws(Id{}).Composition(Identity)
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
+
+func Test_Id_ComonadLaws_Associativity(t *testing.T) {
+	f, g := NewComonadLaws(Id{}).Associativity(Identity)
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}

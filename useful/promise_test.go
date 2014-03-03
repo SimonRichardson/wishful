@@ -95,3 +95,10 @@ func Test_Promise_ComonadLaws_Composition(t *testing.T) {
 		t.Error(err)
 	}
 }
+
+func Test_Promise_ComonadLaws_Associativity(t *testing.T) {
+	f, g := NewComonadLaws(Promise{}).Associativity(extractPromise)
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}

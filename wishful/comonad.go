@@ -48,3 +48,25 @@ func (o ComonadLaws) Composition(run func(v AnyVal) AnyVal) (func(v int) AnyVal,
 	}
 	return f, g
 }
+
+func (o ComonadLaws) Associativity(run func(v AnyVal) AnyVal) (func(v int) AnyVal, func(v int) AnyVal) {
+	extract := func(y Comonad) AnyVal {
+		return y.Extract()
+	}
+	duplicate := func(x Comonad) func(y AnyVal) AnyVal {
+		return func(y AnyVal) AnyVal {
+			return x.Extend(extract)
+		}
+	}
+	f := func(v int) AnyVal {
+		a := o.x.Of(v).(Comonad)
+		b := Compose(duplicate(a))(duplicate(a))
+		return run(b(a))
+	}
+	g := func(v int) AnyVal {
+		a := o.x.Of(v).(Functor)
+		c := a.(Comonad)
+		return run(a.Map(Compose(duplicate(c))(duplicate(c))).(Comonad).Extract())
+	}
+	return f, g
+}

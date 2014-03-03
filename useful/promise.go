@@ -45,8 +45,6 @@ func (x Promise) Map(f func(v AnyVal) AnyVal) Functor {
 	}}
 }
 
-// Derived
-
 func (x Promise) Extract() AnyVal {
 	return x.Fork(Identity)
 }
