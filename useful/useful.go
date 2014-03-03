@@ -1,12 +1,13 @@
 package useful
 
 import (
+	"github.com/SimonRichardson/wishful/helpful"
 	. "github.com/SimonRichardson/wishful/wishful"
 )
 
 var (
 	concat = fromMonadToSemigroupConcat(func(a Semigroup, b Semigroup) AnyVal {
-		return a.Concat(b)
+		return helpful.Append(a, b)
 	})
 )
 
@@ -42,6 +43,6 @@ func concatAnyvals(x AnyVal) func(y AnyVal) AnyVal {
 	return func(y AnyVal) AnyVal {
 		a := x.(Semigroup)
 		b := y.(Semigroup)
-		return a.Concat(b)
+		return helpful.Append(a, b)
 	}
 }
