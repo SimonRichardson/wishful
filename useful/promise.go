@@ -51,10 +51,10 @@ func (x Promise) Extract() AnyVal {
 	return x.Fork(Identity)
 }
 
-func (x Promise) Extend(f func(p Promise) AnyVal) Promise {
+func (x Promise) Extend(f func(p Comonad) AnyVal) Comonad {
 	return x.Map(func(y AnyVal) AnyVal {
 		fun := NewFunction(f)
 		res, _ := fun.Call(x.Of(y))
 		return res
-	}).(Promise)
+	}).(Comonad)
 }

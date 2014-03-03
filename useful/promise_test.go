@@ -11,24 +11,6 @@ func extractPromise(x AnyVal) AnyVal {
 	return promise.Extract()
 }
 
-// Manual tests
-
-func Test_Promise_Extend(t *testing.T) {
-	f := func(x int) int {
-		return x
-	}
-	g := func(x int) int {
-		a := Promise{}.Of(x)
-		b := a.(Promise).Extend(func(p Promise) AnyVal {
-			return p.Extract()
-		})
-		return b.Extract().(int)
-	}
-	if err := quick.CheckEqual(f, g, nil); err != nil {
-		t.Error(err)
-	}
-}
-
 // Applicative Laws
 
 func Test_Promise_ApplicativeLaws_Identity(t *testing.T) {
@@ -93,6 +75,22 @@ func Test_Promise_MonadLaws_RightIdentity(t *testing.T) {
 
 func Test_Promise_MonadLaws_Associativity(t *testing.T) {
 	f, g := NewMonadLaws(Promise{}).Associativity(extractPromise)
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
+
+// Comonad Laws
+
+func Test_Promise_ComonadLaws_Identity(t *testing.T) {
+	f, g := NewComonadLaws(Promise{}).Identity(extractPromise)
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
+
+func Test_Promise_ComonadLaws_Composition(t *testing.T) {
+	f, g := NewComonadLaws(Promise{}).Composition(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
