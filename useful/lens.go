@@ -16,12 +16,8 @@ type SliceIndex struct {
 
 func (s SliceIndex) extract(val AnyVal) (reflect.Value, reflect.Value) {
 	src := reflect.ValueOf(val)
-	num := src.Len()
-
-	dst := reflect.MakeSlice(src.Type(), num, num)
-	for i := 0; i < num; i++ {
-		dst.Index(i).Set(src.Index(i))
-	}
+	dst := reflect.New(src.Type()).Elem()
+	dst.Set(src)
 
 	return dst, dst.Index(s.Index)
 }
@@ -56,7 +52,7 @@ func (x Lens) Id() Lens {
 	})
 }
 
-func (x Lens) Slice(accessor Accessor) Lens {
+func (x Lens) AccessorLens(accessor Accessor) Lens {
 	return NewLens(func(a AnyVal) Store {
 		return NewStore(
 			func(b AnyVal) AnyVal {
@@ -64,6 +60,44 @@ func (x Lens) Slice(accessor Accessor) Lens {
 			},
 			func() AnyVal {
 				return accessor.Get(a)
+			},
+		)
+	})
+}
+
+func (x Lens) ObjectLens(property string) Lens {
+	return NewLens(func(a AnyVal) Store {
+		src := reflect.ValueOf(a)
+		dst := reflect.New(src.Type()).Elem()
+		dst.Set(src)
+		val := dst.FieldByName(property)
+
+		return NewStore(
+			func(b AnyVal) AnyVal {
+				val.Set(reflect.ValueOf(b))
+				return dst.Interface()
+			},
+			func() AnyVal {
+				return val.Interface()
+			},
+		)
+	})
+}
+
+func (x Lens) SliceLens(index int) Lens {
+	return NewLens(func(a AnyVal) Store {
+		src := reflect.ValueOf(a)
+		dst := reflect.New(src.Type()).Elem()
+		dst.Set(src)
+		val := dst.Index(index)
+
+		return NewStore(
+			func(b AnyVal) AnyVal {
+				val.Set(reflect.ValueOf(b))
+				return dst.Interface()
+			},
+			func() AnyVal {
+				return val.Interface()
 			},
 		)
 	})
