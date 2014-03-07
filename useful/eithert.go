@@ -23,6 +23,13 @@ func (x EitherT) Of(v AnyVal) Point {
 	}
 }
 
+func (x EitherT) From(v AnyVal) EitherT {
+	return EitherT{
+		m:   x.m,
+		Run: v,
+	}
+}
+
 func (x EitherT) Fold(f func(v AnyVal) AnyVal, g func(v AnyVal) AnyVal) AnyVal {
 	return x.Run.(Monad).Chain(func(o AnyVal) Monad {
 		return x.m.Of(o.(Foldable).Fold(f, g)).(Monad)

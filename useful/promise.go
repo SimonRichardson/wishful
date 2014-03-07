@@ -8,6 +8,12 @@ type Promise struct {
 	Fork func(resolve func(x AnyVal) AnyVal) AnyVal
 }
 
+func NewPromise(f func(resolve func(x AnyVal) AnyVal) AnyVal) Promise {
+	return Promise{
+		Fork: f,
+	}
+}
+
 func (x Promise) Of(v AnyVal) Point {
 	return Promise{func(resolve func(x AnyVal) AnyVal) AnyVal {
 		return resolve(v)
