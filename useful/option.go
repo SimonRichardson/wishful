@@ -5,6 +5,12 @@ import (
 )
 
 type Option interface {
+	Of(v AnyVal) Point
+	Empty() Monoid
+	Ap(v Applicative) Applicative
+	Chain(f func(v AnyVal) Monad) Monad
+	Concat(y Semigroup) Semigroup
+	Map(f func(v AnyVal) AnyVal) Functor
 	GetOrElse(y AnyVal) AnyVal
 	OrElse(y Option) Option
 }

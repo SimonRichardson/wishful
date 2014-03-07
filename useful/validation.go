@@ -5,6 +5,11 @@ import (
 )
 
 type Validation interface {
+	Of(v AnyVal) Point
+	Ap(v Applicative) Applicative
+	Chain(f func(v AnyVal) Monad) Monad
+	Concat(y Semigroup) Semigroup
+	Map(f func(v AnyVal) AnyVal) Functor
 	Fold(f func(v AnyVal) AnyVal, g func(v AnyVal) AnyVal) AnyVal
 	Bimap(f func(v AnyVal) AnyVal, g func(v AnyVal) AnyVal) Monad
 }

@@ -5,8 +5,14 @@ import (
 )
 
 type Either interface {
-	Swap() Monad
+	Of(v AnyVal) Point
+	Ap(v Applicative) Applicative
+	Chain(f func(v AnyVal) Monad) Monad
+	Concat(y Semigroup) Semigroup
+	Map(f func(v AnyVal) AnyVal) Functor
 	Bimap(f func(v AnyVal) AnyVal, g func(v AnyVal) AnyVal) Monad
+	Fold(f func(v AnyVal) AnyVal, g func(v AnyVal) AnyVal) AnyVal
+	Swap() Monad
 }
 
 type Left struct {
@@ -87,4 +93,12 @@ func (x Left) Bimap(f func(v AnyVal) AnyVal, g func(v AnyVal) AnyVal) Monad {
 
 func (x Right) Bimap(f func(v AnyVal) AnyVal, g func(v AnyVal) AnyVal) Monad {
 	return NewRight(g(x.x))
+}
+
+func (x Left) Fold(f func(v AnyVal) AnyVal, g func(v AnyVal) AnyVal) AnyVal {
+	return f(x.x)
+}
+
+func (x Right) Fold(f func(v AnyVal) AnyVal, g func(v AnyVal) AnyVal) AnyVal {
+	return g(x.x)
 }
