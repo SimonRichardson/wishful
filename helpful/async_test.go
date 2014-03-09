@@ -7,8 +7,8 @@ import (
 	"testing/quick"
 )
 
-func success(x AnyVal, callback func(x AnyVal, y AnyVal) AnyVal) AnyVal {
-	return callback(x, nil)
+func success(x AnyVal) Promise {
+	return Promise{}.Of(x).(Promise)
 }
 
 // Manual tests

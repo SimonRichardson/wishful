@@ -16,7 +16,10 @@ func NewFunction(f AnyVal) Function {
 }
 
 func (f Function) Call(args ...AnyVal) (AnyVal, error) {
+	return f.Apply(args)
+}
 
+func (f Function) Apply(args []AnyVal) (AnyVal, error) {
 	vargs := make([]reflect.Value, len(args))
 	for i, v := range args {
 		vargs[i] = reflect.ValueOf(v)
