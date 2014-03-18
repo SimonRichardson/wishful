@@ -10,6 +10,7 @@ type Option interface {
 	Ap(v Applicative) Applicative
 	Chain(f func(v AnyVal) Monad) Monad
 	Concat(y Semigroup) Semigroup
+	Fold(f func(v AnyVal) AnyVal, g func() AnyVal) AnyVal
 	Map(f func(v AnyVal) AnyVal) Functor
 	GetOrElse(y AnyVal) AnyVal
 	OrElse(y Option) Option
@@ -62,6 +63,14 @@ func (x Some) Chain(f func(v AnyVal) Monad) Monad {
 
 func (x None) Chain(f func(v AnyVal) Monad) Monad {
 	return x
+}
+
+func (x Some) Fold(f func(v AnyVal) AnyVal, g func() AnyVal) AnyVal {
+	return f(x.x)
+}
+
+func (x None) Fold(f func(v AnyVal) AnyVal, g func() AnyVal) AnyVal {
+	return g()
 }
 
 func (x Some) Map(f func(v AnyVal) AnyVal) Functor {
