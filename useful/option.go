@@ -12,7 +12,7 @@ type Option interface {
 	Concat(y Semigroup) Semigroup
 	Fold(f func(v AnyVal) AnyVal, g func() AnyVal) AnyVal
 	Map(f func(v AnyVal) AnyVal) Functor
-	GetOrElse(y AnyVal) AnyVal
+	GetOrElse(f func() AnyVal) AnyVal
 	OrElse(y Option) Option
 }
 
@@ -94,12 +94,12 @@ func (x None) Concat(y Semigroup) Semigroup {
 
 // Derived
 
-func (x Some) GetOrElse(y AnyVal) AnyVal {
+func (x Some) GetOrElse(f func() AnyVal) AnyVal {
 	return x.x
 }
 
-func (x None) GetOrElse(y AnyVal) AnyVal {
-	return y
+func (x None) GetOrElse(f func() AnyVal) AnyVal {
+	return f()
 }
 
 func (x Some) OrElse(y Option) Option {

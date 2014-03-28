@@ -1,9 +1,9 @@
 package useful
 
 import (
-	. "github.com/SimonRichardson/wishful/wishful"
 	"testing"
 	"testing/quick"
+	. "github.com/SimonRichardson/wishful/wishful"
 )
 
 // Manual tests
@@ -87,7 +87,7 @@ func Test_Option_Some_GetOrElse(t *testing.T) {
 		return x
 	}
 	g := func(x int, y int) int {
-		return Some{}.Of(x).(Option).GetOrElse(y).(int)
+		return Some{}.Of(x).(Option).GetOrElse(ConstantNoArgs(y)).(int)
 	}
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
@@ -99,7 +99,7 @@ func Test_Option_None_GetOrElse(t *testing.T) {
 		return y
 	}
 	g := func(x int, y int) int {
-		return None{}.GetOrElse(y).(int)
+		return None{}.GetOrElse(ConstantNoArgs(y)).(int)
 	}
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
