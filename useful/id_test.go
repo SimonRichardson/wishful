@@ -1,9 +1,9 @@
 package useful
 
 import (
-	. "github.com/SimonRichardson/wishful/wishful"
 	"testing"
 	"testing/quick"
+	. "github.com/SimonRichardson/wishful/wishful"
 )
 
 // Applicative Laws
@@ -102,6 +102,22 @@ func Test_Id_ComonadLaws_Composition(t *testing.T) {
 
 func Test_Id_ComonadLaws_Associativity(t *testing.T) {
 	f, g := NewComonadLaws(Id{}).Associativity(Identity)
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
+
+// Traversable
+
+func Test_Id_TraversableLaws_Identity(t *testing.T) {
+	f, g := NewTraversableLaws(Id{}).Identity(Identity)
+	if err := quick.CheckEqual(f, g, nil); err != nil {
+		t.Error(err)
+	}
+}
+
+func Test_Id_TraversableLaws_Composition(t *testing.T) {
+	f, g := NewTraversableLaws(Id{}).Composition(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}

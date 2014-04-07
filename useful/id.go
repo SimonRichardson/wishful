@@ -47,3 +47,13 @@ func (x Id) Extend(f func(p Comonad) AnyVal) Comonad {
 		return res
 	}).(Comonad)
 }
+
+func (x Id) Traverse(f func(x AnyVal) AnyVal) Traversable {
+	return f(x.x).(Functor).Map(func(x AnyVal) AnyVal {
+		return NewId(x)
+	}).(Traversable)
+}
+
+func (x Id) Sequence() AnyVal {
+	return x.Traverse(Identity)
+}
