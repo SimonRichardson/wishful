@@ -4,6 +4,10 @@ import (
 	. "github.com/SimonRichardson/wishful/wishful"
 )
 
+var (
+	PurePromise Promise = Promise{}
+)
+
 type Promise struct {
 	Fork func(resolve func(x AnyVal) AnyVal) AnyVal
 }

@@ -4,6 +4,10 @@ import (
 	. "github.com/SimonRichardson/wishful/wishful"
 )
 
+var (
+	PureOption Option = Some{}
+)
+
 type Option interface {
 	Of(v AnyVal) Point
 	Empty() Monoid
@@ -103,7 +107,7 @@ func (x None) GetOrElse(f func() AnyVal) AnyVal {
 }
 
 func (x Some) OrElse(y Option) Option {
-	return Some{}.Of(x.x).(Option)
+	return x.Of(x.x).(Option)
 }
 
 func (x None) OrElse(y Option) Option {

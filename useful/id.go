@@ -4,6 +4,10 @@ import (
 	. "github.com/SimonRichardson/wishful/wishful"
 )
 
+var (
+	PureId Id = Id{}
+)
+
 type Id struct {
 	x AnyVal
 }

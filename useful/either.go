@@ -4,6 +4,10 @@ import (
 	. "github.com/SimonRichardson/wishful/wishful"
 )
 
+var (
+	PureEither Either = Right{}
+)
+
 type Either interface {
 	Of(v AnyVal) Point
 	Ap(v Applicative) Applicative
