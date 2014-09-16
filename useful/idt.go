@@ -6,7 +6,7 @@ import (
 
 type IdT struct {
 	m   Point
-	Run AnyVal
+	Run Any
 }
 
 func NewIdT(m Point) IdT {
@@ -16,7 +16,7 @@ func NewIdT(m Point) IdT {
 	}
 }
 
-func (x IdT) Of(v AnyVal) Point {
+func (x IdT) Of(v Any) Point {
 	return IdT{
 		m:   x.m,
 		Run: x.m.Of(v),
@@ -24,8 +24,8 @@ func (x IdT) Of(v AnyVal) Point {
 }
 
 func (x IdT) Ap(v Applicative) Applicative {
-	mon := x.Chain(func(f AnyVal) Monad {
-		return v.(Functor).Map(func(x AnyVal) AnyVal {
+	mon := x.Chain(func(f Any) Monad {
+		return v.(Functor).Map(func(x Any) Any {
 			fun := NewFunction(f)
 			res, _ := fun.Call(x)
 			return res
@@ -34,11 +34,11 @@ func (x IdT) Ap(v Applicative) Applicative {
 	return mon.(Applicative)
 }
 
-func (x IdT) Chain(f func(v AnyVal) Monad) Monad {
+func (x IdT) Chain(f func(v Any) Monad) Monad {
 	mon := x.Run.(Monad)
 	tra := IdT{
 		m: x.m,
-		Run: mon.Chain(func(y AnyVal) Monad {
+		Run: mon.Chain(func(y Any) Monad {
 			idt := f(y).(IdT)
 			return idt.Run.(Monad)
 		}),
@@ -46,8 +46,8 @@ func (x IdT) Chain(f func(v AnyVal) Monad) Monad {
 	return tra
 }
 
-func (x IdT) Map(f func(v AnyVal) AnyVal) Functor {
-	mon := x.Chain(func(y AnyVal) Monad {
+func (x IdT) Map(f func(v Any) Any) Functor {
+	mon := x.Chain(func(y Any) Monad {
 		app := NewIdT(x.m).Of(f(y))
 		return app.(Monad)
 	})

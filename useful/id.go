@@ -5,16 +5,16 @@ import (
 )
 
 type Id struct {
-	x AnyVal
+	x Any
 }
 
-func NewId(x AnyVal) Id {
+func NewId(x Any) Id {
 	return Id{
 		x: x,
 	}
 }
 
-func (x Id) Of(v AnyVal) Point {
+func (x Id) Of(v Any) Point {
 	return NewId(v)
 }
 
@@ -22,7 +22,7 @@ func (x Id) Ap(v Applicative) Applicative {
 	return fromMonadToApplicativeAp(x, v)
 }
 
-func (x Id) Chain(f func(v AnyVal) Monad) Monad {
+func (x Id) Chain(f func(v Any) Monad) Monad {
 	return f(x.x)
 }
 
@@ -30,18 +30,18 @@ func (x Id) Concat(y Semigroup) Semigroup {
 	return concat(x, y)
 }
 
-func (x Id) Map(f func(v AnyVal) AnyVal) Functor {
-	return x.Chain(func(x AnyVal) Monad {
+func (x Id) Map(f func(v Any) Any) Functor {
+	return x.Chain(func(x Any) Monad {
 		return NewId(f(x))
 	}).(Functor)
 }
 
-func (x Id) Extract() AnyVal {
+func (x Id) Extract() Any {
 	return x.x
 }
 
-func (x Id) Extend(f func(p Comonad) AnyVal) Comonad {
-	return x.Map(func(y AnyVal) AnyVal {
+func (x Id) Extend(f func(p Comonad) Any) Comonad {
+	return x.Map(func(y Any) Any {
 		fun := NewFunction(f)
 		res, _ := fun.Call(x.Of(y))
 		return res

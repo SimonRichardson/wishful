@@ -1,12 +1,12 @@
 package useful
 
 import (
-	. "github.com/SimonRichardson/wishful/wishful"
 	"testing"
 	"testing/quick"
+	. "github.com/SimonRichardson/wishful/wishful"
 )
 
-func extractPromise(x AnyVal) AnyVal {
+func extractPromise(x Any) Any {
 	promise := x.(Promise)
 	return promise.Extract()
 }

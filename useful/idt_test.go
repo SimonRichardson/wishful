@@ -1,12 +1,12 @@
 package useful
 
 import (
-	. "github.com/SimonRichardson/wishful/wishful"
 	"testing"
 	"testing/quick"
+	. "github.com/SimonRichardson/wishful/wishful"
 )
 
-func extractIdT(x AnyVal) AnyVal {
+func extractIdT(x Any) Any {
 	io := x.(IdT)
 	return io.Run
 }

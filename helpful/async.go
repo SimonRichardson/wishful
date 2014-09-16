@@ -9,14 +9,14 @@ var (
 	EitherPromise EitherT = NewEitherT(Promise{})
 )
 
-func Async(f func(x AnyVal) Promise) func(x AnyVal) EitherT {
-	return func(x AnyVal) EitherT {
+func Async(f func(x Any) Promise) func(x Any) EitherT {
+	return func(x Any) EitherT {
 		return EitherPromise.From(
 			NewPromise(
-				func(resolve func(x AnyVal) AnyVal) AnyVal {
+				func(resolve func(x Any) Any) Any {
 					fun := NewFunction(f)
 					res, _ := fun.Call(x)
-					return res.(Promise).Fork(func(x AnyVal) AnyVal {
+					return res.(Promise).Fork(func(x Any) Any {
 						return resolve(NewRight(x))
 					})
 				},

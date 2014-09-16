@@ -5,25 +5,25 @@ import (
 )
 
 type Option interface {
-	Of(v AnyVal) Point
+	Of(v Any) Point
 	Empty() Monoid
 	Ap(v Applicative) Applicative
-	Chain(f func(v AnyVal) Monad) Monad
+	Chain(f func(v Any) Monad) Monad
 	Concat(y Semigroup) Semigroup
-	Fold(f func(v AnyVal) AnyVal, g func() AnyVal) AnyVal
-	Map(f func(v AnyVal) AnyVal) Functor
-	GetOrElse(f func() AnyVal) AnyVal
+	Fold(f func(v Any) Any, g func() Any) Any
+	Map(f func(v Any) Any) Functor
+	GetOrElse(f func() Any) Any
 	OrElse(y Option) Option
 }
 
 type Some struct {
-	x AnyVal
+	x Any
 }
 
 type None struct {
 }
 
-func NewSome(x AnyVal) Some {
+func NewSome(x Any) Some {
 	return Some{
 		x: x,
 	}
@@ -33,11 +33,11 @@ func NewNone() None {
 	return None{}
 }
 
-func (x Some) Of(v AnyVal) Point {
+func (x Some) Of(v Any) Point {
 	return NewSome(v)
 }
 
-func (x None) Of(v AnyVal) Point {
+func (x None) Of(v Any) Point {
 	return NewSome(v)
 }
 
@@ -57,30 +57,30 @@ func (x None) Ap(v Applicative) Applicative {
 	return x
 }
 
-func (x Some) Chain(f func(v AnyVal) Monad) Monad {
+func (x Some) Chain(f func(v Any) Monad) Monad {
 	return f(x.x)
 }
 
-func (x None) Chain(f func(v AnyVal) Monad) Monad {
+func (x None) Chain(f func(v Any) Monad) Monad {
 	return x
 }
 
-func (x Some) Fold(f func(v AnyVal) AnyVal, g func() AnyVal) AnyVal {
+func (x Some) Fold(f func(v Any) Any, g func() Any) Any {
 	return f(x.x)
 }
 
-func (x None) Fold(f func(v AnyVal) AnyVal, g func() AnyVal) AnyVal {
+func (x None) Fold(f func(v Any) Any, g func() Any) Any {
 	return g()
 }
 
-func (x Some) Map(f func(v AnyVal) AnyVal) Functor {
-	res := x.Chain(func(v AnyVal) Monad {
+func (x Some) Map(f func(v Any) Any) Functor {
+	res := x.Chain(func(v Any) Monad {
 		return NewSome(f(v))
 	})
 	return res.(Functor)
 }
 
-func (x None) Map(f func(v AnyVal) AnyVal) Functor {
+func (x None) Map(f func(v Any) Any) Functor {
 	return x
 }
 
@@ -94,11 +94,11 @@ func (x None) Concat(y Semigroup) Semigroup {
 
 // Derived
 
-func (x Some) GetOrElse(f func() AnyVal) AnyVal {
+func (x Some) GetOrElse(f func() Any) Any {
 	return x.x
 }
 
-func (x None) GetOrElse(f func() AnyVal) AnyVal {
+func (x None) GetOrElse(f func() Any) Any {
 	return f()
 }
 

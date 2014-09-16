@@ -4,7 +4,7 @@ func IncInt(a int) int {
 	return a + 1
 }
 
-func Inc(a AnyVal) AnyVal {
+func Inc(a Any) Any {
 	if obj, ok := a.(int); ok {
 		return obj + 1
 	}
@@ -21,7 +21,7 @@ func DecInt(a int) int {
 	return a - 1
 }
 
-func Dec(a AnyVal) AnyVal {
+func Dec(a Any) Any {
 	if obj, ok := a.(int); ok {
 		return obj - 1
 	}

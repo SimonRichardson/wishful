@@ -14,15 +14,15 @@ func NewSemigroupLaws(point Point) SemigroupLaws {
 	}
 }
 
-func (o SemigroupLaws) Associativity(run func(v AnyVal) AnyVal) (func(x Int, y Int, z Int) AnyVal, func(x Int, y Int, z Int) AnyVal) {
-	f := func(x Int, y Int, z Int) AnyVal {
+func (o SemigroupLaws) Associativity(run func(v Any) Any) (func(x Int, y Int, z Int) Any, func(x Int, y Int, z Int) Any) {
+	f := func(x Int, y Int, z Int) Any {
 		a := o.x.Of(x).(Semigroup)
 		b := o.x.Of(y).(Semigroup)
 		c := o.x.Of(z).(Semigroup)
 
 		return run(a.Concat(b).Concat(c))
 	}
-	g := func(x Int, y Int, z Int) AnyVal {
+	g := func(x Int, y Int, z Int) Any {
 		a := o.x.Of(x).(Semigroup)
 		b := o.x.Of(y).(Semigroup)
 		c := o.x.Of(z).(Semigroup)

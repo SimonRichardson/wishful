@@ -12,11 +12,11 @@ func (o Int) Of(x int) Int {
 }
 
 func (o Int) Concat(x Semigroup) Semigroup {
-	y, _ := FromAnyValToInt(x)
+	y, _ := FromAnyToInt(x)
 	return o.Of(int(o) + int(y))
 }
 
-func FromAnyValToInt(v AnyVal) (Int, error) {
+func FromAnyToInt(v Any) (Int, error) {
 	if obj, ok := v.(int); ok {
 		return Int(obj), nil
 	} else if obj, ok := v.(Int); ok {

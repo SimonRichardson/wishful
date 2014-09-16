@@ -5,32 +5,32 @@ import (
 )
 
 type Store struct {
-	Set func(x AnyVal) AnyVal
-	Get func() AnyVal
+	Set func(x Any) Any
+	Get func() Any
 }
 
-func NewStore(set func(x AnyVal) AnyVal, get func() AnyVal) Store {
+func NewStore(set func(x Any) Any, get func() Any) Store {
 	return Store{
 		set,
 		get,
 	}
 }
 
-func (x Store) Map(f func(x AnyVal) AnyVal) Functor {
-	return x.Extend(func(x Store) AnyVal {
+func (x Store) Map(f func(x Any) Any) Functor {
+	return x.Extend(func(x Store) Any {
 		return f(x.Extract())
 	})
 }
 
 // Derived
 
-func (x Store) Extend(f func(x Store) AnyVal) Store {
+func (x Store) Extend(f func(x Store) Any) Store {
 	return Store{
-		func(y AnyVal) AnyVal {
+		func(y Any) Any {
 			fun := NewFunction(f)
 			res, _ := fun.Call(Store{
 				x.Set,
-				func() AnyVal {
+				func() Any {
 					return y
 				},
 			})
@@ -40,6 +40,6 @@ func (x Store) Extend(f func(x Store) AnyVal) Store {
 	}
 }
 
-func (x Store) Extract() AnyVal {
+func (x Store) Extract() Any {
 	return x.Set(x.Get())
 }

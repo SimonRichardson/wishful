@@ -1,12 +1,12 @@
 package useful
 
 import (
-	. "github.com/SimonRichardson/wishful/wishful"
 	"testing"
 	"testing/quick"
+	. "github.com/SimonRichardson/wishful/wishful"
 )
 
-func extractEitherT(x AnyVal) AnyVal {
+func extractEitherT(x Any) Any {
 	io := x.(EitherT)
 	return io.Run
 }

@@ -24,7 +24,7 @@ The useful lib provides actual implementations of Wishful spec.
 
 ### Helpful
 
-When `AnyVal` is just not enough! 
+When `Any` is just not enough! 
 
 Because of the limitations with GO and the lack of generics, sometimes you 
 really want to know what type you're actually getting back from the algebraic 

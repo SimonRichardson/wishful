@@ -5,10 +5,10 @@ import (
 )
 
 var (
-	productConcat = fromMonadToSemigroupConcat(func(a Semigroup, b Semigroup) AnyVal {
+	productConcat = fromMonadToSemigroupConcat(func(a Semigroup, b Semigroup) Any {
 		// This is a bit horrid
-		x, _ := FromAnyValToInt(a)
-		y, _ := FromAnyValToInt(b)
+		x, _ := FromAnyToInt(a)
+		y, _ := FromAnyToInt(b)
 		return int(x) * int(y)
 	})
 )
@@ -23,8 +23,8 @@ func NewProduct(x Int) Product {
 	}
 }
 
-func (x Product) Of(v AnyVal) Point {
-	p, _ := FromAnyValToInt(v)
+func (x Product) Of(v Any) Point {
+	p, _ := FromAnyToInt(v)
 	return NewProduct(p)
 }
 
@@ -32,7 +32,7 @@ func (x Product) Empty() Monoid {
 	return NewProduct(Int(1))
 }
 
-func (x Product) Chain(f func(v AnyVal) Monad) Monad {
+func (x Product) Chain(f func(v Any) Monad) Monad {
 	return f(x.x)
 }
 
@@ -40,9 +40,9 @@ func (x Product) Concat(y Semigroup) Semigroup {
 	return productConcat(x, y)
 }
 
-func (x Product) Map(f func(v AnyVal) AnyVal) Functor {
-	return x.Chain(func(x AnyVal) Monad {
-		p, _ := FromAnyValToInt(f(x))
+func (x Product) Map(f func(v Any) Any) Functor {
+	return x.Chain(func(x Any) Monad {
+		p, _ := FromAnyToInt(f(x))
 		return NewProduct(p)
 	}).(Functor)
 }

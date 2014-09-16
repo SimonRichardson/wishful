@@ -1,9 +1,9 @@
 package useful
 
 import (
-	. "github.com/SimonRichardson/wishful/wishful"
 	"testing"
 	"testing/quick"
+	. "github.com/SimonRichardson/wishful/wishful"
 )
 
 // Manual tests
@@ -46,7 +46,7 @@ func Test_Either_Left_Ap(t *testing.T) {
 
 func Test_Either_Left_Chain(t *testing.T) {
 	f := func(x int) Either {
-		return Left{}.Chain(func(v AnyVal) Monad {
+		return Left{}.Chain(func(v Any) Monad {
 			return Left{}
 		}).(Either)
 	}
@@ -108,7 +108,7 @@ func Test_Either_Right_Swap(t *testing.T) {
 
 func Test_Either_Left_Bimap(t *testing.T) {
 	f := func(x int) Either {
-		return Left{x}.Bimap(func(v AnyVal) AnyVal {
+		return Left{x}.Bimap(func(v Any) Any {
 			return v.(int) + 1
 		}, Identity).(Either)
 	}
@@ -122,7 +122,7 @@ func Test_Either_Left_Bimap(t *testing.T) {
 
 func Test_Either_Right_Bimap(t *testing.T) {
 	f := func(x int) Either {
-		return Right{x}.Bimap(Identity, func(v AnyVal) AnyVal {
+		return Right{x}.Bimap(Identity, func(v Any) Any {
 			return v.(int) + 1
 		}).(Either)
 	}

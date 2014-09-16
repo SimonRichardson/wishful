@@ -1,7 +1,7 @@
 package wishful
 
 type Monad interface {
-	Chain(f func(v AnyVal) Monad) Monad
+	Chain(f func(v Any) Monad) Monad
 }
 
 type MonadLaws struct {
@@ -14,50 +14,50 @@ func NewMonadLaws(point Point) MonadLaws {
 	}
 }
 
-func (o MonadLaws) LeftIdentity(run func(v AnyVal) AnyVal) (func(v int) AnyVal, func(v int) AnyVal) {
-	f := func(v int) AnyVal {
+func (o MonadLaws) LeftIdentity(run func(v Any) Any) (func(v int) Any, func(v int) Any) {
+	f := func(v int) Any {
 		a := o.x.Of(v).(Monad)
-		return run(a.Chain(func(x AnyVal) Monad {
-			return Apply(func(x AnyVal) AnyVal {
+		return run(a.Chain(func(x Any) Monad {
+			return Apply(func(x Any) Any {
 				return o.x.Of(x)
 			})(x).(Monad)
 		}))
 	}
-	g := func(v int) AnyVal {
-		return run(Apply(func(x AnyVal) AnyVal {
+	g := func(v int) Any {
+		return run(Apply(func(x Any) Any {
 			return o.x.Of(x)
 		})(v))
 	}
 	return f, g
 }
 
-func (o MonadLaws) RightIdentity(run func(v AnyVal) AnyVal) (func(v int) AnyVal, func(v int) AnyVal) {
-	f := func(v int) AnyVal {
+func (o MonadLaws) RightIdentity(run func(v Any) Any) (func(v int) Any, func(v int) Any) {
+	f := func(v int) Any {
 		a := o.x.Of(v).(Monad)
-		return run(a.Chain(func(x AnyVal) Monad {
+		return run(a.Chain(func(x Any) Monad {
 			return o.x.Of(x).(Monad)
 		}))
 	}
-	g := func(v int) AnyVal {
+	g := func(v int) Any {
 		return run(o.x.Of(v))
 	}
 	return f, g
 }
 
-func (o MonadLaws) Associativity(run func(v AnyVal) AnyVal) (func(v int) AnyVal, func(v int) AnyVal) {
-	f := func(v int) AnyVal {
+func (o MonadLaws) Associativity(run func(v Any) Any) (func(v int) Any, func(v int) Any) {
+	f := func(v int) Any {
 		a := o.x.Of(v).(Monad)
-		return run(a.Chain(func(x AnyVal) Monad {
+		return run(a.Chain(func(x Any) Monad {
 			return o.x.Of(x).(Monad)
-		}).Chain(func(x AnyVal) Monad {
+		}).Chain(func(x Any) Monad {
 			return o.x.Of(x).(Monad)
 		}))
 	}
-	g := func(v int) AnyVal {
+	g := func(v int) Any {
 		a := o.x.Of(v).(Monad)
-		return run(a.Chain(func(x AnyVal) Monad {
+		return run(a.Chain(func(x Any) Monad {
 			b := o.x.Of(x).(Monad)
-			return b.Chain(func(x AnyVal) Monad {
+			return b.Chain(func(x Any) Monad {
 				return o.x.Of(x).(Monad)
 			})
 		}))

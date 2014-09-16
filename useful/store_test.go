@@ -1,9 +1,9 @@
 package useful
 
 import (
-	. "github.com/SimonRichardson/wishful/wishful"
 	"testing"
 	"testing/quick"
+	. "github.com/SimonRichardson/wishful/wishful"
 )
 
 func Test_Store_Map(t *testing.T) {
@@ -11,7 +11,7 @@ func Test_Store_Map(t *testing.T) {
 		return x
 	}
 	g := func(x int) int {
-		store := NewStore(Identity, func() AnyVal {
+		store := NewStore(Identity, func() Any {
 			return x
 		})
 		fun := store.Map(Identity)
@@ -27,7 +27,7 @@ func Test_Store_Extract(t *testing.T) {
 		return x
 	}
 	g := func(x int) int {
-		store := NewStore(Identity, func() AnyVal {
+		store := NewStore(Identity, func() Any {
 			return x
 		})
 		return store.Extract().(int)
@@ -42,10 +42,10 @@ func Test_Store_Extend(t *testing.T) {
 		return x
 	}
 	g := func(x int) int {
-		store := NewStore(Identity, func() AnyVal {
+		store := NewStore(Identity, func() Any {
 			return x
 		})
-		ext := store.Extend(func(x Store) AnyVal {
+		ext := store.Extend(func(x Store) Any {
 			return x.Extract()
 		})
 		return ext.Extract().(int)

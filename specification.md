@@ -73,8 +73,8 @@ The `empty` method takes no arguments:
 
 ### Functor
 
-1. `u.Map(func(a AnyVal) AnyVal { return a; }))` is equivalent to `u` (identity)
-2. `u.Map(func(x AnyVal) AnyVal { return f(g(x)); })` is equivalent to `u.Map(g).Map(f)` (composition)
+1. `u.Map(func(a Any) Any { return a; }))` is equivalent to `u` (identity)
+2. `u.Map(func(x Any) Any { return f(g(x)); })` is equivalent to `u.Map(g).Map(f)` (composition)
 
 #### `Map` method
 
@@ -99,12 +99,12 @@ implement the Functor specification.
 A value which satisfies the specification of a Applicative does not
 need to implement:
 
-* Functor's `Map`; derivable as `func(f func(x AnyVal) AnyVal) AnyVal { return x.Of(f).Ap(x); })}`
+* Functor's `Map`; derivable as `func(f func(x Any) Any) Any { return x.Of(f).Ap(x); })}`
 
-1. `a.Of(func(a AnyVal) AnyVal { return a; }).Ap(v)` is equivalent to `v` (identity)
-2. `a.Of(func(f AnyVal) AnyVal { return func(g) { return func(x) { return f(g(x))}; }; }).Ap(u).Ap(v).Ap(w)` is equivalent to `u.Ap(v.Ap(w))` (composition)
+1. `a.Of(func(a Any) Any { return a; }).Ap(v)` is equivalent to `v` (identity)
+2. `a.Of(func(f Any) Any { return func(g) { return func(x) { return f(g(x))}; }; }).Ap(u).Ap(v).Ap(w)` is equivalent to `u.Ap(v.Ap(w))` (composition)
 3. `a.Of(f).Ap(a.Of(x))` is equivalent to `a.Of(f(x))` (homomorphism)
-4. `u.Ap(a.Of(y))` is equivalent to `a.Of(func(f AnyVal) AnyVal { return f(y); }).Ap(u)` (interchange)
+4. `u.Ap(a.Of(y))` is equivalent to `a.Of(func(f Any) Any { return f(y); }).Ap(u)` (interchange)
 
 #### `Ap` method
 
@@ -136,7 +136,7 @@ The `Of` method takes one argument:
 
 ### Chain
 
-1. `m.Chain(f).Chain(g)` is equivalent to `m.Chain(func(x AnyVal) AnyVal { return f(x).Chain(g); })` (associativity)
+1. `m.Chain(f).Chain(g)` is equivalent to `m.Chain(func(x Any) Any { return f(x).Chain(g); })` (associativity)
 
 #### `Chain` method
 
@@ -161,8 +161,8 @@ the Applicative and Chain specifications.
 A value which satisfies the specification of a Monad does not need to
 implement:
 
-* Applicative's `Ap`; derivable as `funct(m AnyVal) Anyval { return this.chain(funct(f AnyVal) Monad { return m.Map(f); }); }`
-* Functor's `map`; derivable as `function(f) { return x.Chain(func(a AnyVal) Monad { return x.Of(f(a)); })}`
+* Applicative's `Ap`; derivable as `funct(m Any) Anyval { return this.chain(funct(f Any) Monad { return m.Map(f); }); }`
+* Functor's `map`; derivable as `function(f) { return x.Chain(func(a Any) Monad { return x.Of(f(a)); })}`
 
 1. `m.Of(a).Chain(f)` is equivalent to `f(a)` (left identity)
 2. `m.Chain(m.Of)` is equivalent to `m` (right identity)

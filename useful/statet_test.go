@@ -6,7 +6,7 @@ import (
 	. "github.com/SimonRichardson/wishful/wishful"
 )
 
-func extractStateT(x AnyVal) AnyVal {
+func extractStateT(x Any) Any {
 	io := x.(StateT)
 	return io.Run(1)
 }

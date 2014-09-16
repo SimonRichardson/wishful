@@ -1,12 +1,12 @@
 package useful
 
 import (
-	. "github.com/SimonRichardson/wishful/wishful"
 	"testing"
 	"testing/quick"
+	. "github.com/SimonRichardson/wishful/wishful"
 )
 
-func extractIO(x AnyVal) AnyVal {
+func extractIO(x Any) Any {
 	io := x.(IO)
 	return io.UnsafePerform()
 }

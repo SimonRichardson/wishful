@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	AnyValName string = "AnyVal"
+	AnyName string = "Any"
 )
 
 type Rewriter struct {
@@ -33,7 +33,7 @@ func (v Rewriter) Visit(node ast.Node) ast.Visitor {
 		}
 	case *ast.Field:
 		if f, ok := n.Type.(*ast.Ident); ok {
-			if f.Name == AnyValName {
+			if f.Name == AnyName {
 				f.Name = v.TypeName
 			}
 			if val, ok := v.Names[f.Name]; ok {

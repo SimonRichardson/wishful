@@ -1,41 +1,41 @@
 package wishful
 
 // A combinator
-func Apply(f func(x AnyVal) AnyVal) func(x AnyVal) AnyVal {
-	return func(x AnyVal) AnyVal {
+func Apply(f func(x Any) Any) func(x Any) Any {
+	return func(x Any) Any {
 		return f(x)
 	}
 }
 
 // B combinator
-func Compose(f func(x AnyVal) AnyVal) func(g func(y AnyVal) AnyVal) func(z AnyVal) AnyVal {
-	return func(g func(y AnyVal) AnyVal) func(z AnyVal) AnyVal {
-		return func(a AnyVal) AnyVal {
+func Compose(f func(x Any) Any) func(g func(y Any) Any) func(z Any) Any {
+	return func(g func(y Any) Any) func(z Any) Any {
+		return func(a Any) Any {
 			return f(g(a))
 		}
 	}
 }
 
 // K combinator
-func Constant(a AnyVal) func(x AnyVal) AnyVal {
-	return func(b AnyVal) AnyVal {
+func Constant(a Any) func(x Any) Any {
+	return func(b Any) Any {
 		return a
 	}
 }
-func ConstantNoArgs(a AnyVal) func() AnyVal {
-	return func() AnyVal {
+func ConstantNoArgs(a Any) func() Any {
+	return func() Any {
 		return a
 	}
 }
 
 // I combinator
-func Identity(x AnyVal) AnyVal {
+func Identity(x Any) Any {
 	return x
 }
 
 // T combinator
-func Thrush(x AnyVal) func(f func(v AnyVal) AnyVal) AnyVal {
-	return func(f func(v AnyVal) AnyVal) AnyVal {
+func Thrush(x Any) func(f func(v Any) Any) Any {
+	return func(f func(v Any) Any) Any {
 		return f(x)
 	}
 }

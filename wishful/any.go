@@ -1,5 +1,5 @@
 package wishful
 
-type AnyVal interface{}
+type Any interface{}
 
 type Empty struct{}

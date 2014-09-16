@@ -1,9 +1,9 @@
 package useful
 
 import (
-	. "github.com/SimonRichardson/wishful/wishful"
 	"testing"
 	"testing/quick"
+	. "github.com/SimonRichardson/wishful/wishful"
 )
 
 type Value struct {
@@ -66,7 +66,7 @@ func Test_Validation_Failure_ApWithSuccess(t *testing.T) {
 
 func Test_Validation_Failure_Chain(t *testing.T) {
 	f := func(x int) Validation {
-		return Failure{}.Chain(func(v AnyVal) Monad {
+		return Failure{}.Chain(func(v Any) Monad {
 			return Failure{}
 		}).(Validation)
 	}
@@ -104,7 +104,7 @@ func Test_Validation_Failure_Concat(t *testing.T) {
 
 func Test_Validation_Failure_Bimap(t *testing.T) {
 	f := func(x int) Validation {
-		return Failure{x}.Bimap(func(v AnyVal) AnyVal {
+		return Failure{x}.Bimap(func(v Any) Any {
 			return v.(int) + 1
 		}, Identity).(Validation)
 	}
@@ -118,7 +118,7 @@ func Test_Validation_Failure_Bimap(t *testing.T) {
 
 func Test_Validation_Success_Bimap(t *testing.T) {
 	f := func(x int) Validation {
-		return Success{x}.Bimap(Identity, func(v AnyVal) AnyVal {
+		return Success{x}.Bimap(Identity, func(v Any) Any {
 			return v.(int) + 1
 		}).(Validation)
 	}

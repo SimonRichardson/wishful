@@ -1,12 +1,12 @@
 package useful
 
 import (
-	. "github.com/SimonRichardson/wishful/wishful"
 	"testing"
 	"testing/quick"
+	. "github.com/SimonRichardson/wishful/wishful"
 )
 
-func extractState(x AnyVal) AnyVal {
+func extractState(x Any) Any {
 	state := x.(State)
 	return state.EvalState(1)
 }
@@ -27,10 +27,10 @@ func Test_State_ExecState(t *testing.T) {
 }
 
 func Test_State_Get(t *testing.T) {
-	f := func(x int) (AnyVal, AnyVal) {
+	f := func(x int) (Any, Any) {
 		return x, x
 	}
-	g := func(x int) (AnyVal, AnyVal) {
+	g := func(x int) (Any, Any) {
 		a := State{}.Get()
 		return a.Run(x)
 	}
@@ -40,10 +40,10 @@ func Test_State_Get(t *testing.T) {
 }
 
 func Test_State_Modify(t *testing.T) {
-	f := func(x int) (AnyVal, AnyVal) {
+	f := func(x int) (Any, Any) {
 		return nil, x
 	}
-	g := func(x int) (AnyVal, AnyVal) {
+	g := func(x int) (Any, Any) {
 		a := State{}.Modify(Identity)
 		return a.Run(x)
 	}
@@ -53,10 +53,10 @@ func Test_State_Modify(t *testing.T) {
 }
 
 func Test_State_Put(t *testing.T) {
-	f := func(x int, y int) (AnyVal, AnyVal) {
+	f := func(x int, y int) (Any, Any) {
 		return x, y
 	}
-	g := func(x int, y int) (AnyVal, AnyVal) {
+	g := func(x int, y int) (Any, Any) {
 		a := State{}.Put(x, y)
 		return a.Run(x)
 	}

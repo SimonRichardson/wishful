@@ -1,12 +1,12 @@
 package useful
 
 import (
-	. "github.com/SimonRichardson/wishful/wishful"
 	"testing"
 	"testing/quick"
+	. "github.com/SimonRichardson/wishful/wishful"
 )
 
-func extractEndo(x AnyVal) AnyVal {
+func extractEndo(x Any) Any {
 	endo := x.(Endo)
 	return endo.Fork(Identity)
 }
@@ -14,10 +14,10 @@ func extractEndo(x AnyVal) AnyVal {
 // Manual
 
 func Test_Endo_NewEndo(t *testing.T) {
-	f := func(x int) AnyVal {
+	f := func(x int) Any {
 		return extractEndo(NewEndo(Constant(x)))
 	}
-	g := func(x int) AnyVal {
+	g := func(x int) Any {
 		return extractEndo(Endo{}.Of(x))
 	}
 	if err := quick.CheckEqual(f, g, nil); err != nil {

@@ -1,13 +1,13 @@
 package helpful
 
 import (
-	. "github.com/SimonRichardson/wishful/useful"
-	. "github.com/SimonRichardson/wishful/wishful"
 	"testing"
 	"testing/quick"
+	. "github.com/SimonRichardson/wishful/useful"
+	. "github.com/SimonRichardson/wishful/wishful"
 )
 
-func success(x AnyVal) Promise {
+func success(x Any) Promise {
 	return Promise{}.Of(x).(Promise)
 }
 

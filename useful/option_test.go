@@ -46,7 +46,7 @@ func Test_Option_None_Ap(t *testing.T) {
 
 func Test_Option_None_Chain(t *testing.T) {
 	f := func(x int) Option {
-		return None{}.Chain(func(v AnyVal) Monad {
+		return None{}.Chain(func(v Any) Monad {
 			return None{}
 		}).(Option)
 	}

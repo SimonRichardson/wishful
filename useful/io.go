@@ -5,25 +5,25 @@ import (
 )
 
 type IO struct {
-	UnsafePerform func() AnyVal
+	UnsafePerform func() Any
 }
 
-func NewIO(unsafe func() AnyVal) IO {
+func NewIO(unsafe func() Any) IO {
 	return IO{
 		UnsafePerform: unsafe,
 	}
 }
 
-func (x IO) Of(v AnyVal) Point {
-	return NewIO(func() AnyVal {
+func (x IO) Of(v Any) Point {
+	return NewIO(func() Any {
 		return v
 	})
 }
 
 func (x IO) Ap(v Applicative) Applicative {
-	res := x.Chain(func(f AnyVal) Monad {
+	res := x.Chain(func(f Any) Monad {
 		fun := v.(Functor)
-		res := fun.Map(func(x AnyVal) AnyVal {
+		res := fun.Map(func(x Any) Any {
 			fun := NewFunction(f)
 			res, _ := fun.Call(x)
 			return res
@@ -33,16 +33,16 @@ func (x IO) Ap(v Applicative) Applicative {
 	return res.(Applicative)
 }
 
-func (x IO) Chain(f func(x AnyVal) Monad) Monad {
-	return NewIO(func() AnyVal {
+func (x IO) Chain(f func(x Any) Monad) Monad {
+	return NewIO(func() Any {
 		io := f(x.UnsafePerform()).(IO)
 		return io.UnsafePerform()
 	})
 }
 
-func (x IO) Map(f func(x AnyVal) AnyVal) Functor {
-	res := x.Chain(func(x AnyVal) Monad {
-		return IO{func() AnyVal {
+func (x IO) Map(f func(x Any) Any) Functor {
+	res := x.Chain(func(x Any) Monad {
+		return IO{func() Any {
 			return f(x)
 		}}
 	})

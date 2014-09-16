@@ -9,17 +9,17 @@ type Function struct {
 	callable reflect.Value
 }
 
-func NewFunction(f AnyVal) Function {
+func NewFunction(f Any) Function {
 	return Function{
 		callable: reflect.ValueOf(f),
 	}
 }
 
-func (f Function) Call(args ...AnyVal) (AnyVal, error) {
+func (f Function) Call(args ...Any) (Any, error) {
 	return f.Apply(args)
 }
 
-func (f Function) Apply(args []AnyVal) (AnyVal, error) {
+func (f Function) Apply(args []Any) (Any, error) {
 	vargs := make([]reflect.Value, len(args))
 	for i, v := range args {
 		vargs[i] = reflect.ValueOf(v)

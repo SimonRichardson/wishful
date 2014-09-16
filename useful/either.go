@@ -5,43 +5,43 @@ import (
 )
 
 type Either interface {
-	Of(AnyVal) Point
+	Of(Any) Point
 	Ap(Applicative) Applicative
-	Chain(func(AnyVal) Monad) Monad
+	Chain(func(Any) Monad) Monad
 	Concat(Semigroup) Semigroup
-	Map(func(AnyVal) AnyVal) Functor
-	Bimap(func(AnyVal) AnyVal, func(AnyVal) AnyVal) Monad
-	Fold(func(AnyVal) AnyVal, func(AnyVal) AnyVal) AnyVal
+	Map(func(Any) Any) Functor
+	Bimap(func(Any) Any, func(Any) Any) Monad
+	Fold(func(Any) Any, func(Any) Any) Any
 	Swap() Monad
-	Sequence(Point) AnyVal
-	Traverse(func(AnyVal) AnyVal, Point) Functor
+	Sequence(Point) Any
+	Traverse(func(Any) Any, Point) Functor
 }
 
 type Left struct {
-	x AnyVal
+	x Any
 }
 
 type Right struct {
-	x AnyVal
+	x Any
 }
 
-func NewLeft(x AnyVal) Left {
+func NewLeft(x Any) Left {
 	return Left{
 		x: x,
 	}
 }
 
-func NewRight(x AnyVal) Right {
+func NewRight(x Any) Right {
 	return Right{
 		x: x,
 	}
 }
 
-func (x Left) Of(v AnyVal) Point {
+func (x Left) Of(v Any) Point {
 	return NewRight(v)
 }
 
-func (x Right) Of(v AnyVal) Point {
+func (x Right) Of(v Any) Point {
 	return NewRight(v)
 }
 
@@ -53,20 +53,20 @@ func (x Right) Ap(v Applicative) Applicative {
 	return fromMonadToApplicativeAp(x, v)
 }
 
-func (x Left) Chain(f func(v AnyVal) Monad) Monad {
+func (x Left) Chain(f func(v Any) Monad) Monad {
 	return x
 }
 
-func (x Right) Chain(f func(v AnyVal) Monad) Monad {
+func (x Right) Chain(f func(v Any) Monad) Monad {
 	return f(x.x)
 }
 
-func (x Left) Map(f func(v AnyVal) AnyVal) Functor {
+func (x Left) Map(f func(v Any) Any) Functor {
 	return x
 }
 
-func (x Right) Map(f func(v AnyVal) AnyVal) Functor {
-	res := x.Chain(func(v AnyVal) Monad {
+func (x Right) Map(f func(v Any) Any) Functor {
+	res := x.Chain(func(v Any) Monad {
 		return NewRight(f(v))
 	})
 	return res.(Functor)
@@ -89,36 +89,36 @@ func (x Right) Swap() Monad {
 	return NewLeft(x.x)
 }
 
-func (x Left) Bimap(f func(v AnyVal) AnyVal, g func(v AnyVal) AnyVal) Monad {
+func (x Left) Bimap(f func(v Any) Any, g func(v Any) Any) Monad {
 	return NewLeft(f(x.x))
 }
 
-func (x Right) Bimap(f func(v AnyVal) AnyVal, g func(v AnyVal) AnyVal) Monad {
+func (x Right) Bimap(f func(v Any) Any, g func(v Any) Any) Monad {
 	return NewRight(g(x.x))
 }
 
-func (x Left) Fold(f func(v AnyVal) AnyVal, g func(v AnyVal) AnyVal) AnyVal {
+func (x Left) Fold(f func(v Any) Any, g func(v Any) Any) Any {
 	return f(x.x)
 }
 
-func (x Right) Fold(f func(v AnyVal) AnyVal, g func(v AnyVal) AnyVal) AnyVal {
+func (x Right) Fold(f func(v Any) Any, g func(v Any) Any) Any {
 	return g(x.x)
 }
 
-func (x Left) Sequence(p Point) AnyVal {
+func (x Left) Sequence(p Point) Any {
 	return x.Traverse(Identity, p)
 }
 
-func (x Right) Sequence(p Point) AnyVal {
+func (x Right) Sequence(p Point) Any {
 	return x.Traverse(Identity, p)
 }
 
-func (x Left) Traverse(f func(AnyVal) AnyVal, p Point) Functor {
+func (x Left) Traverse(f func(Any) Any, p Point) Functor {
 	return p.Of(NewLeft(x.x)).(Functor)
 }
 
-func (x Right) Traverse(f func(AnyVal) AnyVal, p Point) Functor {
-	return f(x.x).(Functor).Map(func(a AnyVal) AnyVal {
+func (x Right) Traverse(f func(Any) Any, p Point) Functor {
+	return f(x.x).(Functor).Map(func(a Any) Any {
 		return NewRight(a)
 	})
 }
