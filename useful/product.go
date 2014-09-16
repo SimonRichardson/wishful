@@ -32,7 +32,7 @@ func (x Product) Empty() Monoid {
 	return NewProduct(Int(1))
 }
 
-func (x Product) Chain(f func(v Any) Monad) Monad {
+func (x Product) Chain(f func(Any) Monad) Monad {
 	return f(x.x)
 }
 
@@ -40,7 +40,7 @@ func (x Product) Concat(y Semigroup) Semigroup {
 	return productConcat(x, y)
 }
 
-func (x Product) Map(f func(v Any) Any) Functor {
+func (x Product) Map(f func(Any) Any) Functor {
 	return x.Chain(func(x Any) Monad {
 		p, _ := FromAnyToInt(f(x))
 		return NewProduct(p)
