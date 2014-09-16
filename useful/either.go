@@ -5,14 +5,16 @@ import (
 )
 
 type Either interface {
-	Of(v AnyVal) Point
-	Ap(v Applicative) Applicative
-	Chain(f func(v AnyVal) Monad) Monad
-	Concat(y Semigroup) Semigroup
-	Map(f func(v AnyVal) AnyVal) Functor
-	Bimap(f func(v AnyVal) AnyVal, g func(v AnyVal) AnyVal) Monad
-	Fold(f func(v AnyVal) AnyVal, g func(v AnyVal) AnyVal) AnyVal
+	Of(AnyVal) Point
+	Ap(Applicative) Applicative
+	Chain(func(AnyVal) Monad) Monad
+	Concat(Semigroup) Semigroup
+	Map(func(AnyVal) AnyVal) Functor
+	Bimap(func(AnyVal) AnyVal, func(AnyVal) AnyVal) Monad
+	Fold(func(AnyVal) AnyVal, func(AnyVal) AnyVal) AnyVal
 	Swap() Monad
+	Sequence(Point) AnyVal
+	Traverse(func(AnyVal) AnyVal, Point) Functor
 }
 
 type Left struct {
@@ -101,4 +103,22 @@ func (x Left) Fold(f func(v AnyVal) AnyVal, g func(v AnyVal) AnyVal) AnyVal {
 
 func (x Right) Fold(f func(v AnyVal) AnyVal, g func(v AnyVal) AnyVal) AnyVal {
 	return g(x.x)
+}
+
+func (x Left) Sequence(p Point) AnyVal {
+	return x.Traverse(Identity, p)
+}
+
+func (x Right) Sequence(p Point) AnyVal {
+	return x.Traverse(Identity, p)
+}
+
+func (x Left) Traverse(f func(AnyVal) AnyVal, p Point) Functor {
+	return p.Of(NewLeft(x.x)).(Functor)
+}
+
+func (x Right) Traverse(f func(AnyVal) AnyVal, p Point) Functor {
+	return f(x.x).(Functor).Map(func(a AnyVal) AnyVal {
+		return NewRight(a)
+	})
 }
