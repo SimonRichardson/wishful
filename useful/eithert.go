@@ -73,8 +73,6 @@ func (x EitherT) Map(f func(v Any) Any) Functor {
 	return mon.(Functor)
 }
 
-// Derived
-
 func (x EitherT) Swap() Monad {
 	return x.Fold(
 		func(v Any) Any {
