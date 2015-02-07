@@ -1,22 +1,27 @@
 package useful
 
 import (
-	. "github.com/SimonRichardson/wishful/wishful"
 	"testing"
 	"testing/quick"
+
+	. "github.com/SimonRichardson/wishful/wishful"
 )
 
 // Functor Laws
 
 func Test_Sum_FunctorLaws_Identity(t *testing.T) {
-	f, g := NewFunctorLaws(Sum{}).Identity(Identity)
+	f, g := NewFunctorLaws(func(x Any) Functor {
+		return Sum{}.Of(x).(Functor)
+	}).Identity(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_Sum_FunctorLaws_Composition(t *testing.T) {
-	f, g := NewFunctorLaws(Sum{}).Composition(Identity)
+	f, g := NewFunctorLaws(func(x Any) Functor {
+		return Sum{}.Of(x).(Functor)
+	}).Composition(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}

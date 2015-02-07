@@ -1,9 +1,10 @@
 package useful
 
 import (
-	. "github.com/SimonRichardson/wishful/wishful"
 	"testing"
 	"testing/quick"
+
+	. "github.com/SimonRichardson/wishful/wishful"
 )
 
 // Applicative Laws
@@ -39,14 +40,18 @@ func Test_Id_ApplicativeLaws_Interchange(t *testing.T) {
 // Functor Laws
 
 func Test_Id_FunctorLaws_Identity(t *testing.T) {
-	f, g := NewFunctorLaws(Id{}).Identity(Identity)
+	f, g := NewFunctorLaws(func(x Any) Functor {
+		return Id{}.Of(x).(Functor)
+	}).Identity(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_Id_FunctorLaws_Composition(t *testing.T) {
-	f, g := NewFunctorLaws(Id{}).Composition(Identity)
+	f, g := NewFunctorLaws(func(x Any) Functor {
+		return Id{}.Of(x).(Functor)
+	}).Composition(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}

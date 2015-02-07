@@ -1,9 +1,10 @@
 package useful
 
 import (
-	. "github.com/SimonRichardson/wishful/wishful"
 	"testing"
 	"testing/quick"
+
+	. "github.com/SimonRichardson/wishful/wishful"
 )
 
 // Manual tests
@@ -15,14 +16,18 @@ func Test_Product_Invalid(t *testing.T) {
 // Functor Laws
 
 func Test_Product_FunctorLaws_Identity(t *testing.T) {
-	f, g := NewFunctorLaws(Product{}).Identity(Identity)
+	f, g := NewFunctorLaws(func(x Any) Functor {
+		return Product{}.Of(x).(Functor)
+	}).Identity(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_Product_FunctorLaws_Composition(t *testing.T) {
-	f, g := NewFunctorLaws(Product{}).Composition(Identity)
+	f, g := NewFunctorLaws(func(x Any) Functor {
+		return Product{}.Of(x).(Functor)
+	}).Composition(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}

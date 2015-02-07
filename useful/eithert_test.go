@@ -3,6 +3,7 @@ package useful
 import (
 	"testing"
 	"testing/quick"
+
 	. "github.com/SimonRichardson/wishful/wishful"
 )
 
@@ -44,14 +45,18 @@ func Test_EitherT_ApplicativeLaws_Interchange(t *testing.T) {
 // Functor Laws
 
 func Test_EitherT_FunctorLaws_Identity(t *testing.T) {
-	f, g := NewFunctorLaws(NewEitherT(Id{})).Identity(extractEitherT)
+	f, g := NewFunctorLaws(func(x Any) Functor {
+		return NewEitherT(Id{}).Of(x).(Functor)
+	}).Identity(extractEitherT)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_EitherT_FunctorLaws_Composition(t *testing.T) {
-	f, g := NewFunctorLaws(NewEitherT(Id{})).Composition(extractEitherT)
+	f, g := NewFunctorLaws(func(x Any) Functor {
+		return NewEitherT(Id{}).Of(x).(Functor)
+	}).Composition(extractEitherT)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}

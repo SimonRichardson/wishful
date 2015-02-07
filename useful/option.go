@@ -109,3 +109,19 @@ func (x Some) OrElse(y Option) Option {
 func (x None) OrElse(y Option) Option {
 	return y
 }
+
+//
+
+var (
+	Option_ = option{}
+)
+
+type option struct{}
+
+func (o option) Of(x Any) Point {
+	return NewSome(x)
+}
+
+func (o option) Empty() Monoid {
+	return NewNone()
+}

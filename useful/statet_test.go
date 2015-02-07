@@ -3,6 +3,7 @@ package useful
 import (
 	"testing"
 	"testing/quick"
+
 	. "github.com/SimonRichardson/wishful/wishful"
 )
 
@@ -44,14 +45,18 @@ func Test_StateT_ApplicativeLaws_Interchange(t *testing.T) {
 // Functor Laws
 
 func Test_StateT_FunctorLaws_Identity(t *testing.T) {
-	f, g := NewFunctorLaws(NewStateT(Id{})).Identity(extractStateT)
+	f, g := NewFunctorLaws(func(x Any) Functor {
+		return NewStateT(Id{}).Of(x).(Functor)
+	}).Identity(extractStateT)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_StateT_FunctorLaws_Composition(t *testing.T) {
-	f, g := NewFunctorLaws(NewStateT(Id{})).Composition(extractStateT)
+	f, g := NewFunctorLaws(func(x Any) Functor {
+		return NewStateT(Id{}).Of(x).(Functor)
+	}).Composition(extractStateT)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}

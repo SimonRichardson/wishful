@@ -202,14 +202,18 @@ func Test_Either_Right_ApplicativeLaws_Interchange(t *testing.T) {
 // Left
 
 func Test_Either_Left_FunctorLaws_Identity(t *testing.T) {
-	f, g := NewFunctorLaws(Left{}).Identity(Identity)
+	f, g := NewFunctorLaws(func(x Any) Functor {
+		return Left{}.Of(x).(Functor)
+	}).Identity(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_Either_Left_FunctorLaws_Composition(t *testing.T) {
-	f, g := NewFunctorLaws(Left{}).Composition(Identity)
+	f, g := NewFunctorLaws(func(x Any) Functor {
+		return Left{}.Of(x).(Functor)
+	}).Composition(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
@@ -218,14 +222,18 @@ func Test_Either_Left_FunctorLaws_Composition(t *testing.T) {
 // Right
 
 func Test_Either_Right_FunctorLaws_Identity(t *testing.T) {
-	f, g := NewFunctorLaws(Right{}).Identity(Identity)
+	f, g := NewFunctorLaws(func(x Any) Functor {
+		return Right{}.Of(x).(Functor)
+	}).Identity(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_Either_Right_FunctorLaws_Composition(t *testing.T) {
-	f, g := NewFunctorLaws(Right{}).Composition(Identity)
+	f, g := NewFunctorLaws(func(x Any) Functor {
+		return Right{}.Of(x).(Functor)
+	}).Composition(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}

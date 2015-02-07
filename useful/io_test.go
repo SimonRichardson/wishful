@@ -3,6 +3,7 @@ package useful
 import (
 	"testing"
 	"testing/quick"
+
 	. "github.com/SimonRichardson/wishful/wishful"
 )
 
@@ -44,14 +45,18 @@ func Test_IO_ApplicativeLaws_Interchange(t *testing.T) {
 // Functor Laws
 
 func Test_IO_FunctorLaws_Identity(t *testing.T) {
-	f, g := NewFunctorLaws(IO{}).Identity(extractIO)
+	f, g := NewFunctorLaws(func(x Any) Functor {
+		return IO{}.Of(x).(Functor)
+	}).Identity(extractIO)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_IO_FunctorLaws_Composition(t *testing.T) {
-	f, g := NewFunctorLaws(IO{}).Composition(extractIO)
+	f, g := NewFunctorLaws(func(x Any) Functor {
+		return IO{}.Of(x).(Functor)
+	}).Composition(extractIO)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}

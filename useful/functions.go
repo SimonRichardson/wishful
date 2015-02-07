@@ -8,12 +8,6 @@ func Append(a Semigroup, b Semigroup) Semigroup {
 	return a.Concat(b)
 }
 
-func Join(a Monad) Monad {
-	return a.Chain(func(a Any) Monad {
-		return a.(Monad)
-	})
-}
-
 func LiftA2(f func(a Any, b Any) Any, a Applicative, b Applicative) Applicative {
 	x := a.(Functor)
 	y := x.Map(func(a Any) Any {

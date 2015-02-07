@@ -3,6 +3,7 @@ package useful
 import (
 	"testing"
 	"testing/quick"
+
 	. "github.com/SimonRichardson/wishful/wishful"
 )
 
@@ -197,14 +198,18 @@ func Test_Validation_Success_ApplicativeLaws_Interchange(t *testing.T) {
 // Failure
 
 func Test_Validation_Failure_FunctorLaws_Identity(t *testing.T) {
-	f, g := NewFunctorLaws(Failure{}).Identity(Identity)
+	f, g := NewFunctorLaws(func(x Any) Functor {
+		return Failure{}.Of(x).(Functor)
+	}).Identity(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_Validation_Failure_FunctorLaws_Composition(t *testing.T) {
-	f, g := NewFunctorLaws(Failure{}).Composition(Identity)
+	f, g := NewFunctorLaws(func(x Any) Functor {
+		return Failure{}.Of(x).(Functor)
+	}).Composition(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
@@ -213,14 +218,18 @@ func Test_Validation_Failure_FunctorLaws_Composition(t *testing.T) {
 // Success
 
 func Test_Validation_Success_FunctorLaws_Identity(t *testing.T) {
-	f, g := NewFunctorLaws(Success{}).Identity(Identity)
+	f, g := NewFunctorLaws(func(x Any) Functor {
+		return Success{}.Of(x).(Functor)
+	}).Identity(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_Validation_Success_FunctorLaws_Composition(t *testing.T) {
-	f, g := NewFunctorLaws(Success{}).Composition(Identity)
+	f, g := NewFunctorLaws(func(x Any) Functor {
+		return Success{}.Of(x).(Functor)
+	}).Composition(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}

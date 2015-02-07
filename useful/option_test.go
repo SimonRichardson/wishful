@@ -3,6 +3,7 @@ package useful
 import (
 	"testing"
 	"testing/quick"
+
 	. "github.com/SimonRichardson/wishful/wishful"
 )
 
@@ -197,14 +198,18 @@ func Test_Option_None_ApplicativeLaws_Interchange(t *testing.T) {
 // Some
 
 func Test_Option_Some_FunctorLaws_Identity(t *testing.T) {
-	f, g := NewFunctorLaws(Some{}).Identity(Identity)
+	f, g := NewFunctorLaws(func(x Any) Functor {
+		return Some{}.Of(x).(Functor)
+	}).Identity(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_Option_Some_FunctorLaws_Composition(t *testing.T) {
-	f, g := NewFunctorLaws(Some{}).Composition(Identity)
+	f, g := NewFunctorLaws(func(x Any) Functor {
+		return Some{}.Of(x).(Functor)
+	}).Composition(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
@@ -213,14 +218,18 @@ func Test_Option_Some_FunctorLaws_Composition(t *testing.T) {
 // None
 
 func Test_Option_None_FunctorLaws_Identity(t *testing.T) {
-	f, g := NewFunctorLaws(None{}).Identity(Identity)
+	f, g := NewFunctorLaws(func(x Any) Functor {
+		return None{}.Of(x).(Functor)
+	}).Identity(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_Option_None_FunctorLaws_Composition(t *testing.T) {
-	f, g := NewFunctorLaws(None{}).Composition(Identity)
+	f, g := NewFunctorLaws(func(x Any) Functor {
+		return None{}.Of(x).(Functor)
+	}).Composition(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
