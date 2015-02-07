@@ -13,11 +13,11 @@ func NewTuple2(a Any, b Any) Tuple2 {
 	return Tuple2{_1: a, _2: b}
 }
 
-func (t Tuple2) Get1() Any {
+func (t Tuple2) Fst() Any {
 	return t._1
 }
 
-func (t Tuple2) Get2() Any {
+func (t Tuple2) Snd() Any {
 	return t._2
 }
 
@@ -33,7 +33,7 @@ func NewTuple3(a Any, b Any, c Any) Tuple3 {
 	}
 }
 
-func (t Tuple3) Get3() Any {
+func (t Tuple3) Trd() Any {
 	return t._3
 }
 
@@ -52,6 +52,6 @@ func NewTuple4(a Any, b Any, c Any, d Any) Tuple4 {
 	}
 }
 
-func (t Tuple4) Get4() Any {
+func (t Tuple4) Fth() Any {
 	return t._4
 }
