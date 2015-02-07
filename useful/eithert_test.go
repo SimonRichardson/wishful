@@ -8,8 +8,8 @@ import (
 )
 
 func extractEitherT(x Any) Any {
-	io := x.(EitherT)
-	return io.Run
+	either := x.(EitherT)
+	return either.Run
 }
 
 // Applicative Laws
