@@ -11,12 +11,12 @@ Monads in Go lang
 
 This project specifies interoperability of common algebraic structures:
 
-Semigroup
-Monoid
-Functor
-Applicative
-Chain
-Monad
+- Semigroup
+- Monoid
+- Functor
+- Applicative
+- Chain
+- Monad
 
 ### Useful
 
