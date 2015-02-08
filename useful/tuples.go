@@ -21,6 +21,26 @@ func (t Tuple2) Snd() Any {
 	return t._2
 }
 
+func (t Tuple2) MapFst(f func(Any) Any) Tuple2 {
+	return NewTuple2(f(t._1), t._2)
+}
+
+func (t Tuple2) MapSnd(f func(Any) Any) Tuple2 {
+	return NewTuple2(t._1, f(t._2))
+}
+
+func (t Tuple2) Bimap(f func(Any) Any, g func(Any) Any) Tuple2 {
+	return NewTuple2(f(t._1), g(t._2))
+}
+
+func (t Tuple2) Append(x Any) Tuple3 {
+	return NewTuple3(t._1, t._2, x)
+}
+
+func (t Tuple2) Slice() []Any {
+	return []Any{t._1, t._2}
+}
+
 type Tuple3 struct {
 	Tuple2
 	_3 Any
@@ -35,6 +55,18 @@ func NewTuple3(a Any, b Any, c Any) Tuple3 {
 
 func (t Tuple3) Trd() Any {
 	return t._3
+}
+
+func (t Tuple3) MapTrd(f func(Any) Any) Tuple3 {
+	return NewTuple3(t._1, t._2, f(t._3))
+}
+
+func (t Tuple3) Append(x Any) Tuple4 {
+	return NewTuple4(t._1, t._2, t._3, x)
+}
+
+func (t Tuple3) Slice() []Any {
+	return []Any{t._1, t._2, t._3}
 }
 
 type Tuple4 struct {
@@ -54,4 +86,8 @@ func NewTuple4(a Any, b Any, c Any, d Any) Tuple4 {
 
 func (t Tuple4) Fth() Any {
 	return t._4
+}
+
+func (t Tuple4) MapFth(f func(Any) Any) Tuple4 {
+	return NewTuple4(t._1, t._2, t._3, f(t._4))
 }
