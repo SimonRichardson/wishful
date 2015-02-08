@@ -18,6 +18,13 @@ func NewStateT(m Point) StateT {
 	}
 }
 
+func (x StateT) Func(f func(Any) Point) StateT {
+	return StateT{
+		m:   x.m,
+		Run: f,
+	}
+}
+
 func (x StateT) Lift(m Functor) StateT {
 	return StateT{
 		m: x.m,
