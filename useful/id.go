@@ -4,46 +4,64 @@ import (
 	. "github.com/SimonRichardson/wishful/wishful"
 )
 
-type Id struct {
+type id struct {
 	x Any
 }
 
-func NewId(x Any) Id {
-	return Id{
+func Id(x Any) id {
+	return id{
 		x: x,
 	}
 }
 
-func (x Id) Of(v Any) Point {
-	return NewId(v)
+func (x id) Of(v Any) Point {
+	return Id(v)
 }
 
-func (x Id) Ap(v Applicative) Applicative {
+func (x id) Ap(v Applicative) Applicative {
 	return fromMonadToApplicativeAp(x, v)
 }
 
-func (x Id) Chain(f func(v Any) Monad) Monad {
+func (x id) Chain(f func(v Any) Monad) Monad {
 	return f(x.x)
 }
 
-func (x Id) Concat(y Semigroup) Semigroup {
+func (x id) Concat(y Semigroup) Semigroup {
 	return concat(x, y)
 }
 
-func (x Id) Map(f func(v Any) Any) Functor {
+func (x id) Map(f func(v Any) Any) Functor {
 	return x.Chain(func(x Any) Monad {
-		return NewId(f(x))
+		return Id(f(x))
 	}).(Functor)
 }
 
-func (x Id) Extract() Any {
+func (x id) Extract() Any {
 	return x.x
 }
 
-func (x Id) Extend(f func(p Comonad) Any) Comonad {
+func (x id) Extend(f func(p Comonad) Any) Comonad {
 	return x.Map(func(y Any) Any {
 		fun := NewFunction(f)
 		res, _ := fun.Call(x.Of(y))
 		return res
 	}).(Comonad)
+}
+
+var (
+	Id_ = id_{}
+)
+
+type id_ struct{}
+
+func (f id_) As(x Any) id {
+	return x.(id)
+}
+
+func (f id_) Ref() id {
+	return id{}
+}
+
+func (f id_) Of(x Any) Point {
+	return id{}.Of(x)
 }

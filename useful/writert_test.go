@@ -16,7 +16,7 @@ func extractWriterT(x Any) Any {
 
 func Test_WriterT_FunctorLaws_Identity(t *testing.T) {
 	f, g := NewFunctorLaws(func(x Any) Functor {
-		return NewWriterT(Id{}).Of(x).(Functor)
+		return NewWriterT(id{}).Of(x).(Functor)
 	}).Identity(extractWriterT)
 
 	if err := quick.CheckEqual(f, g, nil); err != nil {
@@ -26,7 +26,7 @@ func Test_WriterT_FunctorLaws_Identity(t *testing.T) {
 
 func Test_WriterT_FunctorLaws_Composition(t *testing.T) {
 	f, g := NewFunctorLaws(func(x Any) Functor {
-		return NewWriterT(Id{}).Of(x).(Functor)
+		return NewWriterT(id{}).Of(x).(Functor)
 	}).Composition(extractWriterT)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
@@ -36,21 +36,21 @@ func Test_WriterT_FunctorLaws_Composition(t *testing.T) {
 // Monad Laws
 
 func Test_WriterT_MonadLaws_LeftIdentity(t *testing.T) {
-	f, g := NewMonadLaws(NewWriterT(Id{})).LeftIdentity(extractWriterT)
+	f, g := NewMonadLaws(NewWriterT(id{})).LeftIdentity(extractWriterT)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_WriterT_MonadLaws_RightIdentity(t *testing.T) {
-	f, g := NewMonadLaws(NewWriterT(Id{})).RightIdentity(extractWriterT)
+	f, g := NewMonadLaws(NewWriterT(id{})).RightIdentity(extractWriterT)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_WriterT_MonadLaws_Associativity(t *testing.T) {
-	f, g := NewMonadLaws(NewWriterT(Id{})).Associativity(extractWriterT)
+	f, g := NewMonadLaws(NewWriterT(id{})).Associativity(extractWriterT)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}

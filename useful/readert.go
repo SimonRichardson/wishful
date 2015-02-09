@@ -4,13 +4,13 @@ import (
 	. "github.com/SimonRichardson/wishful/wishful"
 )
 
-type ReaderT struct {
+type readerT struct {
 	m   Point
 	Run func(x Any) Point
 }
 
-func NewReaderT(m Point) ReaderT {
-	return ReaderT{
+func ReaderT(m Point) readerT {
+	return readerT{
 		m: m,
 		Run: func(x Any) Point {
 			return nil
@@ -18,8 +18,8 @@ func NewReaderT(m Point) ReaderT {
 	}
 }
 
-func (x ReaderT) Lift(m Functor) ReaderT {
-	return ReaderT{
+func (x readerT) Lift(m Functor) readerT {
+	return readerT{
 		m: x.m,
 		Run: func(b Any) Point {
 			return m.Map(func(c Any) Any {
@@ -29,8 +29,8 @@ func (x ReaderT) Lift(m Functor) ReaderT {
 	}
 }
 
-func (x ReaderT) Of(a Any) Point {
-	return ReaderT{
+func (x readerT) Of(a Any) Point {
+	return readerT{
 		m: x.m,
 		Run: func(b Any) Point {
 			return x.m.Of(a)
@@ -38,22 +38,36 @@ func (x ReaderT) Of(a Any) Point {
 	}
 }
 
-func (x ReaderT) Chain(f func(a Any) Monad) Monad {
-	return ReaderT{
+func (x readerT) Chain(f func(a Any) Monad) Monad {
+	return readerT{
 		m: x.m,
 		Run: func(b Any) Point {
 			result := x.Run(b)
 			return result.(Monad).Chain(func(t Any) Monad {
-				return f(t).(ReaderT).Run(b).(Monad)
+				return f(t).(readerT).Run(b).(Monad)
 			}).(Point)
 		},
 	}
 }
 
-func (x ReaderT) Map(f func(x Any) Any) Functor {
+func (x readerT) Map(f func(x Any) Any) Functor {
 	return x.Chain(func(a Any) Monad {
 		fun := NewFunction(f)
 		res, _ := fun.Call(a)
 		return x.Of(res).(Monad)
 	}).(Functor)
+}
+
+var (
+	ReaderT_ = readerT_{}
+)
+
+type readerT_ struct{}
+
+func (f readerT_) As(x Any) readerT {
+	return x.(readerT)
+}
+
+func (f readerT_) Ref() readerT {
+	return readerT{}
 }

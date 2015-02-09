@@ -8,35 +8,34 @@ import (
 )
 
 func extractIO(x Any) Any {
-	io := x.(IO)
-	return io.UnsafePerform()
+	return IO_.As(x).UnsafePerform()
 }
 
 // Applicative Laws
 
 func Test_IO_ApplicativeLaws_Identity(t *testing.T) {
-	f, g := NewApplicativeLaws(IO{}).Identity(extractIO)
+	f, g := NewApplicativeLaws(io{}).Identity(extractIO)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_IO_ApplicativeLaws_Composition(t *testing.T) {
-	f, g := NewApplicativeLaws(IO{}).Composition(extractIO)
+	f, g := NewApplicativeLaws(io{}).Composition(extractIO)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_IO_ApplicativeLaws_Homomorphism(t *testing.T) {
-	f, g := NewApplicativeLaws(IO{}).Homomorphism(extractIO)
+	f, g := NewApplicativeLaws(io{}).Homomorphism(extractIO)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_IO_ApplicativeLaws_Interchange(t *testing.T) {
-	f, g := NewApplicativeLaws(IO{}).Interchange(extractIO)
+	f, g := NewApplicativeLaws(io{}).Interchange(extractIO)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
@@ -46,7 +45,7 @@ func Test_IO_ApplicativeLaws_Interchange(t *testing.T) {
 
 func Test_IO_FunctorLaws_Identity(t *testing.T) {
 	f, g := NewFunctorLaws(func(x Any) Functor {
-		return IO{}.Of(x).(Functor)
+		return io{}.Of(x).(Functor)
 	}).Identity(extractIO)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
@@ -55,7 +54,7 @@ func Test_IO_FunctorLaws_Identity(t *testing.T) {
 
 func Test_IO_FunctorLaws_Composition(t *testing.T) {
 	f, g := NewFunctorLaws(func(x Any) Functor {
-		return IO{}.Of(x).(Functor)
+		return io{}.Of(x).(Functor)
 	}).Composition(extractIO)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
@@ -65,21 +64,21 @@ func Test_IO_FunctorLaws_Composition(t *testing.T) {
 // Monad Laws
 
 func Test_IO_MonadLaws_LeftIdentity(t *testing.T) {
-	f, g := NewMonadLaws(IO{}).LeftIdentity(extractIO)
+	f, g := NewMonadLaws(io{}).LeftIdentity(extractIO)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_IO_MonadLaws_RightIdentity(t *testing.T) {
-	f, g := NewMonadLaws(IO{}).RightIdentity(extractIO)
+	f, g := NewMonadLaws(io{}).RightIdentity(extractIO)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_IO_MonadLaws_Associativity(t *testing.T) {
-	f, g := NewMonadLaws(IO{}).Associativity(extractIO)
+	f, g := NewMonadLaws(io{}).Associativity(extractIO)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}

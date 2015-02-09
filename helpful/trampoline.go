@@ -6,11 +6,11 @@ import (
 )
 
 func Done(x Any) Free {
-	return NewReturn(x)
+	return Return(x)
 }
 
 func Cont(f func() Free) Free {
-	return NewSuspend(LiftFunc(f))
+	return Suspend(LiftFunc(f))
 }
 
 func Trampoline(x Free) Any {

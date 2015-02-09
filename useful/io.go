@@ -4,23 +4,23 @@ import (
 	. "github.com/SimonRichardson/wishful/wishful"
 )
 
-type IO struct {
+type io struct {
 	UnsafePerform func() Any
 }
 
-func NewIO(unsafe func() Any) IO {
-	return IO{
+func IO(unsafe func() Any) io {
+	return io{
 		UnsafePerform: unsafe,
 	}
 }
 
-func (x IO) Of(v Any) Point {
-	return NewIO(func() Any {
+func (x io) Of(v Any) Point {
+	return IO(func() Any {
 		return v
 	})
 }
 
-func (x IO) Ap(v Applicative) Applicative {
+func (x io) Ap(v Applicative) Applicative {
 	res := x.Chain(func(f Any) Monad {
 		fun := v.(Functor)
 		res := fun.Map(func(x Any) Any {
@@ -33,18 +33,36 @@ func (x IO) Ap(v Applicative) Applicative {
 	return res.(Applicative)
 }
 
-func (x IO) Chain(f func(x Any) Monad) Monad {
-	return NewIO(func() Any {
-		io := f(x.UnsafePerform()).(IO)
+func (x io) Chain(f func(x Any) Monad) Monad {
+	return IO(func() Any {
+		io := f(x.UnsafePerform()).(io)
 		return io.UnsafePerform()
 	})
 }
 
-func (x IO) Map(f func(x Any) Any) Functor {
+func (x io) Map(f func(x Any) Any) Functor {
 	res := x.Chain(func(x Any) Monad {
-		return IO{func() Any {
+		return io{func() Any {
 			return f(x)
 		}}
 	})
 	return res.(Functor)
+}
+
+var (
+	IO_ = io_{}
+)
+
+type io_ struct{}
+
+func (f io_) As(x Any) io {
+	return x.(io)
+}
+
+func (f io_) Ref() io {
+	return io{}
+}
+
+func (f io_) Of(x Any) Point {
+	return io{}.Of(x)
 }

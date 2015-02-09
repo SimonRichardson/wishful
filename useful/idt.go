@@ -4,26 +4,26 @@ import (
 	. "github.com/SimonRichardson/wishful/wishful"
 )
 
-type IdT struct {
+type idT struct {
 	m   Point
 	Run Any
 }
 
-func NewIdT(m Point) IdT {
-	return IdT{
+func IdT(m Point) idT {
+	return idT{
 		m:   m,
 		Run: Empty{},
 	}
 }
 
-func (x IdT) Of(v Any) Point {
-	return IdT{
+func (x idT) Of(v Any) Point {
+	return idT{
 		m:   x.m,
 		Run: x.m.Of(v),
 	}
 }
 
-func (x IdT) Ap(v Applicative) Applicative {
+func (x idT) Ap(v Applicative) Applicative {
 	mon := x.Chain(func(f Any) Monad {
 		return v.(Functor).Map(func(x Any) Any {
 			fun := NewFunction(f)
@@ -34,22 +34,36 @@ func (x IdT) Ap(v Applicative) Applicative {
 	return mon.(Applicative)
 }
 
-func (x IdT) Chain(f func(v Any) Monad) Monad {
+func (x idT) Chain(f func(v Any) Monad) Monad {
 	mon := x.Run.(Monad)
-	tra := IdT{
+	tra := idT{
 		m: x.m,
 		Run: mon.Chain(func(y Any) Monad {
-			idt := f(y).(IdT)
+			idt := f(y).(idT)
 			return idt.Run.(Monad)
 		}),
 	}
 	return tra
 }
 
-func (x IdT) Map(f func(v Any) Any) Functor {
+func (x idT) Map(f func(v Any) Any) Functor {
 	mon := x.Chain(func(y Any) Monad {
-		app := NewIdT(x.m).Of(f(y))
+		app := IdT(x.m).Of(f(y))
 		return app.(Monad)
 	})
 	return mon.(Functor)
+}
+
+var (
+	IdT_ = idT_{}
+)
+
+type idT_ struct{}
+
+func (f idT_) As(x Any) idT {
+	return x.(idT)
+}
+
+func (f idT_) Ref() idT {
+	return idT{}
 }

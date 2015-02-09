@@ -8,18 +8,17 @@ import (
 )
 
 func extractEndo(x Any) Any {
-	endo := x.(Endo)
-	return endo.Fork(Identity)
+	return Endo_.As(x).Fork(Identity)
 }
 
 // Manual
 
-func Test_Endo_NewEndo(t *testing.T) {
+func Test_endo_endo(t *testing.T) {
 	f := func(x int) Any {
-		return extractEndo(NewEndo(Constant(x)))
+		return extractEndo(Endo(Constant(x)))
 	}
 	g := func(x int) Any {
-		return extractEndo(Endo{}.Of(x))
+		return extractEndo(endo{}.Of(x))
 	}
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
@@ -28,18 +27,18 @@ func Test_Endo_NewEndo(t *testing.T) {
 
 // Functor Laws
 
-func Test_Endo_FunctorLaws_Identity(t *testing.T) {
+func Test_endo_FunctorLaws_Identity(t *testing.T) {
 	f, g := NewFunctorLaws(func(x Any) Functor {
-		return Endo{}.Of(x).(Functor)
+		return endo{}.Of(x).(Functor)
 	}).Identity(extractEndo)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
-func Test_Endo_FunctorLaws_Composition(t *testing.T) {
+func Test_endo_FunctorLaws_Composition(t *testing.T) {
 	f, g := NewFunctorLaws(func(x Any) Functor {
-		return Endo{}.Of(x).(Functor)
+		return endo{}.Of(x).(Functor)
 	}).Composition(extractEndo)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
@@ -48,22 +47,22 @@ func Test_Endo_FunctorLaws_Composition(t *testing.T) {
 
 // Monoid Laws
 
-func Test_Endo_MonoidLaws_LeftIdentity(t *testing.T) {
-	f, g := NewMonoidLaws(Endo{}).LeftIdentity(extractEndo)
+func Test_endo_MonoidLaws_LeftIdentity(t *testing.T) {
+	f, g := NewMonoidLaws(endo{}).LeftIdentity(extractEndo)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
-func Test_Endo_MonoidLaws_RightIdentity(t *testing.T) {
-	f, g := NewMonoidLaws(Endo{}).RightIdentity(extractEndo)
+func Test_endo_MonoidLaws_RightIdentity(t *testing.T) {
+	f, g := NewMonoidLaws(endo{}).RightIdentity(extractEndo)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
-func Test_Endo_MonoidLaws_Associativity(t *testing.T) {
-	f, g := NewMonoidLaws(Endo{}).Associativity(extractEndo)
+func Test_endo_MonoidLaws_Associativity(t *testing.T) {
+	f, g := NewMonoidLaws(endo{}).Associativity(extractEndo)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
@@ -71,8 +70,8 @@ func Test_Endo_MonoidLaws_Associativity(t *testing.T) {
 
 // Semigroup Laws
 
-func Test_Endo_SemigroupLaws_Associativity(t *testing.T) {
-	f, g := NewSemigroupLaws(Endo{}).Associativity(extractEndo)
+func Test_endo_SemigroupLaws_Associativity(t *testing.T) {
+	f, g := NewSemigroupLaws(endo{}).Associativity(extractEndo)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}

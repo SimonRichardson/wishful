@@ -8,35 +8,34 @@ import (
 )
 
 func extractIdT(x Any) Any {
-	io := x.(IdT)
-	return io.Run
+	return IdT_.As(x).Run
 }
 
 // Applicative Laws
 
 func Test_IdT_ApplicativeLaws_Identity(t *testing.T) {
-	f, g := NewApplicativeLaws(NewIdT(Id{})).Identity(extractIdT)
+	f, g := NewApplicativeLaws(IdT(id{})).Identity(extractIdT)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_IdT_ApplicativeLaws_Composition(t *testing.T) {
-	f, g := NewApplicativeLaws(NewIdT(Id{})).Composition(extractIdT)
+	f, g := NewApplicativeLaws(IdT(id{})).Composition(extractIdT)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_IdT_ApplicativeLaws_Homomorphism(t *testing.T) {
-	f, g := NewApplicativeLaws(NewIdT(Id{})).Homomorphism(extractIdT)
+	f, g := NewApplicativeLaws(IdT(id{})).Homomorphism(extractIdT)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_IdT_ApplicativeLaws_Interchange(t *testing.T) {
-	f, g := NewApplicativeLaws(NewIdT(Id{})).Interchange(extractIdT)
+	f, g := NewApplicativeLaws(IdT(id{})).Interchange(extractIdT)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
@@ -46,7 +45,7 @@ func Test_IdT_ApplicativeLaws_Interchange(t *testing.T) {
 
 func Test_IdT_FunctorLaws_Identity(t *testing.T) {
 	f, g := NewFunctorLaws(func(x Any) Functor {
-		return NewIdT(Id{}).Of(x).(Functor)
+		return IdT(id{}).Of(x).(Functor)
 	}).Identity(extractIdT)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
@@ -55,7 +54,7 @@ func Test_IdT_FunctorLaws_Identity(t *testing.T) {
 
 func Test_IdT_FunctorLaws_Composition(t *testing.T) {
 	f, g := NewFunctorLaws(func(x Any) Functor {
-		return NewIdT(Id{}).Of(x).(Functor)
+		return IdT(id{}).Of(x).(Functor)
 	}).Composition(extractIdT)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
@@ -65,21 +64,21 @@ func Test_IdT_FunctorLaws_Composition(t *testing.T) {
 // Monad Laws
 
 func Test_IdT_MonadLaws_LeftIdentity(t *testing.T) {
-	f, g := NewMonadLaws(NewIdT(Id{})).LeftIdentity(extractIdT)
+	f, g := NewMonadLaws(IdT(id{})).LeftIdentity(extractIdT)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_IdT_MonadLaws_RightIdentity(t *testing.T) {
-	f, g := NewMonadLaws(NewIdT(Id{})).RightIdentity(extractIdT)
+	f, g := NewMonadLaws(IdT(id{})).RightIdentity(extractIdT)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_IdT_MonadLaws_Associativity(t *testing.T) {
-	f, g := NewMonadLaws(NewIdT(Id{})).Associativity(extractIdT)
+	f, g := NewMonadLaws(IdT(id{})).Associativity(extractIdT)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}

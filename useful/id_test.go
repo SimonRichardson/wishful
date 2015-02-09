@@ -10,28 +10,28 @@ import (
 // Applicative Laws
 
 func Test_Id_ApplicativeLaws_Identity(t *testing.T) {
-	f, g := NewApplicativeLaws(Id{}).Identity(Identity)
+	f, g := NewApplicativeLaws(id{}).Identity(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_Id_ApplicativeLaws_Composition(t *testing.T) {
-	f, g := NewApplicativeLaws(Id{}).Composition(Identity)
+	f, g := NewApplicativeLaws(id{}).Composition(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_Id_ApplicativeLaws_Homomorphism(t *testing.T) {
-	f, g := NewApplicativeLaws(Id{}).Homomorphism(Identity)
+	f, g := NewApplicativeLaws(id{}).Homomorphism(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_Id_ApplicativeLaws_Interchange(t *testing.T) {
-	f, g := NewApplicativeLaws(Id{}).Interchange(Identity)
+	f, g := NewApplicativeLaws(id{}).Interchange(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
@@ -41,7 +41,7 @@ func Test_Id_ApplicativeLaws_Interchange(t *testing.T) {
 
 func Test_Id_FunctorLaws_Identity(t *testing.T) {
 	f, g := NewFunctorLaws(func(x Any) Functor {
-		return Id{}.Of(x).(Functor)
+		return id{}.Of(x).(Functor)
 	}).Identity(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
@@ -50,7 +50,7 @@ func Test_Id_FunctorLaws_Identity(t *testing.T) {
 
 func Test_Id_FunctorLaws_Composition(t *testing.T) {
 	f, g := NewFunctorLaws(func(x Any) Functor {
-		return Id{}.Of(x).(Functor)
+		return id{}.Of(x).(Functor)
 	}).Composition(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
@@ -60,21 +60,21 @@ func Test_Id_FunctorLaws_Composition(t *testing.T) {
 // Monad Laws
 
 func Test_Id_MonadLaws_LeftIdentity(t *testing.T) {
-	f, g := NewMonadLaws(Id{}).LeftIdentity(Identity)
+	f, g := NewMonadLaws(id{}).LeftIdentity(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_Id_MonadLaws_RightIdentity(t *testing.T) {
-	f, g := NewMonadLaws(Id{}).RightIdentity(Identity)
+	f, g := NewMonadLaws(id{}).RightIdentity(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_Id_MonadLaws_Associativity(t *testing.T) {
-	f, g := NewMonadLaws(Id{}).Associativity(Identity)
+	f, g := NewMonadLaws(id{}).Associativity(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
@@ -83,7 +83,7 @@ func Test_Id_MonadLaws_Associativity(t *testing.T) {
 // Semigroup Laws
 
 func Test_Id_SemigroupLaws_Associativity(t *testing.T) {
-	f, g := NewSemigroupLaws(Id{}).Associativity(Identity)
+	f, g := NewSemigroupLaws(id{}).Associativity(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
@@ -92,21 +92,21 @@ func Test_Id_SemigroupLaws_Associativity(t *testing.T) {
 // Comonad Laws
 
 func Test_Id_ComonadLaws_Identity(t *testing.T) {
-	f, g := NewComonadLaws(Id{}).Identity(Identity)
+	f, g := NewComonadLaws(id{}).Identity(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_Id_ComonadLaws_Composition(t *testing.T) {
-	f, g := NewComonadLaws(Id{}).Composition(Identity)
+	f, g := NewComonadLaws(id{}).Composition(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_Id_ComonadLaws_Associativity(t *testing.T) {
-	f, g := NewComonadLaws(Id{}).Associativity(Identity)
+	f, g := NewComonadLaws(id{}).Associativity(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}

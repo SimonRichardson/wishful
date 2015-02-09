@@ -12,69 +12,69 @@ type Free interface {
 	Run() Any
 }
 
-type Return struct {
+type ret struct {
 	val Any
 }
 
-func NewReturn(x Any) Return {
-	return Return{
+func Return(x Any) ret {
+	return ret{
 		val: x,
 	}
 }
 
-func (r Return) Of(x Any) Point {
-	return NewReturn(x)
+func (r ret) Of(x Any) Point {
+	return Return(x)
 }
 
-func (r Return) Chain(f func(Any) Monad) Monad {
+func (r ret) Chain(f func(Any) Monad) Monad {
 	return f(r.val)
 }
 
-func (r Return) Map(f func(Any) Any) Functor {
+func (r ret) Map(f func(Any) Any) Functor {
 	return r.Chain(func(x Any) Monad {
 		return Free_.Of(f(x)).(Monad)
 	}).(Functor)
 }
 
-func (r Return) Run() Any {
+func (r ret) Run() Any {
 	return r.val
 }
 
-type Suspend struct {
+type suspend struct {
 	functor Functor
 }
 
-func NewSuspend(f Functor) Suspend {
-	return Suspend{
+func Suspend(f Functor) suspend {
+	return suspend{
 		functor: f,
 	}
 }
 
-func (s Suspend) Of(x Any) Point {
-	return NewReturn(x)
+func (s suspend) Of(x Any) Point {
+	return Return(x)
 }
 
-func (s Suspend) Chain(f func(Any) Monad) Monad {
-	return Suspend{
+func (s suspend) Chain(f func(Any) Monad) Monad {
+	return suspend{
 		functor: s.functor.Map(func(x Any) Any {
 			return x.(Monad).Chain(f)
 		}),
 	}
 }
 
-func (s Suspend) Map(f func(Any) Any) Functor {
+func (s suspend) Map(f func(Any) Any) Functor {
 	return s.Chain(func(x Any) Monad {
 		return Free_.Of(f(x)).(Monad)
 	}).(Functor)
 }
 
-func (s Suspend) Run() Any {
+func (s suspend) Run() Any {
 	// Mutated state
 	var x Free = s
 	for {
-		if _, ok := x.(Return); ok {
+		if _, ok := x.(ret); ok {
 			break
-		} else if s, ok := x.(Suspend); ok {
+		} else if s, ok := x.(suspend); ok {
 			var (
 				a = s.functor.(Free)
 				b = a.Run().(Free)
@@ -82,21 +82,29 @@ func (s Suspend) Run() Any {
 			x = b
 		}
 	}
-	return x.(Return).Run()
+	return x.(ret).Run()
 }
 
 var (
-	Free_ = free{}
+	Free_ = free_{}
 )
 
-type free struct{}
+type free_ struct{}
 
-func (f free) Of(x Any) Point {
-	return NewReturn(x)
+func (f free_) As(x Any) Free {
+	return x.(Free)
 }
 
-func (f free) Lift(x Functor) Free {
-	return NewSuspend(x.Map(func(y Any) Any {
-		return NewReturn(y)
+func (f free_) Ref() Free {
+	return ret{}
+}
+
+func (f free_) Of(x Any) Point {
+	return Return(x)
+}
+
+func (f free_) Lift(x Functor) Free {
+	return Suspend(x.Map(func(y Any) Any {
+		return Return(y)
 	}))
 }

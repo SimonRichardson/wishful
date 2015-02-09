@@ -10,11 +10,11 @@ import (
 // Manual tests
 
 func Test_Either_Left_New(t *testing.T) {
-	f := func(x int) Left {
-		return NewLeft(x)
+	f := func(x int) left {
+		return Left(x)
 	}
-	g := func(x int) Left {
-		return Left{x}
+	g := func(x int) left {
+		return left{x}
 	}
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
@@ -23,10 +23,10 @@ func Test_Either_Left_New(t *testing.T) {
 
 func Test_Either_Left_Of(t *testing.T) {
 	f := func(x int) Either {
-		return Right{}.Of(x).(Either)
+		return right{}.Of(x).(Either)
 	}
 	g := func(x int) Either {
-		return Left{}.Of(x).(Either)
+		return left{}.Of(x).(Either)
 	}
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
@@ -35,10 +35,10 @@ func Test_Either_Left_Of(t *testing.T) {
 
 func Test_Either_Left_Ap(t *testing.T) {
 	f := func(x int) Either {
-		return Left{}.Ap(Left{}).(Either)
+		return left{}.Ap(left{}).(Either)
 	}
 	g := func(x int) Either {
-		return Left{}
+		return left{}
 	}
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
@@ -47,12 +47,12 @@ func Test_Either_Left_Ap(t *testing.T) {
 
 func Test_Either_Left_Chain(t *testing.T) {
 	f := func(x int) Either {
-		return Left{}.Chain(func(v Any) Monad {
-			return Left{}
+		return left{}.Chain(func(v Any) Monad {
+			return left{}
 		}).(Either)
 	}
 	g := func(x int) Either {
-		return Left{}
+		return left{}
 	}
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
@@ -61,10 +61,10 @@ func Test_Either_Left_Chain(t *testing.T) {
 
 func Test_Either_Left_Map(t *testing.T) {
 	f := func(x int) Either {
-		return Left{}.Map(Identity).(Either)
+		return left{}.Map(Identity).(Either)
 	}
 	g := func(x int) Either {
-		return Left{}
+		return left{}
 	}
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
@@ -73,10 +73,10 @@ func Test_Either_Left_Map(t *testing.T) {
 
 func Test_Either_Left_Concat(t *testing.T) {
 	f := func(x int) Either {
-		return Left{}.Concat(Left{}).(Either)
+		return left{}.Concat(left{}).(Either)
 	}
 	g := func(x int) Either {
-		return Left{}
+		return left{}
 	}
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
@@ -85,10 +85,10 @@ func Test_Either_Left_Concat(t *testing.T) {
 
 func Test_Either_Left_Swap(t *testing.T) {
 	f := func(x int) Either {
-		return Left{x}.Swap().(Either)
+		return left{x}.Swap().(Either)
 	}
 	g := func(x int) Either {
-		return Right{x}
+		return right{x}
 	}
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
@@ -97,10 +97,10 @@ func Test_Either_Left_Swap(t *testing.T) {
 
 func Test_Either_Right_Swap(t *testing.T) {
 	f := func(x int) Either {
-		return Right{x}.Swap().(Either)
+		return right{x}.Swap().(Either)
 	}
 	g := func(x int) Either {
-		return Left{x}
+		return left{x}
 	}
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
@@ -109,12 +109,12 @@ func Test_Either_Right_Swap(t *testing.T) {
 
 func Test_Either_Left_Bimap(t *testing.T) {
 	f := func(x int) Either {
-		return Left{x}.Bimap(func(v Any) Any {
+		return left{x}.Bimap(func(v Any) Any {
 			return v.(int) + 1
 		}, Identity).(Either)
 	}
 	g := func(x int) Either {
-		return Left{x + 1}
+		return left{x + 1}
 	}
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
@@ -123,12 +123,12 @@ func Test_Either_Left_Bimap(t *testing.T) {
 
 func Test_Either_Right_Bimap(t *testing.T) {
 	f := func(x int) Either {
-		return Right{x}.Bimap(Identity, func(v Any) Any {
+		return right{x}.Bimap(Identity, func(v Any) Any {
 			return v.(int) + 1
 		}).(Either)
 	}
 	g := func(x int) Either {
-		return Right{x + 1}
+		return right{x + 1}
 	}
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
@@ -137,61 +137,61 @@ func Test_Either_Right_Bimap(t *testing.T) {
 
 // Applicative Laws
 
-// Left
+// left
 
 func Test_Either_Left_ApplicativeLaws_Identity(t *testing.T) {
-	f, g := NewApplicativeLaws(Left{}).Identity(Identity)
+	f, g := NewApplicativeLaws(left{}).Identity(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_Either_Left_ApplicativeLaws_Composition(t *testing.T) {
-	f, g := NewApplicativeLaws(Left{}).Composition(Identity)
+	f, g := NewApplicativeLaws(left{}).Composition(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_Either_Left_ApplicativeLaws_Homomorphism(t *testing.T) {
-	f, g := NewApplicativeLaws(Left{}).Homomorphism(Identity)
+	f, g := NewApplicativeLaws(left{}).Homomorphism(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_Either_Left_ApplicativeLaws_Interchange(t *testing.T) {
-	f, g := NewApplicativeLaws(Left{}).Interchange(Identity)
+	f, g := NewApplicativeLaws(left{}).Interchange(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
-// Right
+// right
 
 func Test_Either_Right_ApplicativeLaws_Identity(t *testing.T) {
-	f, g := NewApplicativeLaws(Right{}).Identity(Identity)
+	f, g := NewApplicativeLaws(right{}).Identity(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_Either_Right_ApplicativeLaws_Composition(t *testing.T) {
-	f, g := NewApplicativeLaws(Right{}).Composition(Identity)
+	f, g := NewApplicativeLaws(right{}).Composition(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_Either_Right_ApplicativeLaws_Homomorphism(t *testing.T) {
-	f, g := NewApplicativeLaws(Right{}).Homomorphism(Identity)
+	f, g := NewApplicativeLaws(right{}).Homomorphism(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_Either_Right_ApplicativeLaws_Interchange(t *testing.T) {
-	f, g := NewApplicativeLaws(Right{}).Interchange(Identity)
+	f, g := NewApplicativeLaws(right{}).Interchange(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
@@ -199,11 +199,11 @@ func Test_Either_Right_ApplicativeLaws_Interchange(t *testing.T) {
 
 // Functor Laws
 
-// Left
+// left
 
 func Test_Either_Left_FunctorLaws_Identity(t *testing.T) {
 	f, g := NewFunctorLaws(func(x Any) Functor {
-		return Left{}.Of(x).(Functor)
+		return left{}.Of(x).(Functor)
 	}).Identity(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
@@ -212,18 +212,18 @@ func Test_Either_Left_FunctorLaws_Identity(t *testing.T) {
 
 func Test_Either_Left_FunctorLaws_Composition(t *testing.T) {
 	f, g := NewFunctorLaws(func(x Any) Functor {
-		return Left{}.Of(x).(Functor)
+		return left{}.Of(x).(Functor)
 	}).Composition(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
-// Right
+// right
 
 func Test_Either_Right_FunctorLaws_Identity(t *testing.T) {
 	f, g := NewFunctorLaws(func(x Any) Functor {
-		return Right{}.Of(x).(Functor)
+		return right{}.Of(x).(Functor)
 	}).Identity(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
@@ -232,7 +232,7 @@ func Test_Either_Right_FunctorLaws_Identity(t *testing.T) {
 
 func Test_Either_Right_FunctorLaws_Composition(t *testing.T) {
 	f, g := NewFunctorLaws(func(x Any) Functor {
-		return Right{}.Of(x).(Functor)
+		return right{}.Of(x).(Functor)
 	}).Composition(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
@@ -241,47 +241,47 @@ func Test_Either_Right_FunctorLaws_Composition(t *testing.T) {
 
 // Monad Laws
 
-// Left
+// left
 
 func Test_Either_Left_MonadLaws_LeftIdentity(t *testing.T) {
-	f, g := NewMonadLaws(Left{}).LeftIdentity(Identity)
+	f, g := NewMonadLaws(left{}).LeftIdentity(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_Either_Left_MonadLaws_RightIdentity(t *testing.T) {
-	f, g := NewMonadLaws(Left{}).RightIdentity(Identity)
+	f, g := NewMonadLaws(left{}).RightIdentity(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_Either_Left_MonadLaws_Associativity(t *testing.T) {
-	f, g := NewMonadLaws(Left{}).Associativity(Identity)
+	f, g := NewMonadLaws(left{}).Associativity(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
-// Right
+// right
 
 func Test_Either_Right_MonadLaws_LeftIdentity(t *testing.T) {
-	f, g := NewMonadLaws(Right{}).LeftIdentity(Identity)
+	f, g := NewMonadLaws(right{}).LeftIdentity(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_Either_Right_MonadLaws_RightIdentity(t *testing.T) {
-	f, g := NewMonadLaws(Right{}).RightIdentity(Identity)
+	f, g := NewMonadLaws(right{}).RightIdentity(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_Either_Right_MonadLaws_Associativity(t *testing.T) {
-	f, g := NewMonadLaws(Right{}).Associativity(Identity)
+	f, g := NewMonadLaws(right{}).Associativity(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
@@ -289,19 +289,19 @@ func Test_Either_Right_MonadLaws_Associativity(t *testing.T) {
 
 // Semigroup Laws
 
-// Left
+// left
 
 func Test_Either_Left_SemigroupLaws_Associativity(t *testing.T) {
-	f, g := NewSemigroupLaws(Left{}).Associativity(Identity)
+	f, g := NewSemigroupLaws(left{}).Associativity(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
-// Right
+// right
 
 func Test_Either_Right_SemigroupLaws_Associativity(t *testing.T) {
-	f, g := NewSemigroupLaws(Right{}).Associativity(Identity)
+	f, g := NewSemigroupLaws(right{}).Associativity(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}

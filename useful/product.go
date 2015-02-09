@@ -13,36 +13,54 @@ var (
 	})
 )
 
-type Product struct {
+type product struct {
 	x Int
 }
 
-func NewProduct(x Int) Product {
-	return Product{
+func Product(x Int) product {
+	return product{
 		x: x,
 	}
 }
 
-func (x Product) Of(v Any) Point {
+func (x product) Of(v Any) Point {
 	p, _ := FromAnyToInt(v)
-	return NewProduct(p)
+	return Product(p)
 }
 
-func (x Product) Empty() Monoid {
-	return NewProduct(Int(1))
+func (x product) Empty() Monoid {
+	return Product(Int(1))
 }
 
-func (x Product) Chain(f func(Any) Monad) Monad {
+func (x product) Chain(f func(Any) Monad) Monad {
 	return f(x.x)
 }
 
-func (x Product) Concat(y Semigroup) Semigroup {
+func (x product) Concat(y Semigroup) Semigroup {
 	return productConcat(x, y)
 }
 
-func (x Product) Map(f func(Any) Any) Functor {
+func (x product) Map(f func(Any) Any) Functor {
 	return x.Chain(func(x Any) Monad {
 		p, _ := FromAnyToInt(f(x))
-		return NewProduct(p)
+		return Product(p)
 	}).(Functor)
+}
+
+var (
+	Product_ = product_{}
+)
+
+type product_ struct{}
+
+func (f product_) As(x Any) product {
+	return x.(product)
+}
+
+func (f product_) Ref() product {
+	return product{}
+}
+
+func (f product_) Of(x Any) Point {
+	return product{}.Of(x)
 }

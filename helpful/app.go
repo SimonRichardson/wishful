@@ -6,8 +6,8 @@ import (
 )
 
 var (
-	ST  = NewStateT(Promise{})
-	App = NewReaderT(ST)
+	ST  = NewStateT(Promise_.Ref())
+	App = ReaderT(ST)
 )
 
 var (
@@ -16,10 +16,11 @@ var (
 
 type app struct{}
 
-func (a app) LiftT(t Promise) ReaderT {
+func (a app) LiftT(t Monad) Monad {
+	p := Promise_.As(t)
 	return App.Lift(ST.Func(func(x Any) Point {
-		return NewPromise(func(resolve func(Any) Any) Any {
-			return t.Fork(func(y Any) Any {
+		return Promise(func(resolve func(Any) Any) Any {
+			return p.Fork(func(y Any) Any {
 				return resolve(NewTuple2(x, y))
 			})
 		})
