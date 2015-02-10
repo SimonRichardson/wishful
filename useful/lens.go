@@ -2,12 +2,13 @@ package useful
 
 import (
 	"reflect"
+
 	. "github.com/SimonRichardson/wishful/wishful"
 )
 
 type Accessor interface {
-	Get(x Any) Any
-	Set(x Any, y Any) Any
+	Get(Any) Any
+	Set(Any, Any) Any
 }
 
 type SliceIndex struct {

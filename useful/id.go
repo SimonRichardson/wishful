@@ -40,7 +40,7 @@ func (x Id) Extract() Any {
 	return x.x
 }
 
-func (x Id) Extend(f func(p Comonad) Any) Comonad {
+func (x Id) Extend(f func(Comonad) Any) Comonad {
 	return x.Map(func(y Any) Any {
 		fun := NewFunction(f)
 		res, _ := fun.Call(x.Of(y))

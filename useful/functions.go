@@ -8,7 +8,7 @@ func Append(a Semigroup, b Semigroup) Semigroup {
 	return a.Concat(b)
 }
 
-func LiftA2(f func(a Any, b Any) Any, a Applicative, b Applicative) Applicative {
+func LiftA2(f func(Any, Any) Any, a Applicative, b Applicative) Applicative {
 	x := a.(Functor)
 	y := x.Map(func(a Any) Any {
 		return func(b Any) Any {
@@ -18,7 +18,7 @@ func LiftA2(f func(a Any, b Any) Any, a Applicative, b Applicative) Applicative 
 	return b.Ap(y.(Applicative))
 }
 
-func LiftA3(f func(a Any, b Any, c Any) Any, a Applicative, b Applicative, c Applicative) Applicative {
+func LiftA3(f func(Any, Any, Any) Any, a Applicative, b Applicative, c Applicative) Applicative {
 	x := a.(Functor)
 	y := x.Map(func(a Any) Any {
 		return func(b Any) Any {
