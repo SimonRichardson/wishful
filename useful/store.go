@@ -9,14 +9,14 @@ type Store struct {
 	Get func() Any
 }
 
-func NewStore(set func(x Any) Any, get func() Any) Store {
+func NewStore(set Morphism, get func() Any) Store {
 	return Store{
 		set,
 		get,
 	}
 }
 
-func (x Store) Map(f func(x Any) Any) Functor {
+func (x Store) Map(f Morphism) Functor {
 	return x.Extend(func(x Store) Any {
 		return f(x.Extract())
 	})
@@ -24,7 +24,7 @@ func (x Store) Map(f func(x Any) Any) Functor {
 
 // Derived
 
-func (x Store) Extend(f func(x Store) Any) Store {
+func (x Store) Extend(f func(Store) Any) Store {
 	return Store{
 		func(y Any) Any {
 			fun := NewFunction(f)

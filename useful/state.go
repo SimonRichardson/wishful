@@ -35,7 +35,7 @@ func (x State) Ap(v Applicative) Applicative {
 	return app.(Applicative)
 }
 
-func (x State) Chain(f func(x Any) Monad) Monad {
+func (x State) Chain(f func(Any) Monad) Monad {
 	return State{func(s Any) (Any, Any) {
 		a, b := x.Run(s)
 		fun := NewFunction(f)
@@ -44,7 +44,7 @@ func (x State) Chain(f func(x Any) Monad) Monad {
 	}}
 }
 
-func (x State) Map(f func(x Any) Any) Functor {
+func (x State) Map(f Morphism) Functor {
 	fun := x.Chain(func(y Any) Monad {
 		return x.Of(f(y)).(Monad)
 	})
@@ -69,7 +69,7 @@ func (x State) Get() State {
 	}}
 }
 
-func (x State) Modify(f func(x Any) Any) State {
+func (x State) Modify(f Morphism) State {
 	return State{func(z Any) (Any, Any) {
 		fun := NewFunction(f)
 		res, _ := fun.Call(z)

@@ -23,7 +23,7 @@ func (x Sum) Empty() Monoid {
 	return NewSum(Int(0))
 }
 
-func (x Sum) Chain(f func(v Any) Monad) Monad {
+func (x Sum) Chain(f func(Any) Monad) Monad {
 	return f(x.x)
 }
 
@@ -31,7 +31,7 @@ func (x Sum) Concat(y Semigroup) Semigroup {
 	return concat(x, y)
 }
 
-func (x Sum) Map(f func(v Any) Any) Functor {
+func (x Sum) Map(f Morphism) Functor {
 	return x.Chain(func(x Any) Monad {
 		p, _ := FromAnyToInt(f(x))
 		return NewSum(p)

@@ -14,7 +14,7 @@ func NewSemigroupLaws(point Point) SemigroupLaws {
 	}
 }
 
-func (o SemigroupLaws) Associativity(run func(v Any) Any) (func(x Int, y Int, z Int) Any, func(x Int, y Int, z Int) Any) {
+func (o SemigroupLaws) Associativity(run Morphism) (func(Int, Int, Int) Any, func(Int, Int, Int) Any) {
 	f := func(x Int, y Int, z Int) Any {
 		a := o.x.Of(x).(Semigroup)
 		b := o.x.Of(y).(Semigroup)

@@ -16,7 +16,7 @@ func NewCofree(x Any, y Functor) Cofree {
 	}
 }
 
-func (c Cofree) Map(f func(Any) Any) Functor {
+func (c Cofree) Map(f Morphism) Functor {
 	return Cofree{
 		value: f(c.value),
 		functor: c.functor.Map(func(a Any) Any {

@@ -39,7 +39,7 @@ func (w WriterT) Chain(f func(Any) Monad) Monad {
 	}
 }
 
-func (w WriterT) Map(f func(Any) Any) Functor {
+func (w WriterT) Map(f Morphism) Functor {
 	return w.Chain(func(a Any) Monad {
 		return w.Of(f(a)).(Monad)
 	}).(Functor)

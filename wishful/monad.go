@@ -1,7 +1,7 @@
 package wishful
 
 type Monad interface {
-	Chain(f func(v Any) Monad) Monad
+	Chain(f func(Any) Monad) Monad
 }
 
 type MonadLaws struct {
@@ -14,7 +14,7 @@ func NewMonadLaws(point Point) MonadLaws {
 	}
 }
 
-func (o MonadLaws) LeftIdentity(run func(v Any) Any) (func(v int) Any, func(v int) Any) {
+func (o MonadLaws) LeftIdentity(run Morphism) (func(int) Any, func(int) Any) {
 	f := func(v int) Any {
 		a := o.x.Of(v).(Monad)
 		return run(a.Chain(func(x Any) Monad {
@@ -31,7 +31,7 @@ func (o MonadLaws) LeftIdentity(run func(v Any) Any) (func(v int) Any, func(v in
 	return f, g
 }
 
-func (o MonadLaws) RightIdentity(run func(v Any) Any) (func(v int) Any, func(v int) Any) {
+func (o MonadLaws) RightIdentity(run Morphism) (func(int) Any, func(int) Any) {
 	f := func(v int) Any {
 		a := o.x.Of(v).(Monad)
 		return run(a.Chain(func(x Any) Monad {
@@ -44,7 +44,7 @@ func (o MonadLaws) RightIdentity(run func(v Any) Any) (func(v int) Any, func(v i
 	return f, g
 }
 
-func (o MonadLaws) Associativity(run func(v Any) Any) (func(v int) Any, func(v int) Any) {
+func (o MonadLaws) Associativity(run Morphism) (func(int) Any, func(int) Any) {
 	f := func(v int) Any {
 		a := o.x.Of(v).(Monad)
 		return run(a.Chain(func(x Any) Monad {

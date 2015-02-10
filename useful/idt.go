@@ -34,7 +34,7 @@ func (x IdT) Ap(v Applicative) Applicative {
 	return mon.(Applicative)
 }
 
-func (x IdT) Chain(f func(v Any) Monad) Monad {
+func (x IdT) Chain(f func(Any) Monad) Monad {
 	mon := x.Run.(Monad)
 	tra := IdT{
 		m: x.m,
@@ -46,7 +46,7 @@ func (x IdT) Chain(f func(v Any) Monad) Monad {
 	return tra
 }
 
-func (x IdT) Map(f func(v Any) Any) Functor {
+func (x IdT) Map(f Morphism) Functor {
 	mon := x.Chain(func(y Any) Monad {
 		app := NewIdT(x.m).Of(f(y))
 		return app.(Monad)

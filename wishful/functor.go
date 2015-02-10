@@ -1,7 +1,7 @@
 package wishful
 
 type Functor interface {
-	Map(f func(v Any) Any) Functor
+	Map(f Morphism) Functor
 }
 
 type FunctorLaws struct {
@@ -14,7 +14,7 @@ func NewFunctorLaws(fun func(Any) Functor) FunctorLaws {
 	}
 }
 
-func (o FunctorLaws) Identity(run func(v Any) Any) (func(v int) Any, func(v int) Any) {
+func (o FunctorLaws) Identity(run Morphism) (func(int) Any, func(int) Any) {
 	f := func(v int) Any {
 		a := o.x(v)
 		return run(a.Map(Identity))
@@ -25,7 +25,7 @@ func (o FunctorLaws) Identity(run func(v Any) Any) (func(v int) Any, func(v int)
 	return f, g
 }
 
-func (o FunctorLaws) Composition(run func(v Any) Any) (func(v int) Any, func(v int) Any) {
+func (o FunctorLaws) Composition(run Morphism) (func(int) Any, func(int) Any) {
 	f := func(v int) Any {
 		a := o.x(v).(Functor)
 		return run(a.Map(Compose(Identity)(Identity)))

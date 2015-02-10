@@ -18,7 +18,7 @@ type app struct{}
 
 func (a app) LiftT(p Promise) Monad {
 	return App.Lift(ST.Func(func(x Any) Point {
-		return NewPromise(func(resolve func(Any) Any) Any {
+		return NewPromise(func(resolve Morphism) Any {
 			return p.Fork(func(y Any) Any {
 				return resolve(NewTuple2(x, y))
 			})
@@ -26,7 +26,7 @@ func (a app) LiftT(p Promise) Monad {
 	}))
 }
 
-func (a app) Lift() func(Any) Any {
+func (a app) Lift() Morphism {
 	var (
 		x = func(x Any) Any {
 			return App.Lift(x.(Functor))
@@ -38,7 +38,7 @@ func (a app) Lift() func(Any) Any {
 	return Compose(x)(y)
 }
 
-func (a app) Map(f func(Any) Any) Monad {
+func (a app) Map(f Morphism) Monad {
 	var (
 		x = func(x Any) Any {
 			return App.Of(x)
@@ -49,8 +49,8 @@ func (a app) Map(f func(Any) Any) Monad {
 	})
 }
 
-func (a app) MapLift(lift func(Any) Any) func(func(Any) Any) Any {
-	return func(f func(Any) Any) Any {
+func (a app) MapLift(lift Morphism) func(Morphism) Any {
+	return func(f Morphism) Any {
 		return App.Chain(func(y Any) Monad {
 			return Compose(lift)(f)(y).(Monad)
 		})

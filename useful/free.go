@@ -7,7 +7,7 @@ import (
 type Free interface {
 	Of(Any) Point
 	Chain(f func(Any) Monad) Monad
-	Map(f func(Any) Any) Functor
+	Map(f Morphism) Functor
 
 	Run() Any
 }
@@ -30,7 +30,7 @@ func (r ret) Chain(f func(Any) Monad) Monad {
 	return f(r.val)
 }
 
-func (r ret) Map(f func(Any) Any) Functor {
+func (r ret) Map(f Morphism) Functor {
 	return r.Chain(func(x Any) Monad {
 		return Free_.Of(f(x)).(Monad)
 	}).(Functor)
@@ -62,7 +62,7 @@ func (s suspend) Chain(f func(Any) Monad) Monad {
 	}
 }
 
-func (s suspend) Map(f func(Any) Any) Functor {
+func (s suspend) Map(f Morphism) Functor {
 	return s.Chain(func(x Any) Monad {
 		return Free_.Of(f(x)).(Monad)
 	}).(Functor)

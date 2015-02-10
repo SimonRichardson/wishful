@@ -23,7 +23,7 @@ func fromMonadToApplicativeAp(x Monad, y Applicative) Applicative {
 	return res.(Applicative)
 }
 
-func fromMonadToSemigroupConcat(f func(a Semigroup, b Semigroup) Any) func(x Monad, y Semigroup) Semigroup {
+func fromMonadToSemigroupConcat(f func(Semigroup, Semigroup) Any) func(Monad, Semigroup) Semigroup {
 	return func(x Monad, y Semigroup) Semigroup {
 		res := x.Chain(func(a Any) Monad {
 			fun := y.(Functor)
@@ -38,7 +38,7 @@ func fromMonadToSemigroupConcat(f func(a Semigroup, b Semigroup) Any) func(x Mon
 	}
 }
 
-func concatAnyvals(x Any) func(y Any) Any {
+func concatAnyvals(x Any) Morphism {
 	return func(y Any) Any {
 		a := x.(Semigroup)
 		b := y.(Semigroup)

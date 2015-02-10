@@ -33,14 +33,14 @@ func (x IO) Ap(v Applicative) Applicative {
 	return res.(Applicative)
 }
 
-func (x IO) Chain(f func(x Any) Monad) Monad {
+func (x IO) Chain(f func(Any) Monad) Monad {
 	return NewIO(func() Any {
 		IO := f(x.UnsafePerform()).(IO)
 		return IO.UnsafePerform()
 	})
 }
 
-func (x IO) Map(f func(x Any) Any) Functor {
+func (x IO) Map(f Morphism) Functor {
 	res := x.Chain(func(x Any) Monad {
 		return IO{func() Any {
 			return f(x)

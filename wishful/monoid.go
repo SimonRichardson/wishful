@@ -14,7 +14,7 @@ func NewMonoidLaws(point Point) MonoidLaws {
 	}
 }
 
-func (o MonoidLaws) LeftIdentity(run func(v Any) Any) (func(v int) Any, func(v int) Any) {
+func (o MonoidLaws) LeftIdentity(run Morphism) (func(int) Any, func(int) Any) {
 	f := func(v int) Any {
 		a := o.x.(Monoid).Empty().(Semigroup)
 		b := o.x.Of(v).(Semigroup)
@@ -26,7 +26,7 @@ func (o MonoidLaws) LeftIdentity(run func(v Any) Any) (func(v int) Any, func(v i
 	return f, g
 }
 
-func (o MonoidLaws) RightIdentity(run func(v Any) Any) (func(v int) Any, func(v int) Any) {
+func (o MonoidLaws) RightIdentity(run Morphism) (func(v int) Any, func(v int) Any) {
 	f := func(v int) Any {
 		a := o.x.Of(v).(Semigroup)
 		b := o.x.(Monoid).Empty().(Semigroup)
@@ -38,7 +38,7 @@ func (o MonoidLaws) RightIdentity(run func(v Any) Any) (func(v int) Any, func(v 
 	return f, g
 }
 
-func (o MonoidLaws) Associativity(run func(v Any) Any) (func(x Int, y Int, z Int) Any, func(x Int, y Int, z Int) Any) {
+func (o MonoidLaws) Associativity(run Morphism) (func(Int, Int, Int) Any, func(Int, Int, Int) Any) {
 	f := func(x Int, y Int, z Int) Any {
 		a := o.x.Of(x).(Semigroup)
 		b := o.x.Of(y).(Semigroup)

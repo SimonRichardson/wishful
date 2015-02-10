@@ -45,7 +45,7 @@ func (x StateT) Of(a Any) Point {
 	}
 }
 
-func (x StateT) Chain(f func(a Any) Monad) Monad {
+func (x StateT) Chain(f func(Any) Monad) Monad {
 	return StateT{
 		m: x.m,
 		Run: func(b Any) Point {
@@ -98,7 +98,7 @@ func (x StateT) ExecState(s Any) Any {
 	})
 }
 
-func (x StateT) Map(f func(x Any) Any) Functor {
+func (x StateT) Map(f Morphism) Functor {
 	return x.Chain(func(a Any) Monad {
 		fun := NewFunction(f)
 		res, _ := fun.Call(a)

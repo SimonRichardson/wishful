@@ -5,10 +5,10 @@ import (
 )
 
 type Endo struct {
-	Fork func(v Any) Any
+	Fork Morphism
 }
 
-func NewEndo(x func(v Any) Any) Endo {
+func NewEndo(x Morphism) Endo {
 	return Endo{
 		Fork: x,
 	}
@@ -33,7 +33,7 @@ func (x Endo) Concat(y Semigroup) Semigroup {
 	})
 }
 
-func (x Endo) Map(f func(v Any) Any) Functor {
+func (x Endo) Map(f Morphism) Functor {
 	return NewEndo(func(v Any) Any {
 		return f(x.Fork(v))
 	})

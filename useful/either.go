@@ -9,12 +9,12 @@ type Either interface {
 	Ap(Applicative) Applicative
 	Chain(func(Any) Monad) Monad
 	Concat(Semigroup) Semigroup
-	Map(func(Any) Any) Functor
-	Bimap(func(Any) Any, func(Any) Any) Monad
-	Fold(func(Any) Any, func(Any) Any) Any
+	Map(Morphism) Functor
+	Bimap(Morphism, Morphism) Monad
+	Fold(Morphism, Morphism) Any
 	Swap() Monad
 	Sequence(Point) Any
-	Traverse(func(Any) Any, Point) Functor
+	Traverse(Morphism, Point) Functor
 }
 
 // right
@@ -37,11 +37,11 @@ func (x left) Ap(v Applicative) Applicative {
 	return x
 }
 
-func (x left) Chain(f func(v Any) Monad) Monad {
+func (x left) Chain(f func(Any) Monad) Monad {
 	return x
 }
 
-func (x left) Map(f func(v Any) Any) Functor {
+func (x left) Map(f Morphism) Functor {
 	return x
 }
 
@@ -53,11 +53,11 @@ func (x left) Swap() Monad {
 	return NewRight(x.x)
 }
 
-func (x left) Bimap(f func(v Any) Any, g func(v Any) Any) Monad {
+func (x left) Bimap(f Morphism, g Morphism) Monad {
 	return NewLeft(f(x.x))
 }
 
-func (x left) Fold(f func(v Any) Any, g func(v Any) Any) Any {
+func (x left) Fold(f Morphism, g Morphism) Any {
 	return f(x.x)
 }
 
@@ -65,7 +65,7 @@ func (x left) Sequence(p Point) Any {
 	return x.Traverse(Identity, p)
 }
 
-func (x left) Traverse(f func(Any) Any, p Point) Functor {
+func (x left) Traverse(f Morphism, p Point) Functor {
 	return p.Of(NewLeft(x.x)).(Functor)
 }
 
@@ -93,7 +93,7 @@ func (x right) Chain(f func(v Any) Monad) Monad {
 	return f(x.x)
 }
 
-func (x right) Map(f func(v Any) Any) Functor {
+func (x right) Map(f Morphism) Functor {
 	res := x.Chain(func(v Any) Monad {
 		return NewRight(f(v))
 	})
@@ -104,7 +104,7 @@ func (x right) Concat(y Semigroup) Semigroup {
 	return concat(x, y)
 }
 
-func (x right) Fold(f func(v Any) Any, g func(v Any) Any) Any {
+func (x right) Fold(f Morphism, g Morphism) Any {
 	return g(x.x)
 }
 
@@ -112,7 +112,7 @@ func (x right) Swap() Monad {
 	return NewLeft(x.x)
 }
 
-func (x right) Bimap(f func(v Any) Any, g func(v Any) Any) Monad {
+func (x right) Bimap(f Morphism, g Morphism) Monad {
 	return NewRight(g(x.x))
 }
 
@@ -120,7 +120,7 @@ func (x right) Sequence(p Point) Any {
 	return x.Traverse(Identity, p)
 }
 
-func (x right) Traverse(f func(Any) Any, p Point) Functor {
+func (x right) Traverse(f Morphism, p Point) Functor {
 	return f(x.x).(Functor).Map(func(a Any) Any {
 		return Either_.Of(a)
 	})

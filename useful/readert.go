@@ -50,7 +50,7 @@ func (x ReaderT) Chain(f func(a Any) Monad) Monad {
 	}
 }
 
-func (x ReaderT) Map(f func(x Any) Any) Functor {
+func (x ReaderT) Map(f Morphism) Functor {
 	return x.Chain(func(a Any) Monad {
 		fun := NewFunction(f)
 		res, _ := fun.Call(a)

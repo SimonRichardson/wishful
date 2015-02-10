@@ -5,10 +5,10 @@ import (
 )
 
 type Reader struct {
-	Run func(Any) Any
+	Run Morphism
 }
 
-func NewReader(f func(Any) Any) Reader {
+func NewReader(f Morphism) Reader {
 	return Reader{
 		Run: f,
 	}
@@ -35,7 +35,7 @@ func (r Reader) Chain(f func(Any) Monad) Monad {
 	}
 }
 
-func (r Reader) Map(f func(Any) Any) Functor {
+func (r Reader) Map(f Morphism) Functor {
 	return r.Chain(func(x Any) Monad {
 		return Reader{}.Of(f(x)).(Monad)
 	}).(Functor)

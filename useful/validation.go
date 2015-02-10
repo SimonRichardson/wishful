@@ -9,9 +9,9 @@ type Validation interface {
 	Ap(v Applicative) Applicative
 	Chain(f func(v Any) Monad) Monad
 	Concat(y Semigroup) Semigroup
-	Map(f func(v Any) Any) Functor
-	Fold(f func(v Any) Any, g func(v Any) Any) Any
-	Bimap(f func(v Any) Any, g func(v Any) Any) Monad
+	Map(f Morphism) Functor
+	Fold(f Morphism, g Morphism) Any
+	Bimap(f Morphism, g Morphism) Monad
 }
 
 type failure struct {
@@ -61,19 +61,19 @@ func (x success) Ap(v Applicative) Applicative {
 	}).(Applicative)
 }
 
-func (x failure) Chain(f func(v Any) Monad) Monad {
+func (x failure) Chain(f func(Any) Monad) Monad {
 	return x
 }
 
-func (x success) Chain(f func(v Any) Monad) Monad {
+func (x success) Chain(f func(Any) Monad) Monad {
 	return f(x.x)
 }
 
-func (x failure) Map(f func(v Any) Any) Functor {
+func (x failure) Map(f Morphism) Functor {
 	return x.Bimap(Identity, f).(Functor)
 }
 
-func (x success) Map(f func(v Any) Any) Functor {
+func (x success) Map(f Morphism) Functor {
 	return x.Bimap(Identity, f).(Functor)
 }
 
@@ -94,18 +94,18 @@ func (x success) Concat(y Semigroup) Semigroup {
 
 // Derived
 
-func (x failure) Fold(f func(v Any) Any, g func(v Any) Any) Any {
+func (x failure) Fold(f Morphism, g Morphism) Any {
 	return f(x.x)
 }
 
-func (x success) Fold(f func(v Any) Any, g func(v Any) Any) Any {
+func (x success) Fold(f Morphism, g Morphism) Any {
 	return g(x.x)
 }
 
-func (x failure) Bimap(f func(v Any) Any, g func(v Any) Any) Monad {
+func (x failure) Bimap(f Morphism, g Morphism) Monad {
 	return NewFailure(f(x.x))
 }
 
-func (x success) Bimap(f func(v Any) Any, g func(v Any) Any) Monad {
+func (x success) Bimap(f Morphism, g Morphism) Monad {
 	return NewSuccess(g(x.x))
 }

@@ -22,7 +22,7 @@ func (x Id) Ap(v Applicative) Applicative {
 	return fromMonadToApplicativeAp(x, v)
 }
 
-func (x Id) Chain(f func(v Any) Monad) Monad {
+func (x Id) Chain(f func(Any) Monad) Monad {
 	return f(x.x)
 }
 
@@ -30,7 +30,7 @@ func (x Id) Concat(y Semigroup) Semigroup {
 	return concat(x, y)
 }
 
-func (x Id) Map(f func(v Any) Any) Functor {
+func (x Id) Map(f Morphism) Functor {
 	return x.Chain(func(x Any) Monad {
 		return NewId(f(x))
 	}).(Functor)

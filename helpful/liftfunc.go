@@ -17,7 +17,7 @@ type funcF struct {
 	val func() Any
 }
 
-func (x funcF) Map(f func(Any) Any) Functor {
+func (x funcF) Map(f Morphism) Functor {
 	return funcF{
 		val: func() Any {
 			return f(x.val())

@@ -14,7 +14,7 @@ func NewApplicativeLaws(point Point) ApplicativeLaws {
 	}
 }
 
-func (o ApplicativeLaws) Identity(run func(v Any) Any) (func(v int) Any, func(v int) Any) {
+func (o ApplicativeLaws) Identity(run Morphism) (func(int) Any, func(int) Any) {
 	f := func(v int) Any {
 		a := o.x.Of(Identity).(Applicative)
 		b := o.x.Of(v).(Applicative)
@@ -26,7 +26,7 @@ func (o ApplicativeLaws) Identity(run func(v Any) Any) (func(v int) Any, func(v 
 	return f, g
 }
 
-func (o ApplicativeLaws) Composition(run func(v Any) Any) (func(v int) Any, func(v int) Any) {
+func (o ApplicativeLaws) Composition(run Morphism) (func(int) Any, func(int) Any) {
 	f := func(v int) Any {
 		a := o.x.Of(Compose).(Applicative)
 		b := o.x.Of(Identity).(Applicative)
@@ -43,7 +43,7 @@ func (o ApplicativeLaws) Composition(run func(v Any) Any) (func(v int) Any, func
 	return f, g
 }
 
-func (o ApplicativeLaws) Homomorphism(run func(v Any) Any) (func(v int) Any, func(v int) Any) {
+func (o ApplicativeLaws) Homomorphism(run Morphism) (func(int) Any, func(int) Any) {
 	f := func(v int) Any {
 		a := o.x.Of(Identity).(Applicative)
 		b := o.x.Of(v).(Applicative)
@@ -55,7 +55,7 @@ func (o ApplicativeLaws) Homomorphism(run func(v Any) Any) (func(v int) Any, fun
 	return f, g
 }
 
-func (o ApplicativeLaws) Interchange(run func(v Any) Any) (func(v int) Any, func(v int) Any) {
+func (o ApplicativeLaws) Interchange(run Morphism) (func(int) Any, func(int) Any) {
 	f := func(v int) Any {
 		a := o.x.Of(Identity).(Applicative)
 		b := o.x.Of(v).(Applicative)

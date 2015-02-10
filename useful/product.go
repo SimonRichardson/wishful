@@ -40,7 +40,7 @@ func (x Product) Concat(y Semigroup) Semigroup {
 	return productConcat(x, y)
 }
 
-func (x Product) Map(f func(Any) Any) Functor {
+func (x Product) Map(f Morphism) Functor {
 	return x.Chain(func(x Any) Monad {
 		p, _ := FromAnyToInt(f(x))
 		return NewProduct(p)

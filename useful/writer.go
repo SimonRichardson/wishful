@@ -45,7 +45,7 @@ func (w Writer) Chain(f func(Any) Monad) Monad {
 	}
 }
 
-func (w Writer) Map(f func(Any) Any) Functor {
+func (w Writer) Map(f Morphism) Functor {
 	return w.Chain(func(x Any) Monad {
 		return Writer{
 			Run: func() Tuple2 {

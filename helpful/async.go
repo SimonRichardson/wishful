@@ -9,11 +9,11 @@ var (
 	EitherPromise Monad = NewEitherT(Promise_.Ref())
 )
 
-func Async(f func(x Any) Monad) func(x Any) Monad {
+func Async(f func(Any) Monad) func(Any) Monad {
 	return func(x Any) Monad {
 		return EitherT_.As(EitherPromise).From(
 			NewPromise(
-				func(resolve func(x Any) Any) Any {
+				func(resolve Morphism) Any {
 					fun := NewFunction(f)
 					res, _ := fun.Call(x)
 					return Promise_.As(res).Fork(func(x Any) Any {
