@@ -8,7 +8,7 @@ func Apply(f Morphism) Morphism {
 }
 
 // B combinator
-func Compose(f Morphism) func(g Morphism) Morphism {
+func Compose(f Morphism) func(Morphism) Morphism {
 	return func(g Morphism) Morphism {
 		return func(a Any) Any {
 			return f(g(a))
