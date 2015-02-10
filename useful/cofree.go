@@ -4,50 +4,50 @@ import (
 	. "github.com/SimonRichardson/wishful/wishful"
 )
 
-type cofree struct {
+type Cofree struct {
 	value   Any
 	functor Functor
 }
 
-func Cofree(x Any, y Functor) cofree {
-	return cofree{
+func NewCofree(x Any, y Functor) Cofree {
+	return Cofree{
 		value:   x,
 		functor: y,
 	}
 }
 
-func (c cofree) Map(f func(Any) Any) Functor {
-	return cofree{
+func (c Cofree) Map(f func(Any) Any) Functor {
+	return Cofree{
 		value: f(c.value),
 		functor: c.functor.Map(func(a Any) Any {
-			return a.(cofree).Map(f)
+			return a.(Cofree).Map(f)
 		}),
 	}
 }
 
-func (c cofree) Extract() Any {
+func (c Cofree) Extract() Any {
 	return c.value
 }
 
-func (c cofree) Extend(f func(cofree) Any) cofree {
-	return cofree{
+func (c Cofree) Extend(f func(Cofree) Any) Cofree {
+	return Cofree{
 		value: f(c),
 		functor: c.functor.Map(func(a Any) Any {
-			return a.(cofree).Extend(f)
+			return a.(Cofree).Extend(f)
 		}),
 	}
 }
 
-func (c cofree) Traverse(g func(Any) Functor) Functor {
+func (c Cofree) Traverse(g func(Any) Functor) Functor {
 	var do func(Any) Functor
 	do = func(h Any) Functor {
 		var (
-			a = h.(cofree)
+			a = h.(Cofree)
 			b = a.functor.(Traversable).Traverse(do)
 		)
 		return g(a.value).Map(func(x Any) Any {
-			return func(i Functor) cofree {
-				return cofree{
+			return func(i Functor) Cofree {
+				return Cofree{
 					value:   x,
 					functor: i,
 				}
@@ -63,10 +63,10 @@ var (
 
 type cofree_ struct{}
 
-func (e cofree_) As(x Any) cofree {
-	return x.(cofree)
+func (e cofree_) As(x Any) Cofree {
+	return x.(Cofree)
 }
 
-func (e cofree_) Ref() cofree {
-	return cofree{}
+func (e cofree_) Ref() Cofree {
+	return Cofree{}
 }

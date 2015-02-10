@@ -14,28 +14,28 @@ func extractEitherT(x Any) Any {
 // Applicative Laws
 
 func Test_EitherT_ApplicativeLaws_Identity(t *testing.T) {
-	f, g := NewApplicativeLaws(EitherT(id{})).Identity(extractEitherT)
+	f, g := NewApplicativeLaws(NewEitherT(Id{})).Identity(extractEitherT)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_EitherT_ApplicativeLaws_Composition(t *testing.T) {
-	f, g := NewApplicativeLaws(EitherT(id{})).Composition(extractEitherT)
+	f, g := NewApplicativeLaws(NewEitherT(Id{})).Composition(extractEitherT)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_EitherT_ApplicativeLaws_Homomorphism(t *testing.T) {
-	f, g := NewApplicativeLaws(EitherT(id{})).Homomorphism(extractEitherT)
+	f, g := NewApplicativeLaws(NewEitherT(Id{})).Homomorphism(extractEitherT)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_EitherT_ApplicativeLaws_Interchange(t *testing.T) {
-	f, g := NewApplicativeLaws(EitherT(id{})).Interchange(extractEitherT)
+	f, g := NewApplicativeLaws(NewEitherT(Id{})).Interchange(extractEitherT)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
@@ -45,7 +45,7 @@ func Test_EitherT_ApplicativeLaws_Interchange(t *testing.T) {
 
 func Test_EitherT_FunctorLaws_Identity(t *testing.T) {
 	f, g := NewFunctorLaws(func(x Any) Functor {
-		return EitherT(id{}).Of(x).(Functor)
+		return NewEitherT(Id{}).Of(x).(Functor)
 	}).Identity(extractEitherT)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
@@ -54,7 +54,7 @@ func Test_EitherT_FunctorLaws_Identity(t *testing.T) {
 
 func Test_EitherT_FunctorLaws_Composition(t *testing.T) {
 	f, g := NewFunctorLaws(func(x Any) Functor {
-		return EitherT(id{}).Of(x).(Functor)
+		return NewEitherT(Id{}).Of(x).(Functor)
 	}).Composition(extractEitherT)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
@@ -64,21 +64,21 @@ func Test_EitherT_FunctorLaws_Composition(t *testing.T) {
 // Monad Laws
 
 func Test_EitherT_MonadLaws_LeftIdentity(t *testing.T) {
-	f, g := NewMonadLaws(EitherT(id{})).LeftIdentity(extractEitherT)
+	f, g := NewMonadLaws(NewEitherT(Id{})).LeftIdentity(extractEitherT)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_EitherT_MonadLaws_RightIdentity(t *testing.T) {
-	f, g := NewMonadLaws(EitherT(id{})).RightIdentity(extractEitherT)
+	f, g := NewMonadLaws(NewEitherT(Id{})).RightIdentity(extractEitherT)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_EitherT_MonadLaws_Associativity(t *testing.T) {
-	f, g := NewMonadLaws(EitherT(id{})).Associativity(extractEitherT)
+	f, g := NewMonadLaws(NewEitherT(Id{})).Associativity(extractEitherT)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}

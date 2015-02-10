@@ -16,14 +16,14 @@ type ret struct {
 	val Any
 }
 
-func Return(x Any) ret {
+func NewReturn(x Any) ret {
 	return ret{
 		val: x,
 	}
 }
 
 func (r ret) Of(x Any) Point {
-	return Return(x)
+	return NewReturn(x)
 }
 
 func (r ret) Chain(f func(Any) Monad) Monad {
@@ -44,14 +44,14 @@ type suspend struct {
 	functor Functor
 }
 
-func Suspend(f Functor) suspend {
+func NewSuspend(f Functor) suspend {
 	return suspend{
 		functor: f,
 	}
 }
 
 func (s suspend) Of(x Any) Point {
-	return Return(x)
+	return NewReturn(x)
 }
 
 func (s suspend) Chain(f func(Any) Monad) Monad {
@@ -100,11 +100,11 @@ func (f free_) Ref() Free {
 }
 
 func (f free_) Of(x Any) Point {
-	return Return(x)
+	return NewReturn(x)
 }
 
 func (f free_) Lift(x Functor) Free {
-	return Suspend(x.Map(func(y Any) Any {
-		return Return(y)
+	return NewSuspend(x.Map(func(y Any) Any {
+		return NewReturn(y)
 	}))
 }

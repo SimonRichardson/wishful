@@ -23,30 +23,30 @@ type some struct {
 type none struct {
 }
 
-func Some(x Any) some {
+func NewSome(x Any) some {
 	return some{
 		x: x,
 	}
 }
 
-func None() none {
+func NewNone() none {
 	return none{}
 }
 
 func (x some) Of(v Any) Point {
-	return Some(v)
+	return NewSome(v)
 }
 
 func (x none) Of(v Any) Point {
-	return Some(v)
+	return NewSome(v)
 }
 
 func (x some) Empty() Monoid {
-	return None()
+	return NewNone()
 }
 
 func (x none) Empty() Monoid {
-	return None()
+	return NewNone()
 }
 
 func (x some) Ap(v Applicative) Applicative {
@@ -75,7 +75,7 @@ func (x none) Fold(f func(v Any) Any, g func() Any) Any {
 
 func (x some) Map(f func(v Any) Any) Functor {
 	res := x.Chain(func(v Any) Monad {
-		return Some(f(v))
+		return NewSome(f(v))
 	})
 	return res.(Functor)
 }
@@ -127,9 +127,9 @@ func (o option_) Ref() Option {
 }
 
 func (o option_) Of(x Any) Point {
-	return Some(x)
+	return NewSome(x)
 }
 
 func (o option_) Empty() Monoid {
-	return None()
+	return NewNone()
 }

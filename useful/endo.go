@@ -4,37 +4,37 @@ import (
 	. "github.com/SimonRichardson/wishful/wishful"
 )
 
-type endo struct {
+type Endo struct {
 	Fork func(v Any) Any
 }
 
-func Endo(x func(v Any) Any) endo {
-	return endo{
+func NewEndo(x func(v Any) Any) Endo {
+	return Endo{
 		Fork: x,
 	}
 }
 
-func (x endo) Of(v Any) Point {
-	return Endo(func(x Any) Any {
+func (x Endo) Of(v Any) Point {
+	return NewEndo(func(x Any) Any {
 		return v
 	})
 }
 
-func (x endo) Empty() Monoid {
-	return Endo(func(v Any) Any {
+func (x Endo) Empty() Monoid {
+	return NewEndo(func(v Any) Any {
 		return v
 	})
 }
 
-func (x endo) Concat(y Semigroup) Semigroup {
-	return Endo(func(v Any) Any {
-		a := y.(endo)
+func (x Endo) Concat(y Semigroup) Semigroup {
+	return NewEndo(func(v Any) Any {
+		a := y.(Endo)
 		return x.Fork(a.Fork(v))
 	})
 }
 
-func (x endo) Map(f func(v Any) Any) Functor {
-	return Endo(func(v Any) Any {
+func (x Endo) Map(f func(v Any) Any) Functor {
+	return NewEndo(func(v Any) Any {
 		return f(x.Fork(v))
 	})
 }
@@ -45,14 +45,14 @@ var (
 
 type endo_ struct{}
 
-func (e endo_) As(x Any) endo {
-	return x.(endo)
+func (e endo_) As(x Any) Endo {
+	return x.(Endo)
 }
 
-func (e endo_) Ref() endo {
-	return endo{}
+func (e endo_) Ref() Endo {
+	return Endo{}
 }
 
 func (f endo_) Of(x Any) Point {
-	return endo{}.Of(x)
+	return Endo{}.Of(x)
 }

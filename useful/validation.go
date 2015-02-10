@@ -14,35 +14,35 @@ type Validation interface {
 	Bimap(f func(v Any) Any, g func(v Any) Any) Monad
 }
 
-type Failure struct {
+type failure struct {
 	x Any
 }
 
-type Success struct {
+type success struct {
 	x Any
 }
 
-func NewFailure(x Any) Failure {
-	return Failure{
+func NewFailure(x Any) failure {
+	return failure{
 		x: x,
 	}
 }
 
-func NewSuccess(x Any) Success {
-	return Success{
+func NewSuccess(x Any) success {
+	return success{
 		x: x,
 	}
 }
 
-func (x Failure) Of(v Any) Point {
+func (x failure) Of(v Any) Point {
 	return NewSuccess(v)
 }
 
-func (x Success) Of(v Any) Point {
+func (x success) Of(v Any) Point {
 	return NewSuccess(v)
 }
 
-func (x Failure) Ap(v Applicative) Applicative {
+func (x failure) Ap(v Applicative) Applicative {
 	return v.(Validation).Fold(
 		func(y Any) Any {
 			return NewFailure(concatAnyvals(x.x)(y))
@@ -53,7 +53,7 @@ func (x Failure) Ap(v Applicative) Applicative {
 	).(Applicative)
 }
 
-func (x Success) Ap(v Applicative) Applicative {
+func (x success) Ap(v Applicative) Applicative {
 	return v.(Functor).Map(func(g Any) Any {
 		fun := NewFunction(x.x)
 		res, _ := fun.Call(g)
@@ -61,23 +61,23 @@ func (x Success) Ap(v Applicative) Applicative {
 	}).(Applicative)
 }
 
-func (x Failure) Chain(f func(v Any) Monad) Monad {
+func (x failure) Chain(f func(v Any) Monad) Monad {
 	return x
 }
 
-func (x Success) Chain(f func(v Any) Monad) Monad {
+func (x success) Chain(f func(v Any) Monad) Monad {
 	return f(x.x)
 }
 
-func (x Failure) Map(f func(v Any) Any) Functor {
+func (x failure) Map(f func(v Any) Any) Functor {
 	return x.Bimap(Identity, f).(Functor)
 }
 
-func (x Success) Map(f func(v Any) Any) Functor {
+func (x success) Map(f func(v Any) Any) Functor {
 	return x.Bimap(Identity, f).(Functor)
 }
 
-func (x Failure) Concat(y Semigroup) Semigroup {
+func (x failure) Concat(y Semigroup) Semigroup {
 	a := y.(Validation)
 	b := a.Bimap(
 		concatAnyvals(x.x),
@@ -86,7 +86,7 @@ func (x Failure) Concat(y Semigroup) Semigroup {
 	return b.(Semigroup)
 }
 
-func (x Success) Concat(y Semigroup) Semigroup {
+func (x success) Concat(y Semigroup) Semigroup {
 	a := y.(Functor)
 	b := a.Map(concatAnyvals(x.x))
 	return b.(Semigroup)
@@ -94,18 +94,18 @@ func (x Success) Concat(y Semigroup) Semigroup {
 
 // Derived
 
-func (x Failure) Fold(f func(v Any) Any, g func(v Any) Any) Any {
+func (x failure) Fold(f func(v Any) Any, g func(v Any) Any) Any {
 	return f(x.x)
 }
 
-func (x Success) Fold(f func(v Any) Any, g func(v Any) Any) Any {
+func (x success) Fold(f func(v Any) Any, g func(v Any) Any) Any {
 	return g(x.x)
 }
 
-func (x Failure) Bimap(f func(v Any) Any, g func(v Any) Any) Monad {
+func (x failure) Bimap(f func(v Any) Any, g func(v Any) Any) Monad {
 	return NewFailure(f(x.x))
 }
 
-func (x Success) Bimap(f func(v Any) Any, g func(v Any) Any) Monad {
+func (x success) Bimap(f func(v Any) Any, g func(v Any) Any) Monad {
 	return NewSuccess(g(x.x))
 }

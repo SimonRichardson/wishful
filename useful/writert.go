@@ -57,3 +57,17 @@ func (w WriterT) Tell(x Any) WriterT {
 		},
 	}
 }
+
+var (
+	WriterT_ = writerT_{}
+)
+
+type writerT_ struct{}
+
+func (f writerT_) As(x Any) WriterT {
+	return x.(WriterT)
+}
+
+func (f writerT_) Ref() WriterT {
+	return WriterT{}
+}

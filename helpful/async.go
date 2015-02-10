@@ -6,18 +6,18 @@ import (
 )
 
 var (
-	EitherPromise Monad = EitherT(Promise_.Ref())
+	EitherPromise Monad = NewEitherT(Promise_.Ref())
 )
 
 func Async(f func(x Any) Monad) func(x Any) Monad {
 	return func(x Any) Monad {
 		return EitherT_.As(EitherPromise).From(
-			Promise(
+			NewPromise(
 				func(resolve func(x Any) Any) Any {
 					fun := NewFunction(f)
 					res, _ := fun.Call(x)
 					return Promise_.As(res).Fork(func(x Any) Any {
-						return resolve(Right(x))
+						return resolve(NewRight(x))
 					})
 				},
 			),

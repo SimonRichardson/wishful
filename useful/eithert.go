@@ -4,39 +4,39 @@ import (
 	. "github.com/SimonRichardson/wishful/wishful"
 )
 
-type eitherT struct {
+type EitherT struct {
 	m   Point
 	Run Any
 }
 
-func EitherT(m Point) eitherT {
-	return eitherT{
+func NewEitherT(m Point) EitherT {
+	return EitherT{
 		m:   m,
 		Run: Empty{},
 	}
 }
 
-func (x eitherT) Of(v Any) Point {
-	return eitherT{
+func (x EitherT) Of(v Any) Point {
+	return EitherT{
 		m:   x.m,
-		Run: x.m.Of(Right(v)),
+		Run: x.m.Of(NewRight(v)),
 	}
 }
 
-func (x eitherT) From(v Any) eitherT {
-	return eitherT{
+func (x EitherT) From(v Any) EitherT {
+	return EitherT{
 		m:   x.m,
 		Run: v,
 	}
 }
 
-func (x eitherT) Fold(f func(v Any) Any, g func(v Any) Any) Any {
+func (x EitherT) Fold(f func(v Any) Any, g func(v Any) Any) Any {
 	return x.Run.(Monad).Chain(func(o Any) Monad {
 		return x.m.Of(o.(Foldable).Fold(f, g)).(Monad)
 	})
 }
 
-func (x eitherT) Ap(v Applicative) Applicative {
+func (x EitherT) Ap(v Applicative) Applicative {
 	mon := x.Chain(func(f Any) Monad {
 		return v.(Functor).Map(func(x Any) Any {
 			fun := NewFunction(f)
@@ -47,17 +47,17 @@ func (x eitherT) Ap(v Applicative) Applicative {
 	return mon.(Applicative)
 }
 
-func (x eitherT) Chain(f func(v Any) Monad) Monad {
+func (x EitherT) Chain(f func(v Any) Monad) Monad {
 	mon := x.Run.(Monad)
-	tra := eitherT{
+	tra := EitherT{
 		m: x.m,
 		Run: mon.Chain(func(y Any) Monad {
 			return y.(Foldable).Fold(
 				func(v Any) Any {
-					return x.m.Of(Left(v))
+					return x.m.Of(NewLeft(v))
 				},
 				func(v Any) Any {
-					return f(v).(eitherT).Run
+					return f(v).(EitherT).Run
 				},
 			).(Monad)
 		}),
@@ -65,32 +65,32 @@ func (x eitherT) Chain(f func(v Any) Monad) Monad {
 	return tra
 }
 
-func (x eitherT) Map(f func(v Any) Any) Functor {
+func (x EitherT) Map(f func(v Any) Any) Functor {
 	mon := x.Chain(func(y Any) Monad {
-		app := EitherT(x.m).Of(f(y))
+		app := NewEitherT(x.m).Of(f(y))
 		return app.(Monad)
 	})
 	return mon.(Functor)
 }
 
-func (x eitherT) Swap() Monad {
+func (x EitherT) Swap() Monad {
 	return x.Fold(
 		func(v Any) Any {
-			return Right(v)
+			return NewRight(v)
 		},
 		func(v Any) Any {
-			return Left(v)
+			return NewLeft(v)
 		},
 	).(Monad)
 }
 
-func (x eitherT) Bimap(f func(v Any) Any, g func(v Any) Any) Monad {
+func (x EitherT) Bimap(f func(v Any) Any, g func(v Any) Any) Monad {
 	return x.Fold(
 		func(v Any) Any {
-			return Left(f(v))
+			return NewLeft(f(v))
 		},
 		func(v Any) Any {
-			return Right(g(v))
+			return NewRight(g(v))
 		},
 	).(Monad)
 }
@@ -101,10 +101,10 @@ var (
 
 type eitherT_ struct{}
 
-func (e eitherT_) As(x Any) eitherT {
-	return x.(eitherT)
+func (e eitherT_) As(x Any) EitherT {
+	return x.(EitherT)
 }
 
-func (e eitherT_) Ref() eitherT {
-	return eitherT{}
+func (e eitherT_) Ref() EitherT {
+	return EitherT{}
 }

@@ -115,3 +115,17 @@ func (x StateT) Ap(a Applicative) Applicative {
 		}).(Monad)
 	}).(Applicative)
 }
+
+var (
+	StateT_ = stateT_{}
+)
+
+type stateT_ struct{}
+
+func (f stateT_) As(x Any) StateT {
+	return x.(StateT)
+}
+
+func (f stateT_) Ref() StateT {
+	return StateT{}
+}

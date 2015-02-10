@@ -23,14 +23,14 @@ type left struct {
 	x Any
 }
 
-func Left(x Any) left {
+func NewLeft(x Any) left {
 	return left{
 		x: x,
 	}
 }
 
 func (x left) Of(v Any) Point {
-	return Right(v)
+	return NewRight(v)
 }
 
 func (x left) Ap(v Applicative) Applicative {
@@ -50,11 +50,11 @@ func (x left) Concat(y Semigroup) Semigroup {
 }
 
 func (x left) Swap() Monad {
-	return Right(x.x)
+	return NewRight(x.x)
 }
 
 func (x left) Bimap(f func(v Any) Any, g func(v Any) Any) Monad {
-	return Left(f(x.x))
+	return NewLeft(f(x.x))
 }
 
 func (x left) Fold(f func(v Any) Any, g func(v Any) Any) Any {
@@ -66,7 +66,7 @@ func (x left) Sequence(p Point) Any {
 }
 
 func (x left) Traverse(f func(Any) Any, p Point) Functor {
-	return p.Of(Left(x.x)).(Functor)
+	return p.Of(NewLeft(x.x)).(Functor)
 }
 
 // right
@@ -75,14 +75,14 @@ type right struct {
 	x Any
 }
 
-func Right(x Any) right {
+func NewRight(x Any) right {
 	return right{
 		x: x,
 	}
 }
 
 func (x right) Of(v Any) Point {
-	return Right(v)
+	return NewRight(v)
 }
 
 func (x right) Ap(v Applicative) Applicative {
@@ -95,7 +95,7 @@ func (x right) Chain(f func(v Any) Monad) Monad {
 
 func (x right) Map(f func(v Any) Any) Functor {
 	res := x.Chain(func(v Any) Monad {
-		return Right(f(v))
+		return NewRight(f(v))
 	})
 	return res.(Functor)
 }
@@ -109,11 +109,11 @@ func (x right) Fold(f func(v Any) Any, g func(v Any) Any) Any {
 }
 
 func (x right) Swap() Monad {
-	return Left(x.x)
+	return NewLeft(x.x)
 }
 
 func (x right) Bimap(f func(v Any) Any, g func(v Any) Any) Monad {
-	return Right(g(x.x))
+	return NewRight(g(x.x))
 }
 
 func (x right) Sequence(p Point) Any {
@@ -143,5 +143,5 @@ func (e either_) Ref() Either {
 }
 
 func (e either_) Of(x Any) Point {
-	return Right(x)
+	return NewRight(x)
 }

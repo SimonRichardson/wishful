@@ -4,34 +4,40 @@ import (
 	. "github.com/SimonRichardson/wishful/wishful"
 )
 
-type reader struct {
+type Reader struct {
 	Run func(Any) Any
 }
 
-func (r reader) Of(x Any) Point {
-	return reader{
+func NewReader(f func(Any) Any) Reader {
+	return Reader{
+		Run: f,
+	}
+}
+
+func (r Reader) Of(x Any) Point {
+	return Reader{
 		Run: func(y Any) Any {
 			return x
 		},
 	}
 }
 
-func (r reader) Ap(v Applicative) Applicative {
+func (r Reader) Ap(v Applicative) Applicative {
 	return fromMonadToApplicativeAp(r, v)
 }
 
-func (r reader) Chain(f func(Any) Monad) Monad {
-	return reader{
+func (r Reader) Chain(f func(Any) Monad) Monad {
+	return Reader{
 		Run: func(x Any) Any {
-			y := f(r.Run(x)).(reader)
+			y := f(r.Run(x)).(Reader)
 			return y.Run(x)
 		},
 	}
 }
 
-func (r reader) Map(f func(Any) Any) Functor {
+func (r Reader) Map(f func(Any) Any) Functor {
 	return r.Chain(func(x Any) Monad {
-		return reader{}.Of(f(x)).(Monad)
+		return Reader{}.Of(f(x)).(Monad)
 	}).(Functor)
 }
 
@@ -41,20 +47,20 @@ var (
 
 type reader_ struct{}
 
-func (f reader_) As(x Any) reader {
-	return x.(reader)
+func (f reader_) As(x Any) Reader {
+	return x.(Reader)
 }
 
-func (f reader_) Ref() reader {
-	return reader{}
+func (f reader_) Ref() Reader {
+	return Reader{}
 }
 
 func (r reader_) Of(x Any) Point {
-	return reader{}.Of(x)
+	return Reader{}.Of(x)
 }
 
-func (r reader_) Ask() reader {
-	return reader{
+func (r reader_) Ask() Reader {
+	return Reader{
 		Run: func(a Any) Any {
 			return a
 		},

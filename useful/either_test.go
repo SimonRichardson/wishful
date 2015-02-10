@@ -11,7 +11,7 @@ import (
 
 func Test_Either_Left_New(t *testing.T) {
 	f := func(x int) left {
-		return Left(x)
+		return NewLeft(x)
 	}
 	g := func(x int) left {
 		return left{x}

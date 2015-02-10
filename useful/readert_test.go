@@ -15,7 +15,7 @@ func extractReaderT(x Any) Any {
 
 func Test_ReaderT_FunctorLaws_Identity(t *testing.T) {
 	f, g := NewFunctorLaws(func(x Any) Functor {
-		return ReaderT(id{}).Of(x).(Functor)
+		return NewReaderT(Id{}).Of(x).(Functor)
 	}).Identity(extractReaderT)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
@@ -24,7 +24,7 @@ func Test_ReaderT_FunctorLaws_Identity(t *testing.T) {
 
 func Test_ReaderT_FunctorLaws_Composition(t *testing.T) {
 	f, g := NewFunctorLaws(func(x Any) Functor {
-		return ReaderT(id{}).Of(x).(Functor)
+		return NewReaderT(Id{}).Of(x).(Functor)
 	}).Composition(extractReaderT)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
@@ -34,21 +34,21 @@ func Test_ReaderT_FunctorLaws_Composition(t *testing.T) {
 // Monad Laws
 
 func Test_ReaderT_MonadLaws_LeftIdentity(t *testing.T) {
-	f, g := NewMonadLaws(ReaderT(id{})).LeftIdentity(extractReaderT)
+	f, g := NewMonadLaws(NewReaderT(Id{})).LeftIdentity(extractReaderT)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_ReaderT_MonadLaws_RightIdentity(t *testing.T) {
-	f, g := NewMonadLaws(ReaderT(id{})).RightIdentity(extractReaderT)
+	f, g := NewMonadLaws(NewReaderT(Id{})).RightIdentity(extractReaderT)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_ReaderT_MonadLaws_Associativity(t *testing.T) {
-	f, g := NewMonadLaws(ReaderT(id{})).Associativity(extractReaderT)
+	f, g := NewMonadLaws(NewReaderT(Id{})).Associativity(extractReaderT)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}

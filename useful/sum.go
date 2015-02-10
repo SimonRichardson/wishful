@@ -37,3 +37,21 @@ func (x Sum) Map(f func(v Any) Any) Functor {
 		return NewSum(p)
 	}).(Functor)
 }
+
+var (
+	Sum_ = sum_{}
+)
+
+type sum_ struct{}
+
+func (f sum_) As(x Any) Sum {
+	return x.(Sum)
+}
+
+func (f sum_) Ref() Sum {
+	return Sum{}
+}
+
+func (f sum_) Of(x Any) Point {
+	return Sum{}.Of(x)
+}

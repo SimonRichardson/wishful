@@ -14,28 +14,28 @@ func extractPromise(x Any) Any {
 // Applicative Laws
 
 func Test_promise_ApplicativeLaws_Identity(t *testing.T) {
-	f, g := NewApplicativeLaws(promise{}).Identity(extractPromise)
+	f, g := NewApplicativeLaws(Promise{}).Identity(extractPromise)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_promise_ApplicativeLaws_Composition(t *testing.T) {
-	f, g := NewApplicativeLaws(promise{}).Composition(extractPromise)
+	f, g := NewApplicativeLaws(Promise{}).Composition(extractPromise)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_promise_ApplicativeLaws_Homomorphism(t *testing.T) {
-	f, g := NewApplicativeLaws(promise{}).Homomorphism(extractPromise)
+	f, g := NewApplicativeLaws(Promise{}).Homomorphism(extractPromise)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_promise_ApplicativeLaws_Interchange(t *testing.T) {
-	f, g := NewApplicativeLaws(promise{}).Interchange(extractPromise)
+	f, g := NewApplicativeLaws(Promise{}).Interchange(extractPromise)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
@@ -45,7 +45,7 @@ func Test_promise_ApplicativeLaws_Interchange(t *testing.T) {
 
 func Test_promise_FunctorLaws_Identity(t *testing.T) {
 	f, g := NewFunctorLaws(func(x Any) Functor {
-		return promise{}.Of(x).(Functor)
+		return Promise{}.Of(x).(Functor)
 	}).Identity(extractPromise)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
@@ -54,7 +54,7 @@ func Test_promise_FunctorLaws_Identity(t *testing.T) {
 
 func Test_promise_FunctorLaws_Composition(t *testing.T) {
 	f, g := NewFunctorLaws(func(x Any) Functor {
-		return promise{}.Of(x).(Functor)
+		return Promise{}.Of(x).(Functor)
 	}).Composition(extractPromise)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
@@ -64,21 +64,21 @@ func Test_promise_FunctorLaws_Composition(t *testing.T) {
 // Monad Laws
 
 func Test_promise_MonadLaws_LeftIdentity(t *testing.T) {
-	f, g := NewMonadLaws(promise{}).LeftIdentity(extractPromise)
+	f, g := NewMonadLaws(Promise{}).LeftIdentity(extractPromise)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_promise_MonadLaws_RightIdentity(t *testing.T) {
-	f, g := NewMonadLaws(promise{}).RightIdentity(extractPromise)
+	f, g := NewMonadLaws(Promise{}).RightIdentity(extractPromise)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_promise_MonadLaws_Associativity(t *testing.T) {
-	f, g := NewMonadLaws(promise{}).Associativity(extractPromise)
+	f, g := NewMonadLaws(Promise{}).Associativity(extractPromise)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
@@ -87,21 +87,21 @@ func Test_promise_MonadLaws_Associativity(t *testing.T) {
 // Comonad Laws
 
 func Test_promise_ComonadLaws_Identity(t *testing.T) {
-	f, g := NewComonadLaws(promise{}).Identity(extractPromise)
+	f, g := NewComonadLaws(Promise{}).Identity(extractPromise)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_promise_ComonadLaws_Composition(t *testing.T) {
-	f, g := NewComonadLaws(promise{}).Composition(Identity)
+	f, g := NewComonadLaws(Promise{}).Composition(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_promise_ComonadLaws_Associativity(t *testing.T) {
-	f, g := NewComonadLaws(promise{}).Associativity(extractPromise)
+	f, g := NewComonadLaws(Promise{}).Associativity(extractPromise)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}

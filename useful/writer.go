@@ -67,11 +67,19 @@ func (w Writer) Tell(x Any) Writer {
 // Static methods
 
 var (
-	Writer_ = writer{}
+	Writer_ = writer_{}
 )
 
-type writer struct{}
+type writer_ struct{}
 
-func (w writer) Of(x Any) Point {
+func (f writer_) As(x Any) Writer {
+	return x.(Writer)
+}
+
+func (f writer_) Ref() Writer {
+	return Writer{}
+}
+
+func (w writer_) Of(x Any) Point {
 	return Writer{}.Of(x)
 }

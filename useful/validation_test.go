@@ -18,11 +18,11 @@ func (v Value) Concat(a Semigroup) Semigroup {
 // Manual tests
 
 func Test_Validation_Failure_New(t *testing.T) {
-	f := func(x int) Failure {
+	f := func(x int) failure {
 		return NewFailure(x)
 	}
-	g := func(x int) Failure {
-		return Failure{x}
+	g := func(x int) failure {
+		return failure{x}
 	}
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
@@ -31,10 +31,10 @@ func Test_Validation_Failure_New(t *testing.T) {
 
 func Test_Validation_Failure_Of(t *testing.T) {
 	f := func(x int) Validation {
-		return Success{}.Of(x).(Validation)
+		return success{}.Of(x).(Validation)
 	}
 	g := func(x int) Validation {
-		return Failure{}.Of(x).(Validation)
+		return failure{}.Of(x).(Validation)
 	}
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
@@ -43,22 +43,22 @@ func Test_Validation_Failure_Of(t *testing.T) {
 
 func Test_Validation_Failure_Ap(t *testing.T) {
 	f := func(x int) Validation {
-		return Failure{Value{x}}.Ap(Failure{Value{1}}).(Validation)
+		return failure{Value{x}}.Ap(failure{Value{1}}).(Validation)
 	}
 	g := func(x int) Validation {
-		return Failure{Value{x + 1}}
+		return failure{Value{x + 1}}
 	}
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
-func Test_Validation_Failure_ApWithSuccess(t *testing.T) {
+func Test_Validation_Failure_ApWithsuccess(t *testing.T) {
 	f := func(x int) Validation {
-		return Failure{Value{x}}.Ap(Success{Value{1}}).(Validation)
+		return failure{Value{x}}.Ap(success{Value{1}}).(Validation)
 	}
 	g := func(x int) Validation {
-		return Failure{Value{x}}
+		return failure{Value{x}}
 	}
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
@@ -67,12 +67,12 @@ func Test_Validation_Failure_ApWithSuccess(t *testing.T) {
 
 func Test_Validation_Failure_Chain(t *testing.T) {
 	f := func(x int) Validation {
-		return Failure{}.Chain(func(v Any) Monad {
-			return Failure{}
+		return failure{}.Chain(func(v Any) Monad {
+			return failure{}
 		}).(Validation)
 	}
 	g := func(x int) Validation {
-		return Failure{}
+		return failure{}
 	}
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
@@ -81,10 +81,10 @@ func Test_Validation_Failure_Chain(t *testing.T) {
 
 func Test_Validation_Failure_Map(t *testing.T) {
 	f := func(x int) Validation {
-		return Failure{}.Map(Identity).(Validation)
+		return failure{}.Map(Identity).(Validation)
 	}
 	g := func(x int) Validation {
-		return Failure{}
+		return failure{}
 	}
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
@@ -93,10 +93,10 @@ func Test_Validation_Failure_Map(t *testing.T) {
 
 func Test_Validation_Failure_Concat(t *testing.T) {
 	f := func(x int) Validation {
-		return Failure{Value{x}}.Concat(Failure{Value{1}}).(Validation)
+		return failure{Value{x}}.Concat(failure{Value{1}}).(Validation)
 	}
 	g := func(x int) Validation {
-		return Failure{Value{x + 1}}
+		return failure{Value{x + 1}}
 	}
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
@@ -105,12 +105,12 @@ func Test_Validation_Failure_Concat(t *testing.T) {
 
 func Test_Validation_Failure_Bimap(t *testing.T) {
 	f := func(x int) Validation {
-		return Failure{x}.Bimap(func(v Any) Any {
+		return failure{x}.Bimap(func(v Any) Any {
 			return v.(int) + 1
 		}, Identity).(Validation)
 	}
 	g := func(x int) Validation {
-		return Failure{x + 1}
+		return failure{x + 1}
 	}
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
@@ -119,12 +119,12 @@ func Test_Validation_Failure_Bimap(t *testing.T) {
 
 func Test_Validation_Success_Bimap(t *testing.T) {
 	f := func(x int) Validation {
-		return Success{x}.Bimap(Identity, func(v Any) Any {
+		return success{x}.Bimap(Identity, func(v Any) Any {
 			return v.(int) + 1
 		}).(Validation)
 	}
 	g := func(x int) Validation {
-		return Success{x + 1}
+		return success{x + 1}
 	}
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
@@ -133,61 +133,61 @@ func Test_Validation_Success_Bimap(t *testing.T) {
 
 // Applicative Laws
 
-// Failure
+// failure
 
 func Test_Validation_Failure_ApplicativeLaws_Identity(t *testing.T) {
-	f, g := NewApplicativeLaws(Failure{}).Identity(Identity)
+	f, g := NewApplicativeLaws(failure{}).Identity(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_Validation_Failure_ApplicativeLaws_Composition(t *testing.T) {
-	f, g := NewApplicativeLaws(Failure{}).Composition(Identity)
+	f, g := NewApplicativeLaws(failure{}).Composition(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_Validation_Failure_ApplicativeLaws_Homomorphism(t *testing.T) {
-	f, g := NewApplicativeLaws(Failure{}).Homomorphism(Identity)
+	f, g := NewApplicativeLaws(failure{}).Homomorphism(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_Validation_Failure_ApplicativeLaws_Interchange(t *testing.T) {
-	f, g := NewApplicativeLaws(Failure{}).Interchange(Identity)
+	f, g := NewApplicativeLaws(failure{}).Interchange(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
-// Success
+// success
 
 func Test_Validation_Success_ApplicativeLaws_Identity(t *testing.T) {
-	f, g := NewApplicativeLaws(Success{}).Identity(Identity)
+	f, g := NewApplicativeLaws(success{}).Identity(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_Validation_Success_ApplicativeLaws_Composition(t *testing.T) {
-	f, g := NewApplicativeLaws(Success{}).Composition(Identity)
+	f, g := NewApplicativeLaws(success{}).Composition(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_Validation_Success_ApplicativeLaws_Homomorphism(t *testing.T) {
-	f, g := NewApplicativeLaws(Success{}).Homomorphism(Identity)
+	f, g := NewApplicativeLaws(success{}).Homomorphism(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_Validation_Success_ApplicativeLaws_Interchange(t *testing.T) {
-	f, g := NewApplicativeLaws(Success{}).Interchange(Identity)
+	f, g := NewApplicativeLaws(success{}).Interchange(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
@@ -195,11 +195,11 @@ func Test_Validation_Success_ApplicativeLaws_Interchange(t *testing.T) {
 
 // Functor Laws
 
-// Failure
+// failure
 
 func Test_Validation_Failure_FunctorLaws_Identity(t *testing.T) {
 	f, g := NewFunctorLaws(func(x Any) Functor {
-		return Failure{}.Of(x).(Functor)
+		return failure{}.Of(x).(Functor)
 	}).Identity(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
@@ -208,18 +208,18 @@ func Test_Validation_Failure_FunctorLaws_Identity(t *testing.T) {
 
 func Test_Validation_Failure_FunctorLaws_Composition(t *testing.T) {
 	f, g := NewFunctorLaws(func(x Any) Functor {
-		return Failure{}.Of(x).(Functor)
+		return failure{}.Of(x).(Functor)
 	}).Composition(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
-// Success
+// success
 
 func Test_Validation_Success_FunctorLaws_Identity(t *testing.T) {
 	f, g := NewFunctorLaws(func(x Any) Functor {
-		return Success{}.Of(x).(Functor)
+		return success{}.Of(x).(Functor)
 	}).Identity(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
@@ -228,7 +228,7 @@ func Test_Validation_Success_FunctorLaws_Identity(t *testing.T) {
 
 func Test_Validation_Success_FunctorLaws_Composition(t *testing.T) {
 	f, g := NewFunctorLaws(func(x Any) Functor {
-		return Success{}.Of(x).(Functor)
+		return success{}.Of(x).(Functor)
 	}).Composition(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
@@ -237,47 +237,47 @@ func Test_Validation_Success_FunctorLaws_Composition(t *testing.T) {
 
 // Monad Laws
 
-// Failure
+// failure
 
 func Test_Validation_Failure_MonadLaws_LeftIdentity(t *testing.T) {
-	f, g := NewMonadLaws(Failure{}).LeftIdentity(Identity)
+	f, g := NewMonadLaws(failure{}).LeftIdentity(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_Validation_Failure_MonadLaws_RightIdentity(t *testing.T) {
-	f, g := NewMonadLaws(Failure{}).RightIdentity(Identity)
+	f, g := NewMonadLaws(failure{}).RightIdentity(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_Validation_Failure_MonadLaws_Associativity(t *testing.T) {
-	f, g := NewMonadLaws(Failure{}).Associativity(Identity)
+	f, g := NewMonadLaws(failure{}).Associativity(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
-// Success
+// success
 
 func Test_Validation_Success_MonadLaws_LeftIdentity(t *testing.T) {
-	f, g := NewMonadLaws(Success{}).LeftIdentity(Identity)
+	f, g := NewMonadLaws(success{}).LeftIdentity(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_Validation_Success_MonadLaws_RightIdentity(t *testing.T) {
-	f, g := NewMonadLaws(Success{}).RightIdentity(Identity)
+	f, g := NewMonadLaws(success{}).RightIdentity(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
 func Test_Validation_Success_MonadLaws_Associativity(t *testing.T) {
-	f, g := NewMonadLaws(Success{}).Associativity(Identity)
+	f, g := NewMonadLaws(success{}).Associativity(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
@@ -285,19 +285,19 @@ func Test_Validation_Success_MonadLaws_Associativity(t *testing.T) {
 
 // Semigroup Laws
 
-// Failure
+// failure
 
 func Test_Validation_Failure_SemigroupLaws_Associativity(t *testing.T) {
-	f, g := NewSemigroupLaws(Failure{}).Associativity(Identity)
+	f, g := NewSemigroupLaws(failure{}).Associativity(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
 }
 
-// Success
+// success
 
 func Test_Validation_Success_SemigroupLaws_Associativity(t *testing.T) {
-	f, g := NewSemigroupLaws(Success{}).Associativity(Identity)
+	f, g := NewSemigroupLaws(success{}).Associativity(Identity)
 	if err := quick.CheckEqual(f, g, nil); err != nil {
 		t.Error(err)
 	}
