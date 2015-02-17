@@ -1,8 +1,6 @@
 package useful
 
-import (
-	. "github.com/SimonRichardson/wishful/wishful"
-)
+import . "github.com/SimonRichardson/wishful/wishful"
 
 type Either interface {
 	Of(Any) Point

@@ -1,8 +1,6 @@
 package useful
 
-import (
-	. "github.com/SimonRichardson/wishful/wishful"
-)
+import . "github.com/SimonRichardson/wishful/wishful"
 
 type StateT struct {
 	m   Point
@@ -69,7 +67,7 @@ func (x StateT) Get() StateT {
 	}
 }
 
-func (x StateT) Modify(f func(b Any) Any) StateT {
+func (x StateT) Modify(f Morphism) StateT {
 	return StateT{
 		m: x.m,
 		Run: func(b Any) Point {
